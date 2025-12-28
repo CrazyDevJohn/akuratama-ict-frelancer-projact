@@ -1,0 +1,103 @@
+// Import Firebase services (make sure the version number is current if you update the SDK)
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        doc,
+        setDoc,
+        updateDoc,
+        query,
+        where,
+        getDocs,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+      // Firebase Configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBG8Jy_W3zV4yRkdZcfAOA7NBhRp5-nwXU",
+        authDomain: "login-and-sign-up-5cdb6.firebaseapp.com",
+        projectId: "login-and-sign-up-5cdb6",
+        storageBucket: "login-and-sign-up-5cdb6.firebasestorage.app",
+        messagingSenderId: "149568289212",
+        appId: "1:149568289212:web:fdb3580b1fe84558a953b9",
+        measurementId: "G-WYJVJMPLEX",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+ 
+ 
+ 
+ 
+ 
+ // 1. Check if username already exists in Firestore (READ)
+                const usersColRef = collection(db, USERS_COLLECTION);
+                const usernameQuery = query(usersColRef, where('username', '==', username.toLowerCase()));
+                const snapshot = await getDocs(usernameQuery);
+
+                if (!snapshot.empty) {
+                    throw { code: 'auth/email-already-in-use', message: 'Username is already taken.' };
+                }
+
+                // 2. Create user with Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, pseudoEmail, password);
+                const user = userCredential.user;
+                
+                // 3. Save user data to Firestore (WRITE/CREATE) - MUST match security rules!
+                const userData = {
+                    uid: user.uid,
+                    name: name,
+                    username: username.toLowerCase(),
+                    pseudoEmail: pseudoEmail,
+                    createdAt: serverTimestamp(),
+                    lastLogin: serverTimestamp()
+                };
+                
+                await setDoc(doc(db, USERS_COLLECTION, user.uid), userData); 
+
+
+
+
+                onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          // User already logged in
+          redirectAfterLogin();
+        } else {
+          // No user logged in, show the forms
+          authContainer.style.display = "flex";
+          clearMessages();
+        }
+      });
+
+
+       const userCredential = await signInWithEmailAndPassword(
+              auth,
+              pseudoEmail,
+              password
+            );
+            const user = userCredential.user;
+
+            await updateLastLogin(user.uid);
+            redirectAfterLogin();
+
+
+            function validateUsernameFormat(username, errorElement) {
+        const isValid =
+          /^[a-zA-Z0-9._-]+$/.test(username) && username.length >= 3;
+        if (!isValid) {
+          errorElement.textContent =
+            "Username must be at least 3 characters and contain only letters, numbers, dots, dashes, or underscores.";
+          errorElement.style.display = "block";
+        } else {
+          errorElement.style.display = "none";
+        }
+        return isValid;
+      }

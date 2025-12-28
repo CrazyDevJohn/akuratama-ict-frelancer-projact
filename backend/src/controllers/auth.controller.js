@@ -12,6 +12,7 @@ export const health = (req, res) => {
 };
 
 export const register = async (req, res) => {
+  console.log('✅ Register request body:', req.body);
   try {
     const { name, email, password } = req.body;
 
@@ -88,7 +89,7 @@ export const VerifyRegister = async (req, res) => {
 
     await newUser.save();
 
-    await genToken(res, user, process.env.JWT_SECRET_LOGIN, '15d');
+    await genToken(res, user._id, process.env.JWT_SECRET_LOGIN, '15d');
 
     return res
       .status(201)

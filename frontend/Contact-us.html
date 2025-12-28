@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #fdbb2d;
+            font-size: 1.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .info-item i {
+            background: #1a2a6c;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .info-text h3 {
+            color: #1a2a6c;
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #1a2a6c;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #b21f1f;
+            transform: translateY(-3px);
+        }
+
+        .map-container {
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .contact-section {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        .teacher-profile {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 25px;
+            flex-shrink: 0;
+            color: white;
+            font-size: 40px;
+        }
+
+        .profile-info h2 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            margin-bottom: 10px;
+        }
+
+        .qualifications {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .qualification-tag {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #1a2a6c;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 10px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fdbb2d;
+        }
+
+        .credits {
+            font-size: 18px;
+            color: #fff;
+            background: rgba(26, 42, 108, 0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .credits i {
+            color: #fdbb2d;
+            margin-right: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .footer-links a {
+            color: #fdbb2d;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>අකුරටම ICT</h1>
+            <p>පරිගණක අධ්‍යාපනය සහ ගුරු පුහුණුව සඳහා වෘත්තීය මගපෙන්වීම</p>
+        </header>
+
+        <div class="teacher-profile">
+            <div class="profile-img">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="profile-info">
+                <h2>Lakshan Sriyarathna</h2>
+                <p>අත්දැකීම් සහිත ICT ගුරුවරයෙක් සහ ගුරු පුහුණුකරු</p>
+                <p>වසර 10+ අත්දැකීම | Dp Coding Campus - Attanagalla ( Gampaha District Manager )</p>
+                <div class="qualifications">
+                    <span class="qualification-tag">BSc. Computer Science</span>
+                    <span class="qualification-tag">PGDE in ICT</span>
+                    <span class="qualification-tag">Microsoft Certified Educator</span>
+                    <span class="qualification-tag">Google Certified Teacher</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <div class="contact-info">
+                <h2 class="section-title">අපව සම්බන්ධ කරගන්න</h2>
+                
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="info-text">
+                        <h3>ලිපිනය</h3>
+                        <p>Dp Coding Campus Attanagalla , Attanagalla RajamahaViharaya , Attanagalla</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="info-text">
+                        <h3>දුරකථන අංක</h3>
+                        <p>+94 77 123 4567</p>
+                        <p>+94 11 234 5678</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div class="info-text">
+                        <h3>විද්‍යුත් තැපෑල</h3>
+                        <p>lakshan@ictguruwediya.lk</p>
+                        <p>ictclasses.colombo@gmail.com</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <div class="info-text">
+                        <h3>කාල සීමාව</h3>
+                        <p>සඳුදා - සිකුරාදා: 8:00 AM - 6:00 PM</p>
+                        <p>සෙනසුරාදා: 8:00 AM - 1:00 PM</p>
+                        <p>ඉරිදා: විවේක දිනය</p>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h2 class="section-title">පණිවිඩයක් යවන්න</h2>
+                
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">ඔබේ නම</label>
+                        <input type="text" id="name" class="form-control" placeholder="ඔබේ සම්පූර්ණ නම ඇතුළත් කරන්න" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">විද්‍යුත් තැපෑල</label>
+                        <input type="email" id="email" class="form-control" placeholder="ඔබගේ විද්‍යුත් තැපැල් ලිපිනය" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">දුරකථන අංකය</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="ඔබගේ දුරකථන අංකය">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">විෂය</label>
+                        <select id="subject" class="form-control" required>
+                            <option value="" disabled selected>විෂය තෝරන්න</option>
+                            <option value="ol-ict">සාමාන්‍ය පෙළ ICT</option>
+                            <option value="al-ict">උසස් පෙළ ICT</option>
+                            <option value="programming">ප්‍රෝග්‍රෑමින්ග් පන්ති</option>
+                            <option value="teacher-training">ගුරු පුහුණුව</option>
+                            <option value="other">වෙනත්</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">පණිවිඩය</label>
+                        <textarea id="message" class="form-control" placeholder="ඔබගේ පණිවිඩය මෙහි ඇතුළත් කරන්න..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> පණිවිඩය යවන්න</button>
+                    
+                    <div class="success-message" id="successMessage">
+                        <i class="fas fa-check-circle"></i> ඔබගේ පණිවිඩය සාර්ථකව යවන ලදී! ඉක්මනින් ඔබව සම්බන්ධ කරගන්නෙමු.
+                    </div>
+                </form>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.798467112139!2d79.85877441455836!3d6.921006295003798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25963120b1509%3A0x2db2c18e2158dab0!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1647421565385!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">අකුරටම ICT</div>
+            <div class="credits">
+                <i class="fas fa-heart"></i> All the credits to #teamakuratamaict
+            </div>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Courses</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 #teamakuratamaict. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Form validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (name && email && subject && message) {
+                // In a real application, you would send the form data to a server here
+                // For demonstration, we'll just show the success message
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Reset the form
+                this.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

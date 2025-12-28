@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICT Study Packs - 6-13 ශ්රේණි</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--light);
+        }
+
+        .hero {
+            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .grades-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+        }
+
+        .grades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .grade-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .grade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .grade-header {
+            background: var(--secondary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .grade-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .grade-content {
+            padding: 1.5rem;
+        }
+
+        .grade-content ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .grade-content ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grade-content ul li:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #c0392b;
+        }
+
+        .study-pack-section {
+            padding: 4rem 0;
+            background: var(--light);
+        }
+
+        .pack-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .pack-header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .pack-content {
+            padding: 2rem;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .pack-details {
+            margin-bottom: 2rem;
+        }
+
+        .pack-details h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .pack-details ul {
+            list-style: none;
+        }
+
+        .pack-details ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pack-details ul li:last-child {
+            border-bottom: none;
+        }
+
+        .payment-section {
+            padding: 4rem 0;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .payment-option {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .payment-option:hover {
+            transform: translateY(-5px);
+        }
+
+        .payment-option img {
+            max-width: 100px;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>අකුරටම ICT</span>
+                </div>
+
+                <nav>
+                    <ul>
+                        <li><a href="index.html" >Home</a></li>
+                        <li><a href="Courses.html"class="active">Courses</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="Contact-us.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>6-13 ශ්‍රේණි ICT Study Packs</h1>
+            <p>විශේෂිත අධ්‍යාපනික අන්තර්ගතය සහ වීඩියෝ පාඩම් සමඟ ඔබේ ICT දැනුම වර්ධනය කරගන්න</p>
+        </div>
+    </section>
+
+    <!-- Grades Section -->
+    <section class="grades-section" id="grades">
+        <div class="container">
+            <div class="section-title">
+                <h2>ශ්‍රේණි අනුව Study Packs</h2>
+                <p>ඔබේ ශ්‍රේණිය තෝරා අදාළ study pack එක ලබාගන්න</p>
+            </div>
+
+            <div class="grades-grid">
+                <!-- Grade 6 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>6 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 10</li>
+                            <li>වීඩියෝ පාඩම් 15</li>
+                            <li>පරීක්ෂණ 5</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 7 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>7 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 12</li>
+                            <li>වීඩියෝ පාඩම් 18</li>
+                            <li>පරීක්ෂණ 6</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 8 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>8 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 14</li>
+                            <li>වීඩියෝ පාඩම් 20</li>
+                            <li>පරීක්ෂණ 7</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 9 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>9 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 16</li>
+                            <li>වීඩියෝ පාඩම් 22</li>
+                            <li>පරීක්ෂණ 8</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 10 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>10 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 18</li>
+                            <li>වීඩියෝ පාඩම් 25</li>
+                            <li>පරීක්ෂණ 10</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 11 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>11 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 20</li>
+                            <li>වීඩියෝ පාඩම් 28</li>
+                            <li>පරීක්ෂණ 12</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 12 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>12 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 22</li>
+                            <li>වීඩියෝ පාඩම් 30</li>
+                            <li>පරීක්ෂණ 14</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+
+                <!-- Grade 13 -->
+                <div class="grade-card">
+                    <div class="grade-header">
+                        <h3>13 ශ්‍රේණිය</h3>
+                    </div>
+                    <div class="grade-content">
+                        <ul>
+                            <li>පාඩම් 24</li>
+                            <li>වීඩියෝ පාඩම් 35</li>
+                            <li>පරීක්ෂණ 16</li>
+                            <li>අභ්‍යාස පත්‍රිකා</li>
+                        </ul>
+                        <a href="#" class="btn">Pay Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Pack Section -->
+    <section class="study-pack-section" id="study-packs">
+        <div class="container">
+            <div class="section-title">
+                <h2>Study Pack නිදර්ශනය</h2>
+                <p>අපගේ study pack වල අන්තර්ගතය දෙස බලන්න</p>
+            </div>
+
+            <div class="pack-container">
+                <div class="pack-header">
+                    <h2>9 ශ්‍රේණිය - පාඩම 3: පරිගණක මෘදුකාංග</h2>
+                </div>
+                <div class="pack-content">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="pack-details">
+                        <h3>මෙම පාඩමේ අන්තර්ගතය:</h3>
+                        <ul>
+                            <li>මෘදුකාංග පිළිබඳ හැඳින්වීම</li>
+                            <li>මෙහෙයුම් පද්ධති</li>
+                            <li>යොදුම් මෘදුකාංග</li>
+                            <li>මෘදුකාංග ස්ථාපනය කිරීම</li>
+                            <li>පරිගණක වෛරස් සහ ආරක්ෂාව</li>
+                        </ul>
+                    </div>
+
+                    <a href="#" class="btn">මුළු Study Pack එක ලබාගන්න</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section class="payment-section" id="payment">
+        <div class="container">
+            <div class="section-title">
+                <h2>ගෙවීම් ක්‍රම</h2>
+                <p>ඔබට පහසු ගෙවීම් ක්‍රමයක් තෝරාගන්න</p>
+            </div>
+
+            <div class="payment-options">
+                <div class="payment-option">
+                    <img src="https://via.placeholder.com/100x60" alt="Visa">
+                    <h3>Visa / MasterCard</h3>
+                    <p>කාඩ්ප් මගින් ගෙවන්න</p>
+                </div>
+
+                <div class="payment-option">
+                    <img src="https://via.placeholder.com/100x60" alt="PayPal">
+                    <h3>PayPal</h3>
+                    <p>PayPal ගිණුමක් මගින් ගෙවන්න</p>
+                </div>
+
+                <div class="payment-option">
+                    <img src="https://via.placeholder.com/100x60" alt="Bank Transfer">
+                    <h3>බැංකු මාරුව</h3>
+                    <p>සෘජු බැංකු මාරුවක් මගින් ගෙවන්න</p>
+                </div>
+
+                <div class="payment-option">
+                    <img src="https://via.placeholder.com/100x60" alt="Mobile Payment">
+                    <h3>ජංගම ගෙවීම</h3>
+                    <p>ජංගම දුරකථන ගෙවීම්</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ICT Study Packs</h3>
+                    <p>6-13 ශ්‍රේණි දක්වා ICT අධ්‍යාපනික අන්තර්ගතය සපයන වෙබ් අඩවියකි.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>සබැඳි</h3>
+                    <ul>
+                        <li><a href="#home">මුල් පිටුව</a></li>
+                        <li><a href="#grades">ශ්‍රේණි</a></li>
+                        <li><a href="#study-packs">Study Packs</a></li>
+                        <li><a href="#payment">ගෙවීම්</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>සම්බන්ධ වන්න</h3>
+                    <ul>
+                        <li>දුරකථන: 011-1234567</li>
+                        <li>විද්‍යුත් තැපෑල: info@ictstudypacks.lk</li>
+                        <li>ලිපිනය: කොළඹ 07, ශ්‍රී ලංකාව</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 ICT Study Packs. සියලුම හිමිකම් ඇවිරිණි.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Payment button functionality
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if(this.textContent.includes('ගෙවන්න')) {
+                    e.preventDefault();
+                    alert('ගෙවීම් පිටුවට හරවා යවනු ලැබේ...');
+                    // In a real implementation, this would redirect to payment page
+                    // window.location.href = '/payment';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

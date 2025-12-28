@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Sign Up System (email/Password)</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <style>
+      /* --- General Reset and Body Styling --- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* --- Container Layout --- */
+      .container {
+        /* Starts hidden and shown by JS once Firebase state is checked */
+        display: none;
+        width: 850px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      .welcome-section {
+        flex: 1;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .welcome-section h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+
+      .welcome-section p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .form-section {
+        flex: 1.2;
+        padding: 40px;
+      }
+
+      .form-container {
+        width: 100%;
+      }
+
+      /* --- Toggle Buttons --- */
+      .form-toggle {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .toggle-btn {
+        padding: 10px 20px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        font-weight: 600;
+        color: #777;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .toggle-btn.active {
+        color: #2575fc;
+        border-bottom: 3px solid #2575fc;
+      }
+
+      /* --- Form Visibility and Animation --- */
+      .form {
+        display: none;
+      }
+
+      .form.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .form h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      /* --- Input Styles --- */
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus {
+        border-color: #2575fc;
+        box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+        outline: none;
+      }
+
+      /* --- Password Strength Indicator --- */
+      .password-strength {
+        height: 5px;
+        background-color: #eee;
+        border-radius: 5px;
+        margin-top: 5px;
+        overflow: hidden;
+      }
+
+      .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease;
+      }
+
+      .password-requirements {
+        font-size: 12px;
+        color: #777;
+        margin-top: 5px;
+      }
+
+      /* --- Messages & Buttons --- */
+      .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 15px;
+        text-align: center;
+        display: none;
+      }
+
+      .error-message-general {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 15px;
+        text-align: center;
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+      }
+
+      .btn:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* --- Loading Spinner --- */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .forgot-password {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .forgot-password a {
+        color: #2575fc;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      /* --- Media Queries --- */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .welcome-section {
+          padding: 30px 20px;
+        }
+
+        .form-section {
+          padding: 30px 20px;
+        }
+      }
+
+      .otp {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        background: #000d;
+        display: none;
+        z-index: 11;
+        border-radius: 10px;
+      }
+      .otp.active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .otp input {
+        width: 240px;
+        height: 40px;
+        text-align: center;
+        font-size: 25px;
+        color: #edeaf0;
+        margin: 0 5px;
+        font-size: 30px;
+        color: #000;
+      }
+      .otp button {
+        width: 250px;
+        height: 40px;
+        margin-top: 20px;
+        background: #449a56;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="auth-container">
+      <div class="welcome-section">
+        <h1>Welcome!</h1>
+        <p>Sign in & Access to begin a wonderful journey with us...!</p>
+      </div>
+
+      <div class="form-section">
+        <div class="form-container">
+          <div class="form-toggle">
+            <button class="toggle-btn active" id="login-toggle">Login</button>
+            <button class="toggle-btn" id="signup-toggle">Sign Up</button>
+          </div>
+
+          <form class="form active" id="login-form">
+            <h2>Login to Your Account</h2>
+
+            <div class="input-group">
+              <label for="login-email">Email</label>
+              <input
+                type="email"
+                id="login-email"
+                placeholder="Enter your Email"
+                required
+                maxlength="30"
+              />
+              <div class="error-message" id="login-email-error"></div>
+            </div>
+
+            <div class="input-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn" id="login-btn">
+              <span class="btn-text">Login</span>
+            </button>
+
+            <div class="error-message-general" id="login-error"></div>
+
+            <div class="forgot-password">
+              <a href="#" id="forgot-password-link">Forgot Password?</a>
+            </div>
+          </form>
+
+          <form class="form" id="signup-form">
+            <h2>Create New Account</h2>
+
+            <div class="input-group">
+              <label for="signup-name">Full Name</label>
+              <input
+                type="text"
+                id="signup-name"
+                placeholder="Enter your full name"
+                required
+                maxlength="100"
+              />
+              <div class="error-message" id="signup-name-error"></div>
+            </div>
+
+            <div class="input-group">
+              <label for="signup-email">Email</label>
+              <input
+                type="email"
+                id="signup-email"
+                placeholder="Choose a email"
+                required
+                maxlength="30"
+              />
+              <div class="error-message" id="signup-email-error"></div>
+            </div>
+
+            <div class="input-group">
+              <label for="signup-password">Password</label>
+              <input
+                type="password"
+                id="signup-password"
+                placeholder="Create a password"
+                required
+                minlength="8"
+              />
+              <div class="password-strength">
+                <div
+                  class="password-strength-bar"
+                  id="password-strength-bar"
+                ></div>
+              </div>
+              <div class="password-requirements">
+                Password must be at least 8 characters with uppercase,
+                lowercase, number, and special character.
+              </div>
+              <div class="error-message" id="password-error"></div>
+            </div>
+
+            <div class="input-group">
+              <label for="confirm-password">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm your password"
+                required
+              />
+              <div class="error-message" id="confirm-password-error"></div>
+            </div>
+
+            <button type="submit" class="btn" id="signup-btn">
+              <span class="btn-text">Sign Up</span>
+            </button>
+
+            <div class="success-message" id="signup-success">
+              Account created successfully! You can now login.
+            </div>
+
+            <div class="error-message-general" id="signup-error"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="otp">
+      <input type="number" name="otp-input" id="otp-input" maxlength="6" />
+      <button type="submit" id="otp-btn">SEND OTP</button>
+    </div>
+
+    <script type="module">
+      // Constants
+      const BASE_BACKEND_URL = "http://127.0.0.1:5000/api/v2/";
+
+      // DOM Elements
+      const authContainer = document.getElementById("auth-container");
+      const loginToggle = document.getElementById("login-toggle");
+      const signupToggle = document.getElementById("signup-toggle");
+      const loginForm = document.getElementById("login-form");
+      const signupForm = document.getElementById("signup-form");
+      const passwordInput = document.getElementById("signup-password");
+      const passwordStrengthBar = document.getElementById(
+        "password-strength-bar"
+      );
+      const passwordError = document.getElementById("password-error");
+      const confirmPasswordInput = document.getElementById("confirm-password");
+      const confirmPasswordError = document.getElementById(
+        "confirm-password-error"
+      );
+
+      // --- Helper Functions ---
+
+      // Toggle Event Listeners
+      loginToggle.addEventListener("click", () => {
+        loginToggle.classList.add("active");
+        signupToggle.classList.remove("active");
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+        signupForm.reset();
+        clearMessages();
+      });
+
+      signupToggle.addEventListener("click", () => {
+        signupToggle.classList.add("active");
+        loginToggle.classList.remove("active");
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+        loginForm.reset();
+        clearMessages();
+      });
+
+      function validatePassword() {
+        const password = passwordInput.value;
+        let isValid = true;
+        let errorMessage = "";
+
+        let strength = 0;
+        if (password.length >= 8) strength += 25;
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[a-z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 15;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 10;
+
+        passwordStrengthBar.style.width = strength + "%";
+        if (strength < 50) {
+          passwordStrengthBar.style.backgroundColor = "#e74c3c";
+        } else if (strength < 80) {
+          passwordStrengthBar.style.backgroundColor = "#f39c12";
+        } else {
+          passwordStrengthBar.style.backgroundColor = "#2ecc71";
+        }
+
+        if (password.length < 8) {
+          isValid = false;
+          errorMessage = "Password must be at least 8 characters long.";
+        } else if (!/[A-Z]/.test(password)) {
+          isValid = false;
+          errorMessage = "Password must contain at least one uppercase letter.";
+        } else if (!/[a-z]/.test(password)) {
+          isValid = false;
+          errorMessage = "Password must contain at least one lowercase letter.";
+        } else if (!/[0-9]/.test(password)) {
+          isValid = false;
+          errorMessage = "Password must contain at least one number.";
+        } else if (!/[^A-Za-z0-9]/.test(password)) {
+          isValid = false;
+          errorMessage =
+            "Password must contain at least one special character.";
+        }
+
+        passwordError.textContent = errorMessage;
+        passwordError.style.display = isValid ? "none" : "block";
+        return isValid;
+      }
+
+      passwordInput.addEventListener("input", validatePassword);
+
+      function validateConfirmPassword() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        const isMatch = password === confirmPassword && confirmPassword !== "";
+
+        if (!isMatch) {
+          confirmPasswordError.textContent = "Passwords do not match.";
+          confirmPasswordError.style.display = "block";
+          return false;
+        } else {
+          confirmPasswordError.style.display = "none";
+          return true;
+        }
+      }
+      confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+
+      function setLoading(button, isLoading) {
+        const btnText = button.querySelector(".btn-text");
+        const originalText = button.id === "login-btn" ? "Login" : "Sign Up";
+        if (isLoading) {
+          button.disabled = true;
+          btnText.innerHTML = '<span class="loading"></span>Processing...';
+        } else {
+          button.disabled = false;
+          btnText.textContent = originalText;
+        }
+      }
+
+      function clearMessages() {
+        // Clear general error/success messages
+        document.getElementById("login-error").style.display = "none";
+        document.getElementById("signup-error").style.display = "none";
+        document.getElementById("signup-success").style.display = "none";
+
+        // Clear field-specific error messages
+        document.getElementById("login-email-error").style.display = "none";
+        document.getElementById("signup-email-error").style.display = "none";
+        document.getElementById("signup-name-error").style.display = "none";
+        document.getElementById("password-error").style.display = "none";
+        document.getElementById("confirm-password-error").style.display =
+          "none";
+
+        // Reset password strength bar
+        passwordStrengthBar.style.width = "0%";
+        passwordStrengthBar.style.backgroundColor = "#eee";
+      }
+
+      function redirectAfterLogin() {
+        // Change "Dash.html" to your actual dashboard or home page
+        window.location.href = "Dash.html";
+      }
+
+      async function updateLastLogin(userId) {
+        try {
+          // todo update last login timestamp in user
+        } catch (error) {
+          console.error("❌ Error updating last login:", error);
+        }
+      }
+
+      const register = async (e) => {
+        e.preventDefault();
+
+        const signupBtn = document.getElementById("signup-btn");
+        const signupError = document.getElementById("signup-error");
+        const signupSuccess = document.getElementById("signup-success");
+
+        const name = document.getElementById("signup-name").value.trim();
+        const email = document.getElementById("signup-email").value;
+        const password = document.getElementById("signup-password").value;
+
+        clearMessages();
+
+        // Run all validations
+        if (!name) {
+          document.getElementById("signup-name-error").textContent =
+            "Full Name is required.";
+          document.getElementById("signup-name-error").style.display = "block";
+          return;
+        }
+
+        const isPasswordValid = validatePassword();
+        const isConfirmPasswordValid = validateConfirmPassword();
+        if (!isPasswordValid || !isConfirmPasswordValid) return;
+
+        setLoading(signupBtn, true);
+
+        try {
+          const signupData = {
+            name: document.getElementById("signup-name").value,
+            email: document.getElementById("signup-email").value,
+            password: document.getElementById("signup-password").value,
+          };
+          //register
+          const res = await axios.post(
+            `http://127.0.0.1:5000/api/v2/auth/register`,
+            {
+              ...signupData,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+
+          console.log("✅ Signup response:", res);
+
+          // 4. Success handling
+          signupSuccess.style.display = "block";
+          setTimeout(() => {
+            // loginToggle.click(); // Switch to login form
+            // document.getElementById("signup-form").reset();
+            // document.getElementById("login-email").value = email;
+            // document.getElementById("login-password").focus();
+
+            document.querySelector(".otp").classList.add("active");
+          }, 2000);
+        } catch (e) {
+          const error = e.response ? e.response.data : e;
+          console.error("💥 Signup error details:", error);
+
+          let errorMessage = "An unknown error occurred. Please try again.";
+
+          if (
+            error.code === "auth/email-already-in-use" ||
+            error.message === "email is already taken."
+          ) {
+            errorMessage =
+              "This email is already taken. Please choose another.";
+          } else if (error.code === "auth/weak-password") {
+            errorMessage =
+              "Password is too weak. Please use a stronger password.";
+          } else if (
+            error.code === "permission-denied" ||
+            error.code === "failed-precondition"
+          ) {
+            // This error means the Firestore security rules were violated
+            errorMessage =
+              "Account creation failed due to security rules. Please check Firebase Firestore rules.";
+          } else if (error.code === "auth/network-request-failed") {
+            errorMessage = "Network error. Please check your connection.";
+          }
+
+          signupError.textContent = errorMessage;
+          signupError.style.display = "block";
+        } finally {
+          setLoading(signupBtn, false);
+        }
+      };
+
+      // --- Core Logic: Sign Up ---
+      document
+        .getElementById("signup-form")
+        .addEventListener("submit", register);
+
+      // --- Core Logic: Login ---
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const loginBtn = document.getElementById("login-btn");
+          const loginError = document.getElementById("login-error");
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+
+          clearMessages();
+          if (
+            !validateemailFormat(
+              email,
+              document.getElementById("login-email-error")
+            )
+          )
+            return;
+
+          setLoading(loginBtn, true);
+
+          try {
+            // login
+          } catch (error) {
+            console.error("❌ Login error:", error);
+
+            let errorMessage = "Incorrect email or password.";
+            if (
+              error.code === "auth/user-not-found" ||
+              error.code === "auth/wrong-password" ||
+              error.code === "auth/invalid-credential"
+            ) {
+              errorMessage = "Incorrect email or password.";
+            } else if (error.code === "auth/network-request-failed") {
+              errorMessage = "Network error. Please check your connection.";
+            }
+
+            loginError.textContent = errorMessage;
+            loginError.style.display = "block";
+          } finally {
+            setLoading(loginBtn, false);
+          }
+        });
+
+      // --- Initial Auth State Check ---
+
+      authContainer.style.display = "flex";
+      clearMessages();
+
+      document.getElementById("otp-btn").addEventListener("click", async () => {
+        const res = await axios.post(
+          `http://127.0.0.1:5000/api/v2/auth/verify`,
+          {
+            otp: document.getElementById("otp-input").value,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+
+        console.log("✅ Signup response:", res);
+      });
+    </script>
+  </body>
+</html>

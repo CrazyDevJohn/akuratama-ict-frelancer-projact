@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Akuratama ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baumans&family=Questrial&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles for smooth transitions */
+        .sidebar-item:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s;
+        }
+
+        .action-card {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Fixed Dark Mode styles */
+        body.dark {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark aside {
+            background-color: #1e3a8a;
+        }
+
+        body.dark .text-gray-800 {
+            color: #f7fafc;
+        }
+
+        body.dark .text-gray-600 {
+            color: #cbd5e0;
+        }
+
+        body.dark .bg-white {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark .bg-gray-50 {
+            background-color: #1a202c;
+        }
+
+        body.dark .bg-gray-100 {
+            background-color: #2d3748;
+        }
+
+        /* Mobile Sidebar Transitions */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Hide scrollbar for sidebar */
+        aside::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        aside::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        /* Photo Gallery Styles */
+        .photo-card {
+            min-width: 280px;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+
+        /* Gallery container styling */
+        .photo-gallery-container {
+            scroll-behavior: smooth;
+            scroll-snap-type: x mandatory;
+        }
+
+        /* Hide scrollbar for photo gallery */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .dot.active {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+
+        /* Arrow button disabled state */
+        button:disabled {
+            pointer-events: none;
+        }
+
+        /* Loading animation */
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#ec4899'
+                    },
+                    fontFamily: {
+                        boulas: ['"Baumans"', 'cursive'],
+                        sans: ['"Questrial"', 'sans-serif']
+                    }
+                }
+            }
+        }
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBG8Jy_W3zV4yRkdZcfAOA7NBhRp5-nwXU",
+            authDomain: "login-and-sign-up-5cdb6.firebaseapp.com",
+            projectId: "login-and-sign-up-5cdb6",
+            storageBucket: "login-and-sign-up-5cdb6.firebasestorage.app",
+            messagingSenderId: "149568289212",
+            appId: "1:149568289212:web:fdb3580b1fe84558a953b9",
+            measurementId: "G-WYJVJMPLEX"
+        };
+    </script>
+</head>
+
+<body class="bg-gray-50 font-sans transition-colors duration-300 overflow-x-hidden">
+
+    <div id="sidebar-backdrop"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden transition-opacity duration-300"></div>
+
+    <div class="flex min-h-screen relative">
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-72 bg-blue-600 shadow-2xl transform -translate-x-full lg:translate-x-0 lg:static lg:shadow-none lg:min-h-screen transition-transform duration-300 flex flex-col">
+
+            <div class="p-6 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-graduation-cap text-blue-600 text-xl"></i>
+                    </div>
+                    <h1 class="text-xl font-boulas text-white tracking-wide">AkuratamaICT</h1>
+                </div>
+                <button id="close-sidebar" class="lg:hidden text-white hover:text-gray-200 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="px-4 pb-6 overflow-y-auto flex-1">
+                <nav class="space-y-2">
+                    <div id="nav-dashboard"
+                        class="sidebar-item flex items-center space-x-3 p-3 bg-blue-700 rounded-lg cursor-pointer shadow-sm">
+                        <i class="fa-solid fa-table-columns text-white w-5 text-center"></i>
+                        <span class="text-white font-medium">Dashboard</span>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Student</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-user w-5 text-center"></i>
+                                <span>My Profile</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-id-card w-5 text-center"></i>
+                                <span>My Student ID</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Classes</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-green-300 hover:bg-blue-700/50 rounded-lg cursor-pointer font-medium">
+                                <span class="relative flex h-3 w-3 mr-2">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                                <span>Live Classes</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-video w-5 text-center"></i>
+                                <span>Ongoing Class</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i>
+                                <span>Past Lessons</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-box-archive w-5 text-center"></i>
+                                <span>Study Packs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Performance</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                                <span>My Performance</span>
+                            </div>
+                            <div class="ml-4 mt-2 space-y-1">
+                                <div class="text-xs font-semibold text-blue-300 uppercase tracking-wider mb-1">
+                                    AKURATAMICT STORE</div>
+                                <div
+                                    class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer ml-2">
+                                    <i class="fa-solid fa-store w-4 text-center"></i>
+                                    <span class="text-sm">Store</span>
+                                </div>
+                                <div
+                                    class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer ml-2">
+                                    <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
+                                    <span class="text-sm">My Orders</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Purchase</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-building-columns w-5 text-center"></i>
+                                <span>Bank Details</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-laptop-code w-5 text-center"></i>
+                                <span>Purchase ICT Class</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-chalkboard-user w-5 text-center"></i>
+                                <span>Purchase Class</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-file-invoice w-5 text-center"></i>
+                                <span>Purchase Study Pack</span>
+                            </div>
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-backward w-5 text-center"></i>
+                                <span>Purchase Past Lessons</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Payments</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-wallet w-5 text-center"></i>
+                                <span>My Payments</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 mb-8">
+                        <h3 class="px-3 text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">Support</h3>
+                        <div class="space-y-1">
+                            <div
+                                class="sidebar-item flex items-center space-x-3 p-3 text-blue-100 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-paper-plane w-5 text-center"></i>
+                                <span>Telegram Support</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sidebar-logout-container" class="mt-8 pt-4 border-t border-blue-700/50 lg:hidden">
+                        <div class="space-y-1">
+                            <div id="sidebar-logout"
+                                class="sidebar-item flex items-center space-x-3 p-3 text-red-300 hover:bg-blue-700 rounded-lg cursor-pointer">
+                                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                                <span class="font-semibold">Log Out</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 lg:p-8 transition-all duration-300 w-full">
+            <div id="loading-screen"
+                class="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+                <div class="loading-spinner mb-4"></div>
+                <p class="text-gray-600 dark:text-gray-300 text-lg">Loading your dashboard...</p>
+            </div>
+
+            <div
+                class="lg:hidden flex justify-between items-center mb-6 sticky top-0 bg-gray-50 dark:bg-gray-900 z-30 py-2 border-b border-gray-200 dark:border-gray-700">
+                <button id="open-sidebar" class="p-2 text-gray-600 hover:bg-gray-200 rounded-lg focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+                <span class="text-lg font-boulas text-blue-600">AkuratamaICT</span>
+
+                <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-full">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                </button>
+            </div>
+
+            <header class="flex flex-col items-center text-center mb-8 lg:mb-12 space-y-6 relative">
+                <div class="absolute right-0 top-0 hidden lg:flex items-center space-x-4">
+                    <button id="notification-bell"
+                        class="p-3 text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-800 dark:border dark:border-gray-600">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                    </button>
+                    <button id="theme-toggle"
+                        class="p-3 text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-800 dark:border dark:border-gray-600">
+                        <i class="fa-solid fa-moon text-xl"></i>
+                    </button>
+                    <button id="logout-btn"
+                        class="p-3 text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-300 hover:shadow-md bg-white dark:bg-gray-800 dark:border dark:border-gray-600">
+                        <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col items-center space-y-4 lg:space-y-6 pt-4 lg:pt-0">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full blur opacity-20 animate-pulse"></div>
+                        <img src="sir.jpg"
+                            onerror="this.onerror=null; this.src='https://placehold.co/160x160/2563eb/ffffff?text=Avatar';"
+                            alt="Student Avatar"
+                            class="relative w-28 h-28 lg:w-40 lg:h-40 object-cover rounded-full shadow-xl border-4 border-white dark:border-gray-700">
+                    </div>
+                    <div class="text-center">
+                        <h2 id="greeting-title"
+                            class="text-2xl lg:text-4xl font-boulas text-gray-800 tracking-tight dark:text-white">Good
+                            Evening!</h2>
+                        <p id="user-name-display" class="text-gray-500 font-medium text-sm lg:text-lg mt-1">Welcome back
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:hidden pt-2">
+                    <button id="mobile-theme-toggle"
+                        class="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-700 rounded-full shadow text-sm font-medium text-gray-700 dark:text-gray-200">
+                        <span>Switch Theme</span>
+                        <i class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!--myclasses section-->
+            <a href="myclasses.html">
+            <div id="action-cards-container"
+                class="flex flex-col md:flex-row justify-center items-center gap-4 lg:gap-8 mb-8 lg:mb-16 w-full max-w-5xl mx-auto">
+                <div
+                    class="action-card bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl cursor-pointer w-full md:w-80 text-center dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex flex-col items-center space-y-4">
+                        <div
+                            class="w-16 h-16 lg:w-20 lg:h-20 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-book-open-reader text-blue-600 text-3xl lg:text-4xl"></i>
+                        </div>
+                        
+                        
+                        <div>
+                                <h3 class="font-boulas text-gray-800 text-lg lg:text-xl dark:text-white">MY CLASSES</h3>
+                            <p class="text-gray-500 text-xs lg:text-sm mt-1">Access your learning materials</p>
+                        </div>
+                    </div>
+                </div>
+                 </a>
+
+                <div
+                    class="action-card bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl cursor-pointer w-full md:w-80 text-center dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex flex-col items-center space-y-4">
+                        <div
+                            class="w-16 h-16 lg:w-20 lg:h-20 bg-pink-50 dark:bg-pink-900/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cart-plus text-pink-500 text-3xl lg:text-4xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-boulas text-gray-800 text-lg lg:text-xl dark:text-white">PURCHASE</h3>
+                            <p class="text-gray-500 text-xs lg:text-sm mt-1">Get new classes & tutes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-3xl p-6 lg:p-10 text-center relative overflow-hidden shadow-inner max-w-4xl mx-auto mb-8">
+                <div class="relative z-10 space-y-2 lg:space-y-4">
+                    <h1 class="text-xl lg:text-3xl font-boulas tracking-widest text-gray-600 dark:text-gray-300">
+                        WELCOME TO
+                    </h1>
+                    <div class="text-3xl lg:text-6xl font-boulas flex flex-col lg:block lg:space-x-2 leading-tight">
+                        <span class="text-gray-800 dark:text-white">Akuratama</span>
+                        <span class="text-primary">ICT</span>
+                        <span class="text-gray-800 dark:text-white">LMS</span>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm lg:text-xl mt-4 font-medium">සාර්ථකත්වයේ
+                        ගමනාරම්භය</p>
+                </div>
+
+                <div
+                    class="absolute -bottom-10 -right-10 w-40 h-40 bg-white dark:bg-gray-600 rounded-full opacity-50 blur-2xl">
+                </div>
+                <div
+                    class="absolute top-10 -left-10 w-32 h-32 bg-blue-200 dark:bg-blue-900 rounded-full opacity-30 blur-xl">
+                </div>
+            </div>
+
+            <!-- Photo Gallery Section -->
+            <div class="max-w-6xl mx-auto mb-12 lg:mb-16">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl lg:text-3xl font-boulas text-gray-800 dark:text-white mb-2">Our ICT Journey</h2>
+                    <p class="text-gray-500 dark:text-gray-400">Swipe or use arrows to explore our learning moments</p>
+                    <div id="photo-counter" class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                        <span id="current-photo">1</span> / <span id="total-photos">6</span>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <!-- Left Arrow -->
+                    <button id="prev-photo"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 lg:-translate-x-4 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border border-gray-200 dark:border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg disabled:hover:scale-100">
+                        <i class="fa-solid fa-chevron-left text-gray-700 dark:text-gray-300 text-lg"></i>
+                    </button>
+
+                    <!-- Right Arrow -->
+                    <button id="next-photo"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 lg:translate-x-4 z-10 bg-white dark:bg-gray-800 p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 border border-gray-200 dark:border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg disabled:hover:scale-100">
+                        <i class="fa-solid fa-chevron-right text-gray-700 dark:text-gray-300 text-lg"></i>
+                    </button>
+
+                    <!-- Photo Gallery Container -->
+                    <div id="photo-gallery-container"
+                        class="photo-gallery-container flex overflow-x-auto gap-4 lg:gap-6 p-4 pb-6 scrollbar-hide rounded-2xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <!-- Photo Cards will be generated by JavaScript -->
+                    </div>
+
+                    <!-- Dot Indicators -->
+                    <div id="photo-dots" class="flex justify-center space-x-2 mt-4">
+                        <!-- Dots will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        // Import Modular Firebase services
+        import {initializeApp} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+        import {getAuth, onAuthStateChanged, signOut} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+        import {getFirestore, doc, getDoc} from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js';
+
+        // Retrieve config from global scope (defined in the head <script>)
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- Photo Gallery Data ---
+        const photoData = [
+            {
+                id: 1,
+                title: "2027 AL Blast",
+                description: "Interactive learning with students",
+                url: "https://i.ibb.co/wFg9pNRm/image.png"
+            },
+            {
+                id: 2,
+                title: "2026 Time Table",
+                description: "Keep ICT 2026 on our hands",
+                url: "https://i.ibb.co/jkNSBCRD/image.png"
+            },
+            {
+                id: 3,
+                title: "Grade 7 Classes",
+                description: "Showcasing innovative solutions",
+                url: "https://i.ibb.co/JwFc8pxg/image.png"
+            },
+            {
+                id: 4,
+                title: "Group Discussions",
+                description: "Collaborative problem solving",
+                url: "https://i.ibb.co/rf1c5zKN/image.png"
+            },
+            {
+                id: 5,
+                title: "Exam Preparation",
+                description: "Guidance for success",
+                url: "https://i.ibb.co/JwFc8pxg/image.png"
+            },
+            {
+                id: 6,
+                title: "ICT Lab Session",
+                description: "Practical technology experience",
+                url: "https://i.ibb.co/5gqP7rrG/image.png"
+            }
+        ];
+
+        // --- Photo Gallery Variables ---
+        let currentPhotoIndex = 0;
+        let autoSlideInterval;
+
+        // --- Photo Gallery Functions ---
+        function createPhotoCard(photo, index) {
+            const card = document.createElement('div');
+            card.className = 'photo-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700';
+            card.dataset.index = index;
+
+            card.innerHTML = `
+                <div class="relative overflow-hidden">
+                    <img src="${photo.url}" 
+                         alt="${photo.title}"
+                         class="w-full h-48 lg:h-56 object-cover hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x300/3b82f6/ffffff?text=ICT+Photo'">
+                    <div class="absolute top-3 right-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        Photo ${index + 1}
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-800 dark:text-white text-lg mb-1">${photo.title}</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">${photo.description}</p>
+                    <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-calendar-alt mr-1"></i>
+                        <span>Recent Activity</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function createDotIndicator(index) {
+            const dot = document.createElement('button');
+            dot.className = 'dot w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 transition-all duration-300';
+            dot.dataset.index = index;
+
+            if (index === currentPhotoIndex) {
+                dot.classList.add('active');
+            }
+
+            dot.addEventListener('click', () => {
+                goToPhoto(index);
+            });
+
+            return dot;
+        }
+
+        function updatePhotoCounter() {
+            const currentPhotoElement = document.getElementById('current-photo');
+            const totalPhotosElement = document.getElementById('total-photos');
+
+            if (currentPhotoElement) {
+                currentPhotoElement.textContent = currentPhotoIndex + 1;
+            }
+
+            if (totalPhotosElement) {
+                totalPhotosElement.textContent = photoData.length;
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevPhotoBtn = document.getElementById('prev-photo');
+            const nextPhotoBtn = document.getElementById('next-photo');
+
+            if (!prevPhotoBtn || !nextPhotoBtn) return;
+
+            // Disable/enable previous button
+            if (currentPhotoIndex === 0) {
+                prevPhotoBtn.disabled = true;
+                prevPhotoBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                prevPhotoBtn.classList.remove('hover:shadow-xl', 'hover:scale-110');
+            } else {
+                prevPhotoBtn.disabled = false;
+                prevPhotoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevPhotoBtn.classList.add('hover:shadow-xl', 'hover:scale-110');
+            }
+
+            // Disable/enable next button
+            if (currentPhotoIndex === photoData.length - 1) {
+                nextPhotoBtn.disabled = true;
+                nextPhotoBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                nextPhotoBtn.classList.remove('hover:shadow-xl', 'hover:scale-110');
+            } else {
+                nextPhotoBtn.disabled = false;
+                nextPhotoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextPhotoBtn.classList.add('hover:shadow-xl', 'hover:scale-110');
+            }
+        }
+
+        function initializePhotoGallery() {
+            const photoGalleryContainer = document.getElementById('photo-gallery-container');
+            const photoDotsContainer = document.getElementById('photo-dots');
+
+            if (!photoGalleryContainer || !photoDotsContainer) return;
+
+            // Clear containers
+            photoGalleryContainer.innerHTML = '';
+            photoDotsContainer.innerHTML = '';
+
+            // Create photo cards
+            photoData.forEach((photo, index) => {
+                const card = createPhotoCard(photo, index);
+                photoGalleryContainer.appendChild(card);
+
+                const dot = createDotIndicator(index);
+                photoDotsContainer.appendChild(dot);
+            });
+
+            // Update initial position
+            updateGalleryPosition();
+
+            // Update navigation buttons
+            updateNavigationButtons();
+
+            // Update photo counter
+            updatePhotoCounter();
+
+            // Start auto slide
+            startAutoSlide();
+        }
+
+        function updateGalleryPosition() {
+            const photoGalleryContainer = document.getElementById('photo-gallery-container');
+            const photoDotsContainer = document.getElementById('photo-dots');
+
+            if (!photoGalleryContainer || !photoDotsContainer) return;
+
+            const cardWidth = 280; // Width of photo card + gap
+            const scrollPosition = currentPhotoIndex * cardWidth;
+
+            photoGalleryContainer.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+
+            // Update active dot
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                if (index === currentPhotoIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function goToPhoto(index) {
+            const oldIndex = currentPhotoIndex;
+            currentPhotoIndex = index;
+
+            // Ensure index stays within bounds
+            if (currentPhotoIndex < 0) {
+                currentPhotoIndex = 0;
+                return;
+            } else if (currentPhotoIndex >= photoData.length) {
+                currentPhotoIndex = photoData.length - 1;
+                return;
+            }
+
+            // Only update if index changed
+            if (oldIndex !== currentPhotoIndex) {
+                updateGalleryPosition();
+                updateNavigationButtons();
+                updatePhotoCounter();
+                resetAutoSlide();
+            }
+        }
+
+        function nextPhoto() {
+            // Only go next if not at the last photo
+            if (currentPhotoIndex < photoData.length - 1) {
+                goToPhoto(currentPhotoIndex + 1);
+            }
+        }
+
+        function prevPhoto() {
+            // Only go previous if not at the first photo
+            if (currentPhotoIndex > 0) {
+                goToPhoto(currentPhotoIndex - 1);
+            }
+        }
+
+        function startAutoSlide() {
+            // Clear any existing interval
+            clearInterval(autoSlideInterval);
+
+            // Only start auto slide if there's more than one photo
+            if (photoData.length > 1) {
+                autoSlideInterval = setInterval(() => {
+                    // Auto slide only if not at the last photo
+                    if (currentPhotoIndex < photoData.length - 1) {
+                        nextPhoto();
+                    } else {
+                        // If at the last photo, go back to first
+                        goToPhoto(0);
+                    }
+                }, 5000); // Change photo every 5 seconds
+            }
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM Elements
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const navItems = document.querySelectorAll('.sidebar-item');
+            const themeToggle = document.getElementById('theme-toggle');
+            const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+            const logoutBtn = document.getElementById('logout-btn');
+            const sidebarLogoutBtn = document.getElementById('sidebar-logout');
+            const greetingElement = document.getElementById('greeting-title');
+            const userNameDisplay = document.getElementById('user-name-display');
+            const cards = document.querySelectorAll('.action-card');
+            const loadingScreen = document.getElementById('loading-screen');
+            const prevPhotoBtn = document.getElementById('prev-photo');
+            const nextPhotoBtn = document.getElementById('next-photo');
+            const photoGalleryContainer = document.getElementById('photo-gallery-container');
+
+            // --- Firebase Authentication Logic ---
+            function checkAuth() {
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        console.log('User is logged in:', user.uid);
+
+                        // Get user data from Firestore
+                        try {
+                            const userDocRef = doc(db, 'users', user.uid);
+                            const userDoc = await getDoc(userDocRef);
+
+                            if (userDoc.exists()) {
+                                const userData = userDoc.data();
+                                updateUserDisplay(userData);
+                            } else {
+                                console.warn('User document not found in Firestore. Data might not have saved during signup.');
+                                // Fallback to auth user info
+                                updateUserDisplay({
+                                    name: user.email ? user.email.split('@')[0] : 'User',
+                                    username: user.email ? user.email.split('@')[0] : 'User'
+                                });
+                            }
+                        } catch (error) {
+                            console.error('Error fetching user data:', error);
+                            // Fallback to auth user info
+                            updateUserDisplay({
+                                name: user.email ? user.email.split('@')[0] : 'User',
+                                username: user.email ? user.email.split('@')[0] : 'User'
+                            });
+                        }
+
+                        // Hide loading screen after a short delay
+                        setTimeout(() => {
+                            if (loadingScreen) {
+                                loadingScreen.style.opacity = '0';
+                                setTimeout(() => {
+                                    loadingScreen.style.display = 'none';
+                                }, 500);
+                            }
+                        }, 1000);
+
+                    } else {
+                        // User is not signed in, redirect to login
+                        console.log('User not authenticated, redirecting to login...');
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+
+            // Update user display with real data
+            function updateUserDisplay(userData) {
+                const hour = new Date().getHours();
+                let greeting = 'Good Morning';
+
+                if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
+                else if (hour >= 17) greeting = 'Good Evening';
+
+                // Use the user's actual name from Firestore
+                const userName = userData.name || userData.username || 'Student';
+
+                if (greetingElement) {
+                    greetingElement.textContent = `${greeting}, ${userName}!`;
+                }
+                if (userNameDisplay) {
+                    userNameDisplay.textContent = `Welcome back, ${userName}`;
+                }
+            }
+
+            // Real logout functionality with Firebase
+            const handleLogout = async () => {
+                try {
+                    // Show loading state
+                    if (loadingScreen) {
+                        loadingScreen.style.display = 'flex';
+                        loadingScreen.style.opacity = '1';
+                    }
+
+                    await signOut(auth);
+                    console.log('User logged out successfully');
+
+                    // Redirect to login page
+                    window.location.href = 'index.html';
+
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    // Still redirect even if there's an error
+                    window.location.href = 'index.html';
+                }
+            };
+
+            // Event listeners for ALL Logout buttons
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+            if (sidebarLogoutBtn) {
+                sidebarLogoutBtn.addEventListener('click', handleLogout);
+            }
+
+            // --- Sidebar Logic (Mobile) ---
+            function toggleSidebar() {
+                const isClosed = sidebar.classList.contains('-translate-x-full');
+
+                if (isClosed) {
+                    sidebar.classList.remove('-translate-x-full');
+                    backdrop.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    backdrop.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            // Event Listeners for Sidebar
+            if (openSidebarBtn) openSidebarBtn.addEventListener('click', toggleSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+            if (backdrop) backdrop.addEventListener('click', toggleSidebar);
+
+            // Close sidebar when clicking a link on mobile
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    navItems.forEach(n => n.classList.remove('bg-blue-800', 'shadow-inner'));
+                    this.classList.add('bg-blue-800', 'shadow-inner');
+
+                    if (window.innerWidth < 1024) {
+                        setTimeout(toggleSidebar, 150);
+                    }
+                });
+            });
+
+            // --- Theme Logic ---
+            let isDarkMode = localStorage.getItem('theme') === 'dark';
+
+            function updateThemeIcon(button) {
+                if (!button) return;
+                if (isDarkMode) {
+                    button.innerHTML = `<i class="fa-solid fa-sun text-xl"></i>`;
+                } else {
+                    button.innerHTML = `<i class="fa-solid fa-moon text-xl"></i>`;
+                }
+            }
+
+            function updateTheme() {
+                if (isDarkMode) {
+                    document.body.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.body.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+                updateThemeIcon(themeToggle);
+
+                if (mobileThemeToggle) {
+                    const icon = mobileThemeToggle.querySelector('i');
+                    const span = mobileThemeToggle.querySelector('span');
+                    if (icon) {
+                        icon.className = isDarkMode ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
+                        span.textContent = isDarkMode ? 'Light Theme' : 'Dark Theme';
+                    }
+                }
+            }
+
+            function toggleTheme() {
+                isDarkMode = !isDarkMode;
+                updateTheme();
+            }
+
+            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+            if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+
+            // Initialize theme
+            updateTheme();
+
+            // --- Animations ---
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 1200 + (index * 100));
+            });
+
+            // --- Photo Gallery Event Listeners ---
+            if (prevPhotoBtn) prevPhotoBtn.addEventListener('click', prevPhoto);
+            if (nextPhotoBtn) nextPhotoBtn.addEventListener('click', nextPhoto);
+
+            // Pause auto slide on hover
+            if (photoGalleryContainer) {
+                photoGalleryContainer.addEventListener('mouseenter', () => {
+                    clearInterval(autoSlideInterval);
+                });
+
+                photoGalleryContainer.addEventListener('mouseleave', () => {
+                    startAutoSlide();
+                });
+            }
+
+            // Touch events for mobile swipe
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            if (photoGalleryContainer) {
+                photoGalleryContainer.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                photoGalleryContainer.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+            }
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+
+                if (touchStartX - touchEndX > swipeThreshold) {
+                    // Swipe left - next photo
+                    nextPhoto();
+                } else if (touchEndX - touchStartX > swipeThreshold) {
+                    // Swipe right - previous photo
+                    prevPhoto();
+                }
+            }
+
+            // Initialize authentication check
+            checkAuth();
+
+            // Initialize Photo Gallery
+            initializePhotoGallery();
+        });
+    </script>
+</body>
+
+</html>

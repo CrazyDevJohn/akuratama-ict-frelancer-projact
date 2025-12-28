@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational|Courses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #ff7e5f;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #ff6b4a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Courses Section */
+        .courses-section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: #1e5799;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .grade-selector {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .grade-btn {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .grade-btn:hover {
+            background-color: #d0d5db;
+        }
+
+        .grade-btn.active {
+            background-color: #1e5799;
+            color: white;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-img {
+            height: 180px;
+            background-color: #1e5799;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #1e5799;
+        }
+
+        .course-content p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #ff7e5f;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: #ff7e5f;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Login/Signup Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-50px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-message {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .auth-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-btn {
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .auth-btn.login {
+            background-color: #1e5799;
+            color: white;
+        }
+
+        .auth-btn.login:hover {
+            background-color: #16457a;
+        }
+
+        .auth-btn.signup {
+            background-color: #ff7e5f;
+            color: white;
+        }
+
+        .auth-btn.signup:hover {
+            background-color: #ff6b4a;
+        }
+
+        .auth-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 5px;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .modal {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>අකුරටම ICT</span>
+                </div>
+
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="Courses.html" class="active">Courses</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="Contact-us.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Courses Section -->
+    <section class="courses-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Courses</h2>
+                <p>ඔබට අධ්‍යයනය කිරීමට අවශ්‍ය පාඨමාලා ශ්‍රේණිය තෝරන්න.</p>
+            </div>
+
+            <!-- Grade Selector -->
+            <div class="grade-selector">
+                <button class="grade-btn active" data-grade="all">All Grades</button>
+                <button class="grade-btn" data-grade="6">Grade 6</button>
+                <button class="grade-btn" data-grade="7">Grade 7</button>
+                <button class="grade-btn" data-grade="8">Grade 8</button>
+                <button class="grade-btn" data-grade="9">Grade 9</button>
+                <button class="grade-btn" data-grade="10">Grade 10</button>
+                <button class="grade-btn" data-grade="11">Grade 11</button>
+                <button class="grade-btn" data-grade="12">Grade 12</button>
+                <button class="grade-btn" data-grade="13">Grade 13</button>
+            </div>
+
+            <!-- Courses Grid -->
+            <div class="courses-grid">
+                <!-- Course Card 1 -->
+                <div class="course-card" data-grade="6">
+                    <div class="course-img" style="background-color: #99FF99;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Basic ICT - Grade 6</h3>
+                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 40 hours</span>
+                            <span><i class="fas fa-book"></i> 12 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 6">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 2 -->
+                <div class="course-card" data-grade="7">
+                    <div class="course-img" style="background-color: #99FF99;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Basic ICT - Grade 7</h3>
+                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 45 hours</span>
+                            <span><i class="fas fa-book"></i> 15 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 7">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 3 -->
+                <div class="course-card" data-grade="8">
+                    <div class="course-img" style="background-color: #99FF99;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Basic ICT - Grade 8</h3>
+                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 50 hours</span>
+                            <span><i class="fas fa-book"></i> 18 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 8">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 4 -->
+                <div class="course-card" data-grade="9">
+                    <div class="course-img" style="background-color: #e67e22;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Basic ICT - Grade 9</h3>
+                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 55 hours</span>
+                            <span><i class="fas fa-book"></i> 16 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 9">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 5 -->
+                <div class="course-card" data-grade="10">
+                    <div class="course-img" style="background-color: #e67e22;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Ordinary Level ICT - Grade 10</h3>
+                        <p>සාමානපෙළ මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.ප්‍රශ්න පත්‍ර සඳහා වැඩි අවධානයක් යොමු කරවීම</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 48 hours</span>
+                            <span><i class="fas fa-book"></i> 14 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Ordinary Level ICT - Grade 10">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 6 -->
+                <div class="course-card" data-grade="11">
+                    <div class="course-img" style="background-color: #e67e22;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Ordinary Level ICT - Grade 11</h3>
+                        <p>සාමානපෙළ මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.ප්‍රශ්න පත්‍ර සඳහා වැඩි අවධානයක් යොමු කරවීම</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 60 hours</span>
+                            <span><i class="fas fa-book"></i> 20 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Ordinary Level ICT - Grade 11">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 7 -->
+                <div class="course-card" data-grade="12">
+                    <div class="course-img" style="background-color:#66CCFF;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Advanced Level - ICT - Grade 12</h3>
+                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 70 hours</span>
+                            <span><i class="fas fa-book"></i> 22 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 12">View Course</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 8 -->
+                <div class="course-card" data-grade="13">
+                    <div class="course-img" style="background-color:#66CCFF;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Advanced Level - ICT - Grade 13</h3>
+                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 80 hours</span>
+                            <span><i class="fas fa-book"></i> 25 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 13">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Team Akuratama ICT</h3>
+                    <p>A professional online teaching platform designed to empower educators and engage students in
+                        virtual learning environments.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Teacher Guides</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Webinars</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Education Street, City</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> support@educonnect.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 EduConnect Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login/Signup Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Access Required</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">
+                    <p>You need to <strong>login or sign up</strong> to access this course content.</p>
+                    <p id="selectedCourse" style="font-weight: bold; margin-top: 10px; color: #1e5799;"></p>
+                </div>
+                <div class="auth-options">
+                    <a href="Loginpage.html" class="auth-btn login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Your Account
+                    </a>
+                    <a href="Loginpage.html" class="auth-btn signup">
+                        <i class="fas fa-user-plus"></i>
+                        Create New Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Grade filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const gradeButtons = document.querySelectorAll('.grade-btn');
+            const courseCards = document.querySelectorAll('.course-card');
+            const viewCourseBtns = document.querySelectorAll('.view-course-btn');
+            const loginModal = document.getElementById('loginModal');
+            const closeModal = document.getElementById('closeModal');
+            const selectedCourseElement = document.getElementById('selectedCourse');
+
+            // Grade filter functionality
+            gradeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    gradeButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const selectedGrade = this.getAttribute('data-grade');
+
+                    // Show/hide courses based on selection
+                    courseCards.forEach(card => {
+                        if (selectedGrade === 'all' || card.getAttribute('data-grade') === selectedGrade) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // View Course button functionality
+            viewCourseBtns.forEach(button => {
+                button.addEventListener('click', function() {
+                    const courseName = this.getAttribute('data-course');
+                    selectedCourseElement.textContent = courseName;
+                    loginModal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+                });
+            });
+
+            // Close modal functionality
+            closeModal.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            });
+
+            // Close modal when clicking outside
+            loginModal.addEventListener('click', function(e) {
+                if (e.target === loginModal) {
+                    loginModal.classList.remove('active');
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && loginModal.classList.contains('active')) {
+                    loginModal.classList.remove('active');
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
+                }
+            });
+        });
+    </script>
+</body>
+</html>
