@@ -81,15 +81,18 @@ export const VerifyRegister = async (req, res) => {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
-    const newUser = new User({
+    const newUser = await User.create({
       name: user.name,
       email: user.email,
       password: user.password,
     });
 
-    await newUser.save();
-
-    await genToken(res, user._id, process.env.JWT_SECRET_LOGIN, '15d');
+    await genToken(
+      res,
+      { id: newUser._id },
+      process.env.JWT_SECRET_LOGIN,
+      '15d',
+    );
 
     return res
       .status(201)
@@ -147,7 +150,7 @@ export const login = async (req, res) => {
     );
 
     return res.status(200).json({
-      succuss: true,
+      status: true,
       user: currentUser,
       message: 'User logged in successfully',
     });
@@ -162,12 +165,12 @@ export const getUserProfile = async (req, res) => {
 
   if (!user) {
     return res.status(404).json({
-      succuss: false,
+      status: false,
       message: 'User not found',
     });
   }
   return res.status(200).json({
-    succuss: true,
+    status: true,
     user: user,
   });
 };
@@ -180,7 +183,7 @@ export const logout = async (req, res) => {
       sameSite: 'strict',
     });
     return res.status(200).json({
-      succuss: true,
+      status: true,
       message: 'logout success!',
     });
   } catch (error) {

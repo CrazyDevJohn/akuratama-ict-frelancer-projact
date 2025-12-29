@@ -685,18 +685,30 @@
           const password = document.getElementById("login-password").value;
 
           clearMessages();
-          if (
-            !validateemailFormat(
-              email,
-              document.getElementById("login-email-error")
-            )
-          )
-            return;
 
           setLoading(loginBtn, true);
 
           try {
             // login
+
+            const res = await axios.post(
+              `http://127.0.0.1:5000/api/v2/auth/login`,
+              {
+                email,
+                password,
+              },
+              {
+                withCredentials: true,
+              }
+            );
+            const data = res.data;
+
+            if (data.status) {
+              // await updateLastLogin(data.user.id);
+              redirectAfterLogin();
+            }
+
+            console.log("✅ Login response:", res);
           } catch (error) {
             console.error("❌ Login error:", error);
 
@@ -733,6 +745,16 @@
             withCredentials: true,
           }
         );
+
+        const data = res.data;
+        if (data.status) {
+          document.querySelector(".otp").classList.remove("active");
+          signupForm.reset();
+          loginToggle.click();
+          document.getElementById("login-email").value =
+            document.getElementById("signup-email").value;
+          document.getElementById("login-password").focus();
+        }
 
         console.log("✅ Signup response:", res);
       });
