@@ -10,14 +10,15 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    instructor: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
     sourceLink: {
-      type: String,
+      type: [Schema.Types.ObjectId],
       required: true,
+      default: [],
     },
     studentsEnrolled: {
       type: [Schema.Types.ObjectId],

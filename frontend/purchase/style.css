@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100dvh;
+  background: #edeef0;
+}
+
+.container {
+  position: relative;
+  padding: 10px;
+}
+
+.filters--container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  gap: 10px;
+  overflow-x: scroll;
+}
+
+.filters--container .filter {
+  padding: 2px 5px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  user-select: none;
+  scrollbar-width: none;
+}
+.filters--container .filter.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
