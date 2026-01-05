@@ -19,6 +19,7 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
     <style>
       /* Previous CSS code remains the same until the loading animation section */
 
@@ -1343,14 +1344,7 @@
     <script>
       const checkAuthStatus = async () => {
         try {
-          const res = await axios.get(
-            `http://127.0.0.1:5000/api/v2/auth/profile`,
-            {
-              withCredentials: true,
-            }
-          );
-
-          const data = res.data;
+          const data = await getProfile();
 
           console.log(data);
 

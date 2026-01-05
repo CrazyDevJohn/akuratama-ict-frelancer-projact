@@ -436,6 +436,16 @@
     <script type="module">
       // Constants
 
+      (async function () {
+        const data = await getProfile();
+        console.log(data);
+
+        if (data.status) {
+          window.location.href = "Dash.html";
+          return;
+        }
+      })();
+
       // DOM Elements
       const authContainer = document.getElementById("auth-container");
       const loginToggle = document.getElementById("login-toggle");
@@ -666,15 +676,14 @@
           try {
             // login
 
-            const res = await logiWithEmailAndPasword(email, password);
-            const data = res.data;
+            const data = await logiWithEmailAndPasword(email, password);
 
             if (data.status) {
               // await updateLastLogin(data.user.id);
               redirectAfterLogin();
             }
 
-            console.log("✅ Login response:", res);
+            console.log("✅ Login response:", data);
           } catch (error) {
             console.error("❌ Login error:", error);
 
