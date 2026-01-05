@@ -693,7 +693,7 @@
       clearMessages();
 
       document.getElementById("otp-btn").addEventListener("click", async () => {
-        const data = await sendOtp(document.getElementById("otp-input"));
+        const data = await sendOtp(document.getElementById("otp-input").value);
 
         if (data.status) {
           document.querySelector(".otp").classList.remove("active");
