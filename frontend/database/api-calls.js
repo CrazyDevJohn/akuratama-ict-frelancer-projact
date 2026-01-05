@@ -59,7 +59,7 @@ const logOut = async () => {
     `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/logout`,
     {}
   );
-  alert();
+
   document.coockie = "AKURATAMA_ICT_REGISTER_TOKEN=''";
 
   return await res.data;

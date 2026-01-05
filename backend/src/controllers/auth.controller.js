@@ -180,7 +180,7 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    await res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', '');
+    await res.clearCookie('AKURATAMA_ICT_REGISTER_TOKEN', '');
     return res.status(200).json({
       status: true,
       message: 'logout success!',
