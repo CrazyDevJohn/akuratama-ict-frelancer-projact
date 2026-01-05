@@ -47,32 +47,11 @@ app.use('/api/v2/categories', categoriesRoutes);
 app.use('/api/v2/course', courseRoutes);
 app.use('/api/v2/lessons', lessonRoutes);
 
-app.get('/send', async (req, res) => {
-  await axios.post(
-    'https://api.brevo.com/v3/smtp/email',
-    {
-      sender: {
-        email: 'johnforceh@gmail.com',
-        name: 'john friday',
-      },
-      to: [{ email: 'johnforexpo@gmail.com' }],
-      subject: 'testing mail',
-      htmlContent: '<h1>akurata testing</h1>',
-    },
-    {
-      headers: {
-        'Content-Type': 'aplication/json',
-        'api-key':
-          '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',
-      },
-    },
-  );
-
-  res.send('sending');
-});
-
+connectDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}/api/v2/`);
+    });
+  })
+  .catch((er) => console.log(er));
 // Start server
-app.listen(PORT, () => {
-  connectDb();
-  console.log(`Server is running on http://localhost:${PORT}/api/v2/`);
-});
