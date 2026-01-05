@@ -77,6 +77,8 @@ export const VerifyRegister = async (req, res) => {
 
     const user = jwt.verify(token, process.env.JWT_SECRET_REGISTER);
 
+    console.log(user);
+
     if (parseInt(otp) !== user.otp) {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
