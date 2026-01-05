@@ -441,7 +441,9 @@
         console.log(data);
 
         if (data.status) {
-          window.location.href = "Dash.html";
+          // window.location.href = "Dash.html";
+          return;
+        } else {
           return;
         }
       })();
@@ -579,7 +581,7 @@
 
       function redirectAfterLogin() {
         // Change "Dash.html" to your actual dashboard or home page
-        window.location.href = "Dash.html";
+        // window.location.href = "Dash.html";
       }
 
       async function updateLastLogin(userId) {
@@ -645,7 +647,8 @@
           console.error("💥 Signup error details:", error);
 
           let errorMessage =
-            error.message || "An unknown error occurred. Please try again.";
+            error.response.message ||
+            "An unknown error occurred. Please try again.";
 
           signupError.textContent = errorMessage;
           signupError.style.display = "block";
@@ -687,7 +690,8 @@
           } catch (error) {
             console.error("❌ Login error:", error);
 
-            let errorMessage = error.message || "Incorrect email or password.";
+            let errorMessage =
+              error.response.message || "Incorrect email or password.";
 
             loginError.textContent = errorMessage;
             loginError.style.display = "block";

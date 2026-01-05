@@ -786,7 +786,7 @@
                             username: data.user.email ? data.user.email.split('@')[0] : 'User'
                         });
 
-                        window.location.href ="./Loginpage.html"
+                        // window.location.href ="./Loginpage.html"
                     }
 
                     // Hide loading screen after a short delay
@@ -802,7 +802,7 @@
                 } else {
                     // User is not signed in, redirect to login
                     console.log('User not authenticated, redirecting to login...');
-                    window.location.href = 'index.html';
+                    // window.location.href = 'index.html';
                 }
 
             }
@@ -846,12 +846,12 @@
 
 
                     // Redirect to login page
-                    window.location.href = 'index.html';
+                    // window.location.href = 'index.html';
 
                 } catch (error) {
                     console.error('Logout error:', error);
                     // Still redirect even if there's an error
-                    window.location.href = 'index.html';
+                    // window.location.href = 'index.html';
                 }
             };
 

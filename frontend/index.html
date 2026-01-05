@@ -1349,7 +1349,9 @@
           console.log(data);
 
           if (data.status) {
-            window.location.href = "Dash.html";
+            // window.location.href = "Dash.html";
+          } else {
+            return;
           }
 
           return { status: data.status, user: data.user };

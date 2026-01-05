@@ -186,6 +186,7 @@ export const logout = async (req, res) => {
       message: 'logout success!',
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ status: false, message: 'error in logout', error });
