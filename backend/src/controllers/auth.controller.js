@@ -59,7 +59,7 @@ export const register = async (req, res) => {
 
 export const VerifyRegister = async (req, res) => {
   const { otp } = req.body;
-  const token = req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
+  const token = await req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
   try {
     if (!otp) {
       return res
