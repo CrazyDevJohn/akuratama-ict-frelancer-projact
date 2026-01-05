@@ -59,14 +59,13 @@ export const register = async (req, res) => {
 
 export const VerifyRegister = async (req, res) => {
   const { otp } = req.body;
+  const token = req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
   try {
     if (!otp) {
       return res
         .status(400)
         .json({ status: false, message: 'OTP is required' });
     }
-
-    const token = req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
 
     console.log(token);
 
