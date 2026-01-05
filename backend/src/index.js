@@ -47,11 +47,15 @@ app.use('/api/v2/categories', categoriesRoutes);
 app.use('/api/v2/course', courseRoutes);
 app.use('/api/v2/lessons', lessonRoutes);
 
-connectDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}/api/v2/`);
-    });
-  })
-  .catch((er) => console.log(er));
+const connect = async () => {
+  await connectDb()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}/api/v2/`);
+      });
+    })
+    .catch((er) => console.log(er));
+};
+
+connect();
 // Start server
