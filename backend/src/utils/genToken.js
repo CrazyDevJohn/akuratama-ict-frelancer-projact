@@ -7,8 +7,8 @@ export const genToken = async (res, payload, secret, exp) => {
 
   return res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', token, {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7D MS
-    httpOnly: true,
+    httpOnly: false,
     sameSite: 'strict',
-    secure: process.env.NODE_ENV !== 'development',
+    secure: true,
   });
 };
