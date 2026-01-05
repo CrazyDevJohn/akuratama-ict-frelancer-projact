@@ -58,9 +58,8 @@ export const register = async (req, res) => {
 };
 
 export const VerifyRegister = async (req, res) => {
+  const { otp } = req.body;
   try {
-    const { otp } = req.body;
-
     if (!otp) {
       return res
         .status(400)
