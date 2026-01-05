@@ -82,6 +82,9 @@ export const VerifyRegister = async (req, res) => {
 
     console.log(user);
 
+    console.log(otp, oldOtp);
+    console.log(otp === oldOtp);
+
     if (parseInt(otp) != parseInt(oldOtp)) {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
