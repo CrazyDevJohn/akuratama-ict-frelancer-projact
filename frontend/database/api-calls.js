@@ -54,24 +54,10 @@ const checkIsAuthonticated = async () => {
   return await res.data;
 };
 
-const getProfile = async () => {
-  const res = await axios.get(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/profile`,
-    {
-      withCredentials: true,
-    }
-  );
-
-  return await res.data;
-};
-
 const logOut = async () => {
   const res = await axios.post(
     `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/logout`,
-    {},
-    {
-      withCredentials: true,
-    }
+    {}
   );
 
   return await res.data;

@@ -437,7 +437,7 @@
       // Constants
 
       (async function () {
-        const data = await getProfile();
+        const data = await checkIsAuthonticated();
         console.log(data);
 
         if (data.status) {
