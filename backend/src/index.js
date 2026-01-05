@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: 'https://tester-virid-seven.vercel.app/',
+    origin: true,
     credentials: true,
   }),
 );
