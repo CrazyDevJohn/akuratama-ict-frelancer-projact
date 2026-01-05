@@ -75,11 +75,14 @@ export const VerifyRegister = async (req, res) => {
         .json({ status: false, message: 'No token, authorization denied' });
     }
 
-    const user = jwt.verify(token, process.env.JWT_SECRET_REGISTER);
+    const { otp: oldOtp, ...user } = jwt.verify(
+      token,
+      process.env.JWT_SECRET_REGISTER,
+    );
 
     console.log(user);
 
-    if (parseInt(otp) !== parseInt(user.otp)) {
+    if (parseInt(otp) != parseInt(oldOtp)) {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
