@@ -6,6 +6,7 @@
     <title>Login & Sign Up System (email/Password)</title>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
     <style>
       /* --- General Reset and Body Styling --- */
       * {
@@ -418,7 +419,7 @@
             </button>
 
             <div class="success-message" id="signup-success">
-              Account created successfully! You can now login.
+              Otp send successfully, verify your email!
             </div>
 
             <div class="error-message-general" id="signup-error"></div>
@@ -434,7 +435,6 @@
 
     <script type="module">
       // Constants
-      const BASE_BACKEND_URL = "http://127.0.0.1:5000/api/v2/";
 
       // DOM Elements
       const authContainer = document.getElementById("auth-container");
@@ -608,20 +608,14 @@
         setLoading(signupBtn, true);
 
         try {
-          const signupData = {
-            name: document.getElementById("signup-name").value,
-            email: document.getElementById("signup-email").value,
-            password: document.getElementById("signup-password").value,
-          };
+          const name = document.getElementById("signup-name").value;
+          const email = document.getElementById("signup-email").value;
+          const password = document.getElementById("signup-password").value;
           //register
-          const res = await axios.post(
-            `http://127.0.0.1:5000/api/v2/auth/register`,
-            {
-              ...signupData,
-            },
-            {
-              withCredentials: true,
-            }
+          const res = await createUserWithEmailAndPassword(
+            name,
+            email,
+            password
           );
 
           console.log("✅ Signup response:", res);
@@ -640,27 +634,8 @@
           const error = e.response ? e.response.data : e;
           console.error("💥 Signup error details:", error);
 
-          let errorMessage = "An unknown error occurred. Please try again.";
-
-          if (
-            error.code === "auth/email-already-in-use" ||
-            error.message === "email is already taken."
-          ) {
-            errorMessage =
-              "This email is already taken. Please choose another.";
-          } else if (error.code === "auth/weak-password") {
-            errorMessage =
-              "Password is too weak. Please use a stronger password.";
-          } else if (
-            error.code === "permission-denied" ||
-            error.code === "failed-precondition"
-          ) {
-            // This error means the Firestore security rules were violated
-            errorMessage =
-              "Account creation failed due to security rules. Please check Firebase Firestore rules.";
-          } else if (error.code === "auth/network-request-failed") {
-            errorMessage = "Network error. Please check your connection.";
-          }
+          let errorMessage =
+            error.message || "An unknown error occurred. Please try again.";
 
           signupError.textContent = errorMessage;
           signupError.style.display = "block";
@@ -691,16 +666,7 @@
           try {
             // login
 
-            const res = await axios.post(
-              `http://127.0.0.1:5000/api/v2/auth/login`,
-              {
-                email,
-                password,
-              },
-              {
-                withCredentials: true,
-              }
-            );
+            const res = await logiWithEmailAndPasword(email, password);
             const data = res.data;
 
             if (data.status) {
@@ -712,16 +678,7 @@
           } catch (error) {
             console.error("❌ Login error:", error);
 
-            let errorMessage = "Incorrect email or password.";
-            if (
-              error.code === "auth/user-not-found" ||
-              error.code === "auth/wrong-password" ||
-              error.code === "auth/invalid-credential"
-            ) {
-              errorMessage = "Incorrect email or password.";
-            } else if (error.code === "auth/network-request-failed") {
-              errorMessage = "Network error. Please check your connection.";
-            }
+            let errorMessage = error.message || "Incorrect email or password.";
 
             loginError.textContent = errorMessage;
             loginError.style.display = "block";
@@ -736,17 +693,8 @@
       clearMessages();
 
       document.getElementById("otp-btn").addEventListener("click", async () => {
-        const res = await axios.post(
-          `http://127.0.0.1:5000/api/v2/auth/verify`,
-          {
-            otp: document.getElementById("otp-input").value,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        const data = await sendOtp(document.getElementById("otp-input"));
 
-        const data = res.data;
         if (data.status) {
           document.querySelector(".otp").classList.remove("active");
           signupForm.reset();

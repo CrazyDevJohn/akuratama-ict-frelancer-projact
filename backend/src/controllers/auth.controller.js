@@ -69,6 +69,8 @@ export const VerifyRegister = async (req, res) => {
 
     const token = req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
 
+    console.log(token);
+
     if (!token) {
       return res
         .status(401)
