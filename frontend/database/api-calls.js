@@ -60,7 +60,7 @@ const logOut = async () => {
     {}
   );
 
-  document.coockie = "AKURATAMA_ICT_REGISTER_TOKEN=''";
+  console.log(res.data);
 
   return await res.data;
 };
