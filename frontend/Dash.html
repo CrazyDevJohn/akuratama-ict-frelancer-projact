@@ -760,7 +760,8 @@
 
                 console.log(data)
 
-                console.log(data);
+
+
                 if (data.status) {
                     console.log('User is logged in:', data.user);
 
@@ -843,6 +844,7 @@
                     
 
                     if (data.status) {
+                        document.cookie="AKURATAMA_ICT_REGISTER_TOKEN=''"
                         console.log('User logged out successfully');
                     } else {
                         console.warn('Server logout failed:', data.message);

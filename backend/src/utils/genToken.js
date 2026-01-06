@@ -10,5 +10,6 @@ export const genToken = async (res, payload, secret, exp) => {
     httpOnly: true,
     sameSite: 'none',
     secure: true,
+    path: '/frontend',
   });
 };
