@@ -57,7 +57,10 @@ const checkIsAuthonticated = async () => {
 const logOut = async () => {
   const res = await axios.post(
     `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/logout`,
-    {}
+    {},
+    {
+      withCredentials: true,
+    }
   );
 
   console.log(res.data);

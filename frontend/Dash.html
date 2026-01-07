@@ -486,6 +486,38 @@
     <script type="module">
 
 
+            // --- Firebase Authentication Logic ---
+            async function checkAuth() {
+                const loadingScreen = document.getElementById('loading-screen');
+                const data = await checkIsAuthonticated();
+
+                        console.log(data)
+
+                if (data.status) {
+                    console.log('User is logged in:', data.user);
+                    // Hide loading screen after a short delay
+                    setTimeout(() => {
+                        if (loadingScreen) {
+                            loadingScreen.style.opacity = '0';
+                            setTimeout(() => {
+                                loadingScreen.style.display = 'none';
+                            }, 500);
+                        }
+                    }, 1000);
+
+                } else {
+                    // User is not signed in, redirect to login
+                    console.log('User not authenticated, redirecting to login...');
+                    window.location.href = 'index.html';
+                }
+
+            }
+
+
+
+         checkAuth();
+
+
         // --- Photo Gallery Data ---
         const photoData = [
             {
@@ -751,63 +783,6 @@
             const nextPhotoBtn = document.getElementById('next-photo');
             const photoGalleryContainer = document.getElementById('photo-gallery-container');
 
-            // --- Firebase Authentication Logic ---
-            async function checkAuth() {
-
-                
-
-                const data = await checkIsAuthonticated();
-
-                console.log(data)
-
-
-
-                if (data.status) {
-                    console.log('User is logged in:', data.user);
-
-                    // Get user data from Firestore
-                    try {
-
-
-                        if (data.user) {
-
-                            updateUserDisplay(data.user);
-                        } else {
-                            console.warn('User document not found in Firestore. Data might not have saved during signup.');
-                            // Fallback to auth user info
-                            updateUserDisplay({
-                                name: user.email ? user.email.split('@')[0] : 'User',
-                                username: user.email ? user.email.split('@')[0] : 'User'
-                            });
-                        }
-                    } catch (error) {
-                        console.error('Error fetching user data:', error);
-                        // Fallback to auth user info
-                        updateUserDisplay({
-                            name: data.user.email ? data.user.email.split('@')[0] : 'User',
-                            username: data.user.email ? data.user.email.split('@')[0] : 'User'
-                        });
-
-                        window.location.href ="./Loginpage.html"
-                    }
-
-                    // Hide loading screen after a short delay
-                    setTimeout(() => {
-                        if (loadingScreen) {
-                            loadingScreen.style.opacity = '0';
-                            setTimeout(() => {
-                                loadingScreen.style.display = 'none';
-                            }, 500);
-                        }
-                    }, 1000);
-
-                } else {
-                    // User is not signed in, redirect to login
-                    console.log('User not authenticated, redirecting to login...');
-                    window.location.href = 'index.html';
-                }
-
-            }
 
             // Update user display with real data
             function updateUserDisplay(userData) {
@@ -852,12 +827,12 @@
 
 
                     // Redirect to login page
-                   // window.location.href = 'index.html';
+                   window.location.href = 'index.html';
 
                 } catch (error) {
                     console.error('Logout error:', error);
                     // Still redirect even if there's an error
-                  //  window.location.href = 'index.html';
+                window.location.href = 'index.html';
                 }
             };
 
@@ -997,8 +972,7 @@
                 }
             }
 
-            // Initialize authentication check
-            checkAuth();
+           
 
             // Initialize Photo Gallery
             initializePhotoGallery();
