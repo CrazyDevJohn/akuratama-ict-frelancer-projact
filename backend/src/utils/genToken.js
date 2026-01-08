@@ -1,14 +1,16 @@
 import jwt from 'jsonwebtoken';
 
-export const genToken = async (res, payload, secret, exp) => {
-  const token = jwt.sign(payload, secret, {
-    expiresIn: exp === '15d' ? '15d' : '15m',
+export const genToken = (userId, res) => {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: '7d',
   });
 
-  return res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', token, {
+  res.cookie('CHAT_APP_JWT_TOKEN', token, {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7D MS
     httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV !== 'development',
   });
+
+  return token;
 };
