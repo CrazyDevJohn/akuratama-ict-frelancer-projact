@@ -174,8 +174,7 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', '', { maxAge: 0 });
-    res.clearCookie('AKURATAMA_ICT_REGISTER_TOKEN');
+    genToken('', res);
     res.status(200).json({ message: 'Logout successully' });
   } catch (err) {
     console.log('Error in log out controller ', err.message);
