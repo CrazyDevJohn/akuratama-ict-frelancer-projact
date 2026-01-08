@@ -820,6 +820,7 @@
 
                     if (data.status) {
                         // document.cookie="AKURATAMA_ICT_REGISTER_TOKEN=''"
+                        updateUserDisplay(data.user)
                         console.log('User logged out successfully');
                     } else {
                         console.warn('Server logout failed:', data.message);
