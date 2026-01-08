@@ -174,7 +174,7 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    genToken('', res);
+    genToken('', res, process.env.JWT_SECRET_LOGIN, '15d');
     res.status(200).json({ message: 'Logout successully' });
   } catch (err) {
     console.log('Error in log out controller ', err.message);
