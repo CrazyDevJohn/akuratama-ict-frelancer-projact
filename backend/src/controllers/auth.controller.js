@@ -180,17 +180,10 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    await res.clearCookie('AKURATAMA_ICT_REGISTER_TOKEN');
-
-    console.log('Loged Out');
-    return res.status(200).json({
-      status: true,
-      message: 'logout success!',
-    });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ status: false, message: 'error in logout', error });
+    res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', '', { maxAge: 0 });
+    res.status(200).json({ message: 'Logout successully' });
+  } catch (err) {
+    console.log('Error in log out controller ', err.message);
+    res.status(500).json({ message: 'Internal Server Error!' });
   }
 };

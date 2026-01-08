@@ -27,6 +27,7 @@ export const checkAuth = async (req, res, next) => {
     next();
   } catch (error) {
     console.error('Error in authentication middleware:', error);
+    res.cookies('AKURATAMA_ICT_REGISTER_TOKEN', '');
     return res
       .status(500)
       .json({ status: false, message: 'Internal server error' });
