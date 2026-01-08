@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
+import 'dotenv/config';
 import User from '../models/User.js';
 import { sendMail } from '../lib/mail.js';
 import { genToken } from '../utils/genToken.js';

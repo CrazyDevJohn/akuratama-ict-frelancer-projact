@@ -11,7 +11,7 @@ export const genToken = (userId, res) => {
     return;
   }
 
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET_LOGIN, {
     expiresIn: '7d',
   });
 
