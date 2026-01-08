@@ -90,13 +90,6 @@ export const VerifyRegister = async (req, res) => {
       password: user.password,
     });
 
-    await genToken(
-      res,
-      { id: newUser._id },
-      process.env.JWT_SECRET_LOGIN,
-      '15d',
-    );
-
     return res
       .status(201)
       .json({ status: true, message: 'User registered successfully' });
@@ -172,6 +165,7 @@ export const getUserProfile = async (req, res) => {
       message: 'User not found',
     });
   }
+
   return res.status(200).json({
     status: true,
     user: user,
@@ -180,7 +174,9 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', '', { maxAge: 0 });
+    // res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', '', { maxAge: 0 });
+    res.clearCookie('AKURATAMA_ICT_REGISTER_TOKEN');
+    req.session.destroy();
     res.status(200).json({ message: 'Logout successully' });
   } catch (err) {
     console.log('Error in log out controller ', err.message);
