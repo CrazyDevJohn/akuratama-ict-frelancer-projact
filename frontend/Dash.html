@@ -489,26 +489,32 @@
             // --- Firebase Authentication Logic ---
             async function checkAuth() {
                 const loadingScreen = document.getElementById('loading-screen');
-                const data = await checkIsAuthonticated();
+                try{
+                    const data = await checkIsAuthonticated();
 
-                        console.log(data)
+                            console.log(data)
 
-                if (data.status) {
-                    console.log('User is logged in:', data.user);
-                    // Hide loading screen after a short delay
-                    setTimeout(() => {
-                        if (loadingScreen) {
-                            loadingScreen.style.opacity = '0';
-                            setTimeout(() => {
-                                loadingScreen.style.display = 'none';
-                            }, 500);
-                        }
-                    }, 1000);
 
-                } else {
-                    // User is not signed in, redirect to login
-                    console.log('User not authenticated, redirecting to login...');
-                    window.location.href = 'index.html';
+                    if (data.user) {
+                        console.log('User is logged in:', data.user);
+                        // Hide loading screen after a short delay
+                        setTimeout(() => {
+                            if (loadingScreen) {
+                                loadingScreen.style.opacity = '0';
+                                setTimeout(() => {
+                                    loadingScreen.style.display = 'none';
+                                }, 500);
+                            }
+                        }, 1000);
+
+                    } else {
+                        // User is not signed in, redirect to login
+                        console.log('User not authenticated, redirecting to login...');
+                        window.location.href = 'index.html';
+                    }
+                }catch(e){
+                    console.log(e)
+                     window.location.href = 'index.html';
                 }
 
             }
@@ -817,23 +823,12 @@
                     const data = await logOut()
                     console.log(data)
                     
-
-                    if (data.status) {
-                        // document.cookie="AKURATAMA_ICT_REGISTER_TOKEN=''"
-                        updateUserDisplay(data.user)
-                        console.log('User logged out successfully');
-                    } else {
-                        console.warn('Server logout failed:', data.message);
-                    }
-
-
-                    // Redirect to login page
                    window.location.href = 'index.html';
 
                 } catch (error) {
                     console.error('Logout error:', error);
                     // Still redirect even if there's an error
-                window.location.href = 'index.html';
+                   //  window.location.href = 'index.html';
                 }
             };
 
