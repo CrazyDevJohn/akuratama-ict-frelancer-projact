@@ -27,17 +27,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.set('trust proxy', 1);
 
-app.use((req, res, next) => {
-  res.setHeader;
-  res.setHeader;
-  res.cookie(
-    '_vercel_jwt',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lcklkIjoidGVhbV85MlA0VzA3Rm1XN0ZjRVFNaGhqNEtzaksiLCJpYXQiOjE3Njc0MjczNDEsInVzZXJJZCI6InFMc1NZaXlZVGdNQzFoSm1xMkFIOTJEQiIsInVzZXJuYW1lIjoiY3JhenlkZXZqb2huIiwiYXVkIjoiYWt1cmF0YW1hLWljdC1mcmVsYW5jZXItcHJvamFjdC1hcGlhNnJieHYudmVyY2VsLmFwcCIsInN1YiI6InNzby1wcm90ZWN0aW9uIn0.mSgkhxYzCnQaaZenB9M7GaiKgS890bjDc-10xI4nkpU',
-  );
-
-  next();
-});
-
 app.get('/api/v2/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is healthy' });
 });
