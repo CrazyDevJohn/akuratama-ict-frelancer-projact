@@ -8,9 +8,9 @@ export const genToken = (userId, res) => {
       sameSite: 'strict',
       secure: process.env.NODE_ENV !== 'development',
     });
-
-    return token;
+    return;
   }
+
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: '7d',
   });
