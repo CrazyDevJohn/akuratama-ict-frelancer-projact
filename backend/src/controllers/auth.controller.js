@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import 'dotenv/config';
+
 import User from '../models/User.js';
 import { sendMail } from '../lib/mail.js';
 import { genToken } from '../utils/genToken.js';
@@ -174,7 +174,7 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    await genToken(null, res, process.env.JWT_SECRET_LOGIN, 0);
+    genToken(null, res);
     res.status(200).json({ message: 'Logout successully' });
   } catch (err) {
     console.log('Error in log out controller ', err.message);
