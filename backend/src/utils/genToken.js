@@ -1,26 +1,23 @@
 import jwt from 'jsonwebtoken';
 
-export const genToken = (userId, res) => {
-  if (userId === null) {
-    res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', null, {
+export const genToken = async (res, payload, secret, exp) => {
+  if (payload === null) {
+    return res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', null, {
       maxAge: 0, // 7D MS
       httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'none',
+      secure: true,
     });
-    return;
   }
 
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET_LOGIN, {
-    expiresIn: '7d',
+  const token = jwt.sign(payload, secret, {
+    expiresIn: exp === '15d' ? '15d' : '15m',
   });
 
-  res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', token, {
+  return res.cookie('AKURATAMA_ICT_REGISTER_TOKEN', token, {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7D MS
     httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV !== 'development',
+    sameSite: 'none',
+    secure: true,
   });
-
-  return token;
 };

@@ -61,19 +61,14 @@ export const VerifyRegister = async (req, res) => {
   const { otp } = req.body;
   const token = await req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
   try {
-    if (!otp) {
-      return res
-        .status(400)
-        .json({ status: false, message: 'OTP is required' });
+    if (!otp || !token) {
+      return res.status(400).json({
+        status: false,
+        message: 'No token, authorization denied or OTP is required',
+      });
     }
 
     console.log(token);
-
-    if (!token) {
-      return res
-        .status(401)
-        .json({ status: false, message: 'No token, authorization denied' });
-    }
 
     const { otp: oldOtp, ...user } = jwt.verify(
       token,
@@ -174,7 +169,7 @@ export const getUserProfile = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    genToken(null, res);
+    genToken(res, null, process.env.JWT_SECRET_LOGIN, 0);
     res.status(200).json({ message: 'Logout successully' });
   } catch (err) {
     console.log('Error in log out controller ', err.message);
