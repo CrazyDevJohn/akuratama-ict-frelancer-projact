@@ -75,7 +75,7 @@ export const VerifyRegister = async (req, res) => {
       process.env.JWT_SECRET_REGISTER,
     );
 
-    if (parseInt(otp) !== parseInt(oldOtp)) {
+    if (parseInt(otp) !== (oldOtp)) {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
