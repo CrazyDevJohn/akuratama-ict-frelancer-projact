@@ -11,6 +11,8 @@ import categoriesRoutes from './routes/categories.route.js';
 import lessonRoutes from './routes/lesson.route.js';
 import connectDb from './lib/db.js';
 import { sendMail } from './lib/mail.js';
+import billingRoutes from "./routes/billing.routes.js"
+import { checkAuth } from './middilewares/auth.middleware.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +27,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({extended:true}))
 app.set('trust proxy', 1);
 
 app.get('/api/v2/health', (req, res) => {
@@ -33,8 +36,9 @@ app.get('/api/v2/health', (req, res) => {
 
 app.use('/api/v2/auth', authroutes);
 app.use('/api/v2/categories', categoriesRoutes);
-app.use('/api/v2/course', courseRoutes);
+app.use('/api/v2/course',checkAuth, courseRoutes);
 app.use('/api/v2/lessons', lessonRoutes);
+app.use("/api/v2/billing", checkAuth, billingRoutes)
 
 const connect = async () => {
   await connectDb()

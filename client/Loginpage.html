@@ -436,6 +436,22 @@
     <script type="module">
       // Constants
 
+     /*
+     
+      (async function () {
+        const data = await checkIsAuthonticated();
+        console.log(data);
+
+        if (data.status) {
+          window.location.href = "Dash.html";
+          return;
+        } else {
+          return;
+        }
+      })();
+     
+     */
+
       // DOM Elements
       const authContainer = document.getElementById("auth-container");
       const loginToggle = document.getElementById("login-toggle");
@@ -630,9 +646,12 @@
 
             document.querySelector(".otp").classList.add("active");
           }, 2000);
-        } catch (error) {
+        } catch (e) {
+          const error = e.response ? e.response.data : e;
+          console.error("💥 Signup error details:", error);
+
           let errorMessage =
-            error.response.data.message ||
+            error.response.message ||
             "An unknown error occurred. Please try again.";
 
           signupError.textContent = errorMessage;
@@ -673,9 +692,10 @@
 
             console.log("✅ Login response:", data);
           } catch (error) {
+            console.error("❌ Login error:", error);
+
             let errorMessage =
-              error.response.data.message ||
-              "An unknown error occurred. Please try again.";
+              error.response.message || "Incorrect email or password.";
 
             loginError.textContent = errorMessage;
             loginError.style.display = "block";
@@ -701,7 +721,7 @@
           document.getElementById("login-password").focus();
         }
 
-        console.log("✅ Signup response:", data);
+        console.log("✅ Signup response:", res);
       });
     </script>
   </body>

@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import {
+  getAllUsers,
+  getUserById,
   getUserProfile,
   health,
   login,
@@ -17,5 +19,7 @@ router.post('/register', register);
 router.post('/verify', VerifyRegister);
 router.post('/login', login);
 router.post('/logout', logout);
+router.post('/get-all', getAllUsers);
+router.get('/:id', getUserById);
 
 export default router;

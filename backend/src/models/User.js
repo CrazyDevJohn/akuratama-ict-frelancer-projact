@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const schema = new mongoose.Schema(
   {
@@ -16,10 +16,13 @@ const schema = new mongoose.Schema(
       required: true,
     },
     courseEnrolled: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Course',
+      type: [Schema.Types.ObjectId],
       default: [],
     },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true },
 );

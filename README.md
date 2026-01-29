@@ -9,3 +9,4 @@ yarn
 
 yarn dev
 
+# akuratama

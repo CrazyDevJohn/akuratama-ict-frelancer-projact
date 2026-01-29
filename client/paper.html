@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akuratama ICT | Advanced Level ICT Past Papers</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ====== CSS VARIABLES ====== */
@@ -1294,104 +1296,13 @@
     </div>
 
     <script>
-        // ====== APPLICATION DATA ======
-        const ictLessons = [
-            {
-                id: 1, title: "Introduction to ICT", code: "ICT101",
-                description: "Basic concepts of Information and Communication Technology",
-                papers: 12, videos: 4
-            },
-            {
-                id: 2, title: "Computer Hardware", code: "ICT102",
-                description: "Physical components of computer systems",
-                papers: 15, videos: 5
-            },
-            {
-                id: 3, title: "Software Concepts", code: "ICT103",
-                description: "Software types, development, and applications",
-                papers: 10, videos: 3
-            },
-            {
-                id: 4, title: "Operating Systems", code: "ICT104",
-                description: "OS functions, types, and management",
-                papers: 14, videos: 6
-            },
-            {
-                id: 5, title: "Word Processing", code: "ICT105",
-                description: "Document creation and formatting",
-                papers: 8, videos: 4
-            },
-            {
-                id: 6, title: "Spreadsheets", code: "ICT106",
-                description: "Data analysis and calculations",
-                papers: 16, videos: 7
-            },
-            {
-                id: 7, title: "Database Management", code: "ICT107",
-                description: "Database design and SQL",
-                papers: 18, videos: 8
-            },
-            {
-                id: 8, title: "Programming Basics", code: "ICT108",
-                description: "Programming fundamentals and logic",
-                papers: 20, videos: 9
-            },
-            {
-                id: 9, title: "Web Development", code: "ICT109",
-                description: "HTML, CSS, and web technologies",
-                papers: 12, videos: 6
-            },
-            {
-                id: 10, title: "Multimedia", code: "ICT110",
-                description: "Graphics, audio, and video editing",
-                papers: 9, videos: 4
-            },
-            {
-                id: 11, title: "Networking", code: "ICT111",
-                description: "Network types and protocols",
-                papers: 14, videos: 5
-            },
-            {
-                id: 12, title: "ICT in Society", code: "ICT112",
-                description: "Social impact of technology",
-                papers: 7, videos: 3
-            },
-            {
-                id: 13, title: "Project Management", code: "ICT113",
-                description: "ICT project planning and execution",
-                papers: 11, videos: 4
-            }
-        ];
+let ictLessons = [];;
+        (async function(){
+            const res = await fetchAllCoursesForStudent()
+            ictLessons = res
+        })()
 
-        // Real AL ICT Past Papers Images
-        const lessonImages = {
-            1: [
-                "https://i.imgur.com/3QmJ6Za.jpg",
-                "https://i.imgur.com/x1kL9Yt.jpg",
-                "https://i.imgur.com/wL4T2fN.jpg",
-                "https://i.imgur.com/v7nKs0E.jpg"
-            ],
-            2: [
-                "https://i.imgur.com/YcVdR7H.jpg",
-                "https://i.imgur.com/8KjQl3B.jpg",
-                "https://i.imgur.com/tG9LpWv.jpg"
-            ],
-            3: [
-                "https://i.imgur.com/9LzZq8P.jpg",
-                "https://i.imgur.com/mN5JrXx.jpg",
-                "https://i.imgur.com/Qr1Bj2d.jpg"
-            ],
-            4: [
-                "https://i.imgur.com/Jr8Kz9W.jpg",
-                "https://i.imgur.com/6tDgM5c.jpg",
-                "https://i.imgur.com/BL3hQ2T.jpg"
-            ],
-            5: [
-                "https://i.imgur.com/V7nDqLk.jpg",
-                "https://i.imgur.com/Xp8mYz9.jpg",
-                "https://i.imgur.com/2WkLr3c.jpg"
-            ]
-        };
+    
 
         // ====== APPLICATION STATE ======
         let currentLesson = null;

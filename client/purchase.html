@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase Course - Akuratama ICT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baumans&family=Questrial&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
+
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb",
+              secondary: "#ec4899",
+              darkblue: "#1e3a8a",
+            },
+            fontFamily: {
+              boulas: ['"Baumans"', "cursive"],
+              sans: ['"Questrial"', "sans-serif"],
+              poppins: ['"Poppins"', "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Custom styles from dashboard */
+      .navbar-item:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+        transform: translateY(-2px);
+        transition: all 0.2s ease;
+      }
+
+      /* Filter Tab Styles */
+      .filter-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .filter-btn.active {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        transform: translateY(-2px);
+      }
+
+      /* Course Card Styles */
+      .course-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(229, 231, 235, 0.5);
+      }
+
+      .course-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border-color: #3b82f6;
+      }
+
+      .course-image-overlay {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .course-card:hover .course-image-overlay {
+        opacity: 1;
+      }
+
+      /* Quick View Modal Styles */
+      .modal-backdrop {
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-enter {
+        animation: modalEnter 0.3s ease-out forwards;
+      }
+
+      .modal-exit {
+        animation: modalExit 0.3s ease-out forwards;
+      }
+
+      @keyframes modalEnter {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes modalExit {
+        from {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Navbar styles */
+      .sticky-nav {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Mobile menu styles */
+      .mobile-menu-enter {
+        animation: slideDown 0.3s ease-out forwards;
+      }
+
+      .mobile-menu-exit {
+        animation: slideUp 0.3s ease-out forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gray-50 font-sans transition-colors duration-300 overflow-x-hidden"
+  >
+    <!-- Quick View Modal -->
+    <div
+      id="quickViewModal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop"
+    >
+      <div
+        id="modalContent"
+        class="bg-blue rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden max-h-[90vh] overflow-y-auto modal-enter"
+      >
+        <!-- Modal Header -->
+        <div
+          class="flex justify-between items-center p-6 border-b border-gray-200"
+        >
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800" id="modalTitle">
+              Course Details
+            </h2>
+            <p class="text-gray-500 text-sm mt-1" id="modalSubtitle">
+              Detailed information about the course
+            </p>
+          </div>
+          <button
+            id="closeModal"
+            class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <i class="fa-solid fa-xmark text-2xl text-gray-500"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 md:p-8">
+          <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Course Image -->
+            <div class="lg:w-2/5">
+              <div class="rounded-xl overflow-hidden shadow-lg h-[200px]">
+                <div id="modalImage" class=" w-full h-full flex justify-center items-center">
+            <div class="flex justify-between items-start mb-2">
+            <h3
+              class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
+            >
+              Grade 7
+            </h3>
+          </div>
+          </div>
+              </div>
+              <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-sm text-gray-500">Course Price</p>
+                    <p id="modalPrice" class="text-3xl font-bold text-blue-600">
+                      Rs. 1,500
+                    </p>
+                  </div>
+                  <div
+                    class="bg-blue-100 text-blue-700 font-bold px-4 py-2 rounded-lg"
+                  >
+                    <i class="fa-solid fa-tag mr-2"></i>
+                    <span id="modalBadge">Grade 6</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Course Details -->
+            <div class="lg:w-3/5">
+              <h3
+                id="modalCourseTitle"
+                class="text-2xl font-bold text-gray-800 mb-4"
+              >
+                Course Title
+              </h3>
+              <p id="modalDescription" class="text-gray-600 mb-6">
+                Course description will appear here with all the details about
+                what students will learn, course structure, and benefits.
+              </p>
+
+              <div class="mb-8">
+                <h4 class="font-bold text-gray-700 mb-3 flex items-center">
+                  <i class="fa-solid fa-list-check text-blue-500 mr-2"></i>
+                  What You'll Learn
+                </h4>
+                <ul
+                  id="modalFeatures"
+                  class="grid grid-cols-1 md:grid-cols-2 gap-2"
+                >
+                  <!-- Features will be added dynamically -->
+                </ul>
+              </div>
+
+              <div class="mb-6">
+                <h4 class="font-bold text-gray-700 mb-3 flex items-center">
+                  <i class="fa-solid fa-clock text-blue-500 mr-2"></i>
+                  Course Details
+                </h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div class="bg-gray-50 p-3 rounded-lg text-center">
+                    <i
+                      class="fa-solid fa-book-open text-blue-500 text-xl mb-2"
+                    ></i>
+                    <p class="text-sm text-gray-500">Modules</p>
+                    <p id="modalModules" class="font-bold">12</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg text-center">
+                    <i class="fa-solid fa-video text-blue-500 text-xl mb-2"></i>
+                    <p class="text-sm text-gray-500">Lessons</p>
+                    <p id="modalLessons" class="font-bold">48</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg text-center">
+                    <i class="fa-solid fa-clock text-blue-500 text-xl mb-2"></i>
+                    <p class="text-sm text-gray-500">Duration</p>
+                    <p id="modalDuration" class="font-bold">8 Weeks</p>
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-lg text-center">
+                    <i
+                      class="fa-solid fa-certificate text-blue-500 text-xl mb-2"
+                    ></i>
+                    <p class="text-sm text-gray-500">Certificate</p>
+                    <p id="modalCertificate" class="font-bold">Yes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-6 border-t border-gray-200 bg-gray-50">
+          <div
+            class="flex flex-col md:flex-row justify-between items-center gap-4"
+          >
+            <div>
+              <p class="text-gray-600">
+                <i class="fa-solid fa-shield-alt text-green-500 mr-2"></i>
+                <span class="font-medium">Secure Payment</span> • 100%
+                Satisfaction Guarantee
+              </p>
+            </div>
+            <div class="flex gap-4">
+              <button
+                id="modalCloseBtn"
+                class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                id="modalBuyBtn"
+                class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all transform active:scale-95"
+              >
+                <i class="fa-solid fa-cart-shopping mr-2"></i>
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="sticky-nav sticky top-0 z-40 bg-blue-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Brand Logo and Name -->
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-md"
+            >
+              <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
+            </div>
+            <span class="ml-3 text-xl font-boulas text-blue-600 tracking-wide"
+              >AkuratamaICT</span
+            >
+          </div>
+
+          <!-- Desktop Navigation Menu -->
+          <div class="hidden md:flex items-center space-x-2">
+            <a
+              href="Dash.html"
+              class="navbar-item px-4 py-2 text-gray-700 hover:text-blue-600 font-medium rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-arrow-left mr-2"></i>
+              Back to Dashboard
+            </a>
+            <a
+              href="#"
+              class="navbar-item px-4 py-2 text-gray-700 hover:text-blue-600 font-medium rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-user mr-2"></i>
+              My Profile
+            </a>
+            <a
+              href="#"
+              class="navbar-item px-4 py-2 text-gray-700 hover:text-blue-600 font-medium rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-building-columns mr-2"></i>
+              Bank Details
+            </a>
+            <a
+              href="#"
+              class="navbar-item px-4 py-2 text-gray-700 hover:text-blue-600 font-medium rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-brands fa-whatsapp mr-2 text-green-500"></i>
+              WhatsApp Support
+            </a>
+            <button
+              class="p-2 text-gray-600 hover:bg-gray-100 rounded-full ml-2"
+            >
+              <i class="fa-solid fa-cart-shopping text-xl"></i>
+            </button>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden flex items-center">
+            <button
+              class="p-2 text-gray-600 hover:bg-gray-100 rounded-full mr-2"
+            >
+              <i class="fa-solid fa-cart-shopping text-xl"></i>
+            </button>
+            <button
+              id="mobile-menu-button"
+              class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+            >
+              <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div
+          id="mobile-menu"
+          class="hidden md:hidden py-3 border-t border-gray-200 mobile-menu-enter"
+        >
+          <div class="space-y-1">
+            <a
+              href="Dash.html"
+              class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-arrow-left mr-3 text-blue-500"></i>
+              Back to Dashboard
+            </a>
+            <a
+              href="#"
+              class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-user mr-3 text-blue-500"></i>
+              My Profile
+            </a>
+            <a
+              href="#"
+              class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-solid fa-building-columns mr-3 text-blue-500"></i>
+              Bank Details
+            </a>
+            <a
+              href="#"
+              class="block px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors flex items-center"
+            >
+              <i class="fa-brands fa-whatsapp mr-3 text-green-500"></i>
+              WhatsApp Support
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main
+      class="flex-1 transition-all duration-300 w-full min-h-screen flex flex-col"
+    >
+      <div class="p-6 lg:p-8 flex-1">
+        <div class="mb-8 lg:mb-12 text-center lg:text-left">
+          <div>
+            <h1 class="text-3xl lg:text-4xl font-boulas text-gray-800 mb-3">
+              Purchase <span class="text-blue-600">Courses</span>
+            </h1>
+            <p class="text-gray-500 max-w-2xl">
+              Unlock your potential with our premium ICT courses. Select your
+              grade to view available modules.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="mb-10 overflow-x-auto pb-4 -mx-4 px-4 sticky top-16 lg:static z-20 bg-gray-50/95 backdrop-blur-sm lg:bg-transparent lg:border-none border-b border-gray-200"
+        >
+          <div
+            class="flex space-x-3 lg:space-x-4 min-w-max lg:flex-wrap lg:min-w-0"
+          >
+            <button
+              onclick="filterCourses('all')"
+              class="filter-btn active px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="all"
+            >
+              All Grades
+            </button>
+            <button
+              onclick="filterCourses('grade6')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="grade6"
+            >
+              Grade 6
+            </button>
+            <button
+              onclick="filterCourses('grade7')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="grade7"
+            >
+              Grade 7
+            </button>
+            <button
+              onclick="filterCourses('grade8')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="grade8"
+            >
+              Grade 8
+            </button>
+            <button
+              onclick="filterCourses('grade9')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="grade9"
+            >
+              Grade 9
+            </button>
+            <button
+              onclick="filterCourses('grade10-11')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="grade10-11"
+            >
+              Grade 10/11
+            </button>
+            <button
+              onclick="filterCourses('al')"
+              class="filter-btn px-6 py-2.5 rounded-full bg-white text-gray-600 border border-gray-200 font-medium hover:border-blue-400 hover:text-blue-600 shadow-sm"
+              data-filter="al"
+            >
+              Advanced Level
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="courses-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
+        ></div>
+
+        <div id="empty-state" class="hidden text-center py-20 fade-in">
+          <div class="inline-block p-6 rounded-full bg-blue-50 mb-4">
+            <i class="fa-solid fa-magnifying-glass text-4xl text-blue-300"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-700">No courses found</h3>
+          <p class="text-gray-500 mt-2">
+            Try selecting a different grade category.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <template id="course-card-template">
+      <div
+        class="course-card rounded-2xl overflow-hidden flex flex-col h-full bg-white shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group"
+      >
+        <div class="relative h-48 overflow-hidden">
+          <div class="course-img w-full h-full flex justify-center items-center">
+            <div class="flex justify-between items-start mb-2">
+            <h3
+              class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
+            >
+              Grade 7
+            </h3>
+          </div>
+          </div>
+          <div
+            class="course-tag absolute top-3 right-3 bg-white/90 backdrop-blur text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm hidden"
+          >
+            <i class="fa-solid fa-tag mr-1"></i>
+            <span class="course-badge">Grade 6</span>
+          </div>
+          <div
+            class="course-image-overlay absolute inset-0 flex items-center justify-center"
+          >
+            <button
+              class="quick-view-btn bg-white text-blue-600 px-6 py-2 rounded-full font-bold shadow-lg transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105"
+            >
+              Quick View
+            </button>
+          </div>
+        </div>
+
+        <div class="p-5 flex-1 flex flex-col">
+          <div class="flex justify-between items-start mb-2">
+            <h3
+              class="font-bold text-gray-800 text-xl leading-tight line-clamp-2 course-title group-hover:text-blue-600 transition-colors"
+            >
+              Course Title Here
+            </h3>
+          </div>
+
+          <p class="text-gray-500 text-sm mb-4 line-clamp-2 course-desc flex-1">
+            Description goes here.
+          </p>
+
+          <div class="mt-auto">
+            <div class="flex items-end justify-between mb-4">
+              <div class="flex flex-col">
+                <span class="text-xs text-gray-400 font-medium">Price</span>
+                <span class="text-2xl font-bold text-blue-600 course-price"
+                  >Rs. 1,500</span
+                >
+              </div>
+            </div>
+
+            <div class="w-full">
+              <button
+                class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all flex items-center justify-center text-sm transform active:scale-95 buy-now-btn"
+                
+              >
+                Buy Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      async function checkAuth() {
+        const loadingScreen = document.getElementById("loading-screen");
+        try {
+          const data = await checkIsAuthonticated();
+
+          console.log(data);
+
+          if (data.user) {
+            console.log("User is logged in:", data.user);
+            // Hide loading screen after a short delay
+            setTimeout(() => {
+              if (loadingScreen) {
+                loadingScreen.style.opacity = "0";
+                setTimeout(() => {
+                  loadingScreen.style.display = "none";
+                }, 500);
+              }
+            }, 1000);
+          } else {
+            // User is not signed in, redirect to login
+            console.log("User not authenticated, redirecting to login...");
+            window.location.href = "index.html";
+          }
+        } catch (e) {
+          console.log(e);
+          window.location.href = "index.html";
+        }
+      }
+
+      // checkAuth();
+
+      // Enhanced Sample Data for Courses with more details
+ 
+
+    let courses = [];
+
+    (async function(){ courses =await  fetchAllCourses()})()
+
+      // Modal Functions
+      function showQuickView(courseId) {
+        const course = courses.find((c) => c._id === courseId);
+        if (!course) return;
+
+        // Set modal content
+        document.getElementById("modalTitle").textContent = course.title;
+        document.getElementById("modalSubtitle").textContent =
+          formatGrade(course.grade) + " Course";
+        document.getElementById("modalCourseTitle").textContent = course.title;
+        document.getElementById("modalDescription").textContent = course.desc;
+        document.getElementById("modalImage").style.background = course.image;
+        document.getElementById("modalPrice").textContent = course.price;
+        document.getElementById("modalBadge").textContent = formatGrade(
+          course.grade
+        );
+        document.getElementById("modalModules").textContent = course.modules;
+        document.getElementById("modalLessons").textContent = course.lessons;
+        document.getElementById("modalDuration").textContent = course.duration;
+        document.getElementById("modalCertificate").textContent =
+          course.certificate;
+
+        // Set features
+        const featuresContainer = document.getElementById("modalFeatures");
+        featuresContainer.innerHTML = "";
+        course.features.forEach((feature) => {
+          const li = document.createElement("li");
+          li.className = "flex items-start mb-2";
+          li.innerHTML = `
+                    <i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i>
+                    <span class="text-gray-700">${feature}</span>
+                `;
+          featuresContainer.appendChild(li);
+        });
+
+        // Set buy button action
+        document.getElementById("modalBuyBtn").onclick = function () {
+          const currentUrl = window.location.href;
+          const urlWithQuerys = `upload-slip.html?courseId=${courseId}`;
+
+          window.location.href = urlWithQuerys;
+
+          closeQuickView();
+        };
+
+        // Show modal with animation
+        const modal = document.getElementById("quickViewModal");
+        modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeQuickView() {
+        const modal = document.getElementById("quickViewModal");
+        const modalContent = document.getElementById("modalContent");
+
+        modalContent.classList.remove("modal-enter");
+        modalContent.classList.add("modal-exit");
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modalContent.classList.remove("modal-exit");
+          modalContent.classList.add("modal-enter");
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+
+      // Layout Functions
+      function renderCourses(filter = "all") {
+        const grid = document.getElementById("courses-grid");
+        const emptyState = document.getElementById("empty-state");
+        const template = document.getElementById("course-card-template");
+
+        grid.innerHTML = "";
+
+        let filteredCourses = courses;
+        if (filter !== "all") {
+          filteredCourses = courses.filter((course) => course.grade === filter);
+        }
+
+        if (filteredCourses.length === 0) {
+          emptyState.classList.remove("hidden");
+        } else {
+          emptyState.classList.add("hidden");
+
+          filteredCourses.forEach((course, index) => {
+            const clone = template.content.cloneNode(true);
+
+            // Set Content
+            clone.querySelector(".course-title").textContent = course.title;
+            clone.querySelector(".course-desc").textContent = course.desc;
+            clone.querySelector(".course-price").textContent = course.price;
+            clone.querySelector(".course-img").style.background = course.image;
+            clone.querySelector(".course-badge").textContent = formatGrade(
+              course.grade
+            );
+
+            // Show or hide tag based on course type
+            const courseTag = clone.querySelector(".course-tag");
+            if (course.showTag) {
+              courseTag.classList.remove("hidden");
+            } else {
+              courseTag.classList.add("hidden");
+            }
+
+            // Add event listeners
+            const quickViewBtn = clone.querySelector(".quick-view-btn");
+            quickViewBtn.onclick = (e) => {
+              e.stopPropagation();
+           
+              showQuickView(course?._id);
+            };
+
+            const buyNowBtn = clone.querySelector(".buy-now-btn");
+            buyNowBtn.onclick = (e) => {
+              e.stopPropagation();
+
+              window.location.href ="upload-slip.html?courseId="+course.id 
+
+
+            };
+
+            // Add fade-in animation
+            const card = clone.querySelector(".course-card");
+            card.classList.add("fade-in");
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            grid.appendChild(clone);
+          });
+        }
+      }
+
+      function formatGrade(gradeStr) {
+        if (gradeStr === "al") return "Advanced Level";
+        if (gradeStr === "grade10-11") return "Grade 10/11";
+        return gradeStr.replace("grade", "Grade ");
+      }
+
+      function filterCourses(category) {
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          if (btn.dataset.filter === category) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+        renderCourses(category);
+      }
+
+      // Mobile Menu Toggle
+      document.addEventListener("DOMContentLoaded", () => {
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        mobileMenuButton.addEventListener("click", () => {
+          if (mobileMenu.classList.contains("hidden")) {
+            mobileMenu.classList.remove("hidden");
+            mobileMenu.classList.add("mobile-menu-enter");
+            mobileMenu.classList.remove("mobile-menu-exit");
+          } else {
+            mobileMenu.classList.remove("mobile-menu-enter");
+            mobileMenu.classList.add("mobile-menu-exit");
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          }
+        });
+
+        // Modal close handlers
+        document
+          .getElementById("closeModal")
+          .addEventListener("click", closeQuickView);
+        document
+          .getElementById("modalCloseBtn")
+          .addEventListener("click", closeQuickView);
+
+        // Close modal when clicking on backdrop
+        document
+          .getElementById("quickViewModal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) {
+              closeQuickView();
+            }
+          });
+
+        // Close modal with Escape key
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeQuickView();
+          }
+        });
+
+        setTimeout(()=>{
+          
+          // Initial Render
+        renderCourses("all")}, 1000)
+      });
+    </script>
+  </body>
+</html>

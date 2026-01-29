@@ -3,7 +3,7 @@ import User from '../models/User.js';
 
 export const checkAuth = async (req, res, next) => {
   try {
-    const token = req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
+    const token = await req.cookies.AKURATAMA_ICT_REGISTER_TOKEN;
 
     if (!token) {
       return res

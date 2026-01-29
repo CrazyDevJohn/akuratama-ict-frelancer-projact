@@ -407,7 +407,7 @@
                     </div>
             </a>
 
-            <a href='purchase/index.html'
+            <a href='purchase.html'
                 class="action-card bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl cursor-pointer w-full md:w-80 text-center dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center space-y-4">
                     <div
@@ -492,11 +492,12 @@
                 try{
                     const data = await checkIsAuthonticated();
 
-                            console.log(data)
+                            
 
 
                     if (data.user) {
                         console.log('User is logged in:', data.user);
+                        localStorage.setItem("STUDENT", data.user)
                         // Hide loading screen after a short delay
                         setTimeout(() => {
                             if (loadingScreen) {

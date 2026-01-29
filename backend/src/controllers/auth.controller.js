@@ -46,11 +46,11 @@ export const register = async (req, res) => {
       otp,
     };
 
-    await genToken(res, user, process.env.JWT_SECRET_REGISTER, '15m');
+    const token = await genToken(res, user, process.env.JWT_SECRET_REGISTER, '15m');
 
     return res
       .status(200)
-      .json({ status: true, message: 'User otp send successfully' });
+      .json({ status: true, message: 'User otp send successfully', token });
   } catch (error) {
     console.log(`error in register controller: ${error}`);
     return res.status(500).json({ status: false, message: 'error', error });
@@ -75,7 +75,7 @@ export const VerifyRegister = async (req, res) => {
       process.env.JWT_SECRET_REGISTER,
     );
 
-    if (parseInt(otp) !== parseInt(oldOtp)) {
+    if (parseInt(otp) !== (oldOtp)) {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
@@ -122,7 +122,7 @@ export const login = async (req, res) => {
         .json({ status: false, message: 'Invalid credentials' });
     }
 
-    await genToken(
+    const token =  await genToken(
       res,
       { id: isExistingUser._id },
       process.env.JWT_SECRET_LOGIN,
@@ -144,6 +144,8 @@ export const login = async (req, res) => {
       status: true,
       user: currentUser,
       message: 'User logged in successfully',
+      token
+      
     });
   } catch (error) {
     console.log(`error in VerifyRegister controller: ${error}`);
@@ -176,3 +178,34 @@ export const logout = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error!' });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password");
+
+    return res.status(200).json({
+      users,
+      mesage:"all users "
+    })
+  } catch (error) {
+     console.log('Error in getAllUsers controller ', err.message);
+    res.status(500).json({ message: 'Internal Server Error!' });
+  }
+}
+
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
+
+    if (!user) res.status(503).json({ message: 'No user found!' });
+
+    return res.status(200).json({
+      user,
+      mesage:"all user "
+    })
+  } catch (error) {
+     console.log('Error in getAllUsers controller ', err.message);
+    res.status(500).json({ message: 'Internal Server Error!' });
+  }
+}

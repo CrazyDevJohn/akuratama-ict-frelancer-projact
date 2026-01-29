@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Educational|Courses</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -504,133 +506,6 @@
 
             <!-- Courses Grid -->
             <div class="courses-grid">
-                <!-- Course Card 1 -->
-                <div class="course-card" data-grade="6">
-                    <div class="course-img" style="background-color: #99FF99;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Basic ICT - Grade 6</h3>
-                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 40 hours</span>
-                            <span><i class="fas fa-book"></i> 12 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 6">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 2 -->
-                <div class="course-card" data-grade="7">
-                    <div class="course-img" style="background-color: #99FF99;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Basic ICT - Grade 7</h3>
-                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 45 hours</span>
-                            <span><i class="fas fa-book"></i> 15 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 7">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 3 -->
-                <div class="course-card" data-grade="8">
-                    <div class="course-img" style="background-color: #99FF99;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Basic ICT - Grade 8</h3>
-                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 50 hours</span>
-                            <span><i class="fas fa-book"></i> 18 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 8">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 4 -->
-                <div class="course-card" data-grade="9">
-                    <div class="course-img" style="background-color: #e67e22;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Basic ICT - Grade 9</h3>
-                        <p>මූලික මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 55 hours</span>
-                            <span><i class="fas fa-book"></i> 16 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Basic ICT - Grade 9">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 5 -->
-                <div class="course-card" data-grade="10">
-                    <div class="course-img" style="background-color: #e67e22;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Ordinary Level ICT - Grade 10</h3>
-                        <p>සාමානපෙළ මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.ප්‍රශ්න පත්‍ර සඳහා වැඩි අවධානයක් යොමු කරවීම</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 48 hours</span>
-                            <span><i class="fas fa-book"></i> 14 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Ordinary Level ICT - Grade 10">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 6 -->
-                <div class="course-card" data-grade="11">
-                    <div class="course-img" style="background-color: #e67e22;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Ordinary Level ICT - Grade 11</h3>
-                        <p>සාමානපෙළ මට්ටමේ ICT දැනුම ගොඩනංවමින් විශය නිර්දේශය ආවරණය කිරීම. ප්‍රායෝගික ක්‍රියාකාරකම් සමගින් විශය කොටස් ආවරණය.ප්‍රශ්න පත්‍ර සඳහා වැඩි අවධානයක් යොමු කරවීම</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 60 hours</span>
-                            <span><i class="fas fa-book"></i> 20 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Ordinary Level ICT - Grade 11">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 7 -->
-                <div class="course-card" data-grade="12">
-                    <div class="course-img" style="background-color:#66CCFF;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Advanced Level - ICT - Grade 12</h3>
-                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 70 hours</span>
-                            <span><i class="fas fa-book"></i> 22 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 12">View Course</button>
-                    </div>
-                </div>
-
-                <!-- Course Card 8 -->
-                <div class="course-card" data-grade="13">
-                    <div class="course-img" style="background-color:#66CCFF;">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="course-content">
-                        <h3>Advanced Level - ICT - Grade 13</h3>
-                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> 80 hours</span>
-                            <span><i class="fas fa-book"></i> 25 modules</span>
-                        </div>
-                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 13">View Course</button>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -711,13 +586,69 @@
 
     <script>
         // Grade filter functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const gradeButtons = document.querySelectorAll('.grade-btn');
             const courseCards = document.querySelectorAll('.course-card');
             const viewCourseBtns = document.querySelectorAll('.view-course-btn');
             const loginModal = document.getElementById('loginModal');
             const closeModal = document.getElementById('closeModal');
             const selectedCourseElement = document.getElementById('selectedCourse');
+            const courseContainer = document.querySelector(".courses-grid");
+
+
+
+const genCourseCard = (title, description, grade, price,image)=>{
+    const card = document.createElement("div");card.classList.add("course-card");card.setAttribute("data-grade", grade)
+
+    card.innerHTML = `
+                    <div class="course-img" style="background:${image};">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>${title} - ${grade}</h3>
+                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 70 hours</span>
+                            <span><i class="fas fa-book"></i> 22 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 12">View Course</button>
+                    </div>
+    `
+
+
+    courseContainer.appendChild(card)
+}
+
+
+
+/*
+                <div class="course-card" data-grade="12">
+                    <div class="course-img" style="background-color:#66CCFF;">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="course-content">
+                        <h3>Advanced Level - ICT - Grade 12</h3>
+                        <p>ප්‍රශ්න පත්‍ර සඳහා සුවිශේෂී වැඩි අවධානයක් යොමු කරවමින් තවදුරටත් විශය පථය ආවරණයට කටයුතු කිරීම. අපොස උසස් පෙළ විභ‍ාගය සදහා හැකි උපරිමයෙන් සූදානම් කරවීම.</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> 70 hours</span>
+                            <span><i class="fas fa-book"></i> 22 modules</span>
+                        </div>
+                        <button class="btn view-course-btn" data-course="Advanced Level - ICT - Grade 12">View Course</button>
+                    </div>
+                </div>
+
+
+*/
+
+const {courses} = await fetchAllCourses();
+
+console.log(courses)
+
+courses.forEach(course=>{
+    genCourseCard(course.title, course.description, course.grade, course.price,course.image)
+})
+
+
 
             // Grade filter functionality
             gradeButtons.forEach(button => {

@@ -10,15 +10,18 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-    author: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      price:Number,
+      grade:String,
+    image: {
+      type: String,
+      default:''
     },
-    sourceLink: {
-      type: [Schema.Types.ObjectId],
-      required: true,
-      default: [],
+    modules: Number,
+    lessons: Number,
+    duration:String,
+    certificate: String,
+    features: {
+      type: [String],
     },
     studentsEnrolled: {
       type: [Schema.Types.ObjectId],
@@ -31,3 +34,5 @@ const courseSchema = new Schema(
 
 const Course = model('Course', courseSchema);
 export default Course;
+
+
