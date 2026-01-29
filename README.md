@@ -10,3 +10,4 @@ yarn
 yarn dev
 
 # akuratama
+# akuratama
