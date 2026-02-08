@@ -1,1695 +1,1785 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Akuratama ICT | Advanced Level ICT Past Papers</title>
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-    <script src="./database/api-calls.js"></script> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        /* ====== CSS VARIABLES ====== */
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #60a5fa;
-            --secondary: #7c3aed;
-            --accent: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --light: #f8fafc;
-            --dark: #1e293b;
-            --gray: #64748b;
-            --gray-light: #e2e8f0;
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+      /* ====== CSS VARIABLES ====== */
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --primary-light: #60a5fa;
+        --secondary: #7c3aed;
+        --accent: #ef4444;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --gray: #64748b;
+        --gray-light: #e2e8f0;
+        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 24px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
 
-        /* ====== RESET & BASE STYLES ====== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* ====== RESET & BASE STYLES ====== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background-color: #f9fafb;
-            color: var(--dark);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+      body {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background-color: #f9fafb;
+        color: var(--dark);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
 
-        /* ====== PAGES ====== */
-        .page {
-            display: none;
-            min-height: calc(100vh - 100px);
-            padding: 20px;
-            animation: fadeIn 0.5s ease;
-        }
+      /* ====== PAGES ====== */
+      .page {
+        display: none;
+        min-height: calc(100vh - 100px);
+        padding: 20px;
+        animation: fadeIn 0.5s ease;
+      }
 
-        .page.active {
-            display: block;
-        }
+      .page.active {
+        display: block;
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-
-        /* ====== HEADER ====== */
-        .header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            padding: 20px 0;
-            box-shadow: var(--shadow-lg);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
+      /* ====== HEADER ====== */
+      .header {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        color: white;
+        padding: 20px 0;
+        box-shadow: var(--shadow-lg);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .logo-text h1 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+
+      .logo-text p {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      .header-stats {
+        display: flex;
+        gap: 20px;
+      }
+
+      .stat-box {
+        text-align: center;
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        backdrop-filter: blur(10px);
+        transition: var(--transition);
+      }
+
+      .stat-box:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-light);
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+
+      /* ====== PAGE 1: LESSONS ====== */
+      #page1 .container {
+        max-width: 1400px;
+        margin: 30px auto;
+        padding: 0 20px;
+      }
+
+      .page-title {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .page-title h2 {
+        font-size: 2.2rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+
+      .page-title p {
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      .lessons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+      }
+
+      .lesson-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 30px 25px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .lesson-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .lesson-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-light);
+      }
+
+      .lesson-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .lesson-card.active {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .lesson-card.active .lesson-number,
+      .lesson-card.active .lesson-title,
+      .lesson-card.active .lesson-description {
+        color: white;
+      }
+
+      .lesson-card.active .lesson-code {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .lesson-number {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        border-radius: 10px;
+      }
+
+      .lesson-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--dark);
+        transition: color 0.3s ease;
+      }
+
+      .lesson-description {
+        font-size: 0.95rem;
+        color: var(--gray);
+        margin-bottom: 20px;
+        transition: color 0.3s ease;
+      }
+
+      .lesson-code {
+        display: inline-block;
+        padding: 8px 20px;
+        background: var(--light);
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--primary);
+        transition: all 0.3s ease;
+      }
+
+      /* ====== PAGE 2: PAPER VIEWER ====== */
+      #page2 .container {
+        max-width: 1200px;
+        margin: 30px auto;
+      }
+
+      .viewer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--gray-light);
+      }
+
+      .viewer-title h3 {
+        font-size: 1.8rem;
+        color: var(--dark);
+        margin-bottom: 5px;
+      }
+
+      .viewer-title p {
+        color: var(--gray);
+        font-size: 1rem;
+      }
+
+      /* ====== TIMER ====== */
+      .timer-container {
+        background: linear-gradient(135deg, var(--light) 0%, #f1f5f9 100%);
+        padding: 25px;
+        border-radius: var(--radius-lg);
+        margin-bottom: 30px;
+        border: 3px solid var(--success);
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+
+      .timer-container.paused {
+        border-style: dashed;
+        opacity: 0.8;
+      }
+
+      .timer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .timer-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .timer-controls {
+        display: flex;
+        gap: 10px;
+      }
+
+      .timer-display {
+        font-size: 4rem;
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+        color: var(--success);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .timer-display.paused {
+        opacity: 0.7;
+      }
+
+      .timer-warning {
+        color: var(--warning) !important;
+      }
+
+      .timer-danger {
+        color: var(--accent) !important;
+      }
+
+      .timer-progress {
+        height: 10px;
+        background: var(--gray-light);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .timer-progress-bar {
+        height: 100%;
+        background: var(--success);
+        width: 100%;
+        transition:
+          width 1s ease,
+          background-color 1s ease;
+      }
+
+      /* ====== PAPER GALLERY ====== */
+      .paper-gallery {
+        margin-bottom: 40px;
+      }
+
+      .gallery-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .gallery-title {
+        font-size: 1.4rem;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .photo-thumbnails {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding: 10px 0;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-light) var(--light);
+      }
+
+      .photo-thumbnails::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .photo-thumbnails::-webkit-scrollbar-track {
+        background: var(--light);
+        border-radius: 3px;
+      }
+
+      .photo-thumbnails::-webkit-scrollbar-thumb {
+        background: var(--primary-light);
+        border-radius: 3px;
+      }
+
+      .photo-thumb {
+        width: 120px;
+        height: 120px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: var(--transition);
+        flex-shrink: 0;
+      }
+
+      .photo-thumb:hover {
+        transform: scale(1.05);
+        border-color: var(--primary);
+      }
+
+      .photo-thumb.active {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+      }
+
+      .photo-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .main-photo-container {
+        position: relative;
+        width: 100%;
+        max-height: 600px;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 20px;
+      }
+
+      .main-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #f8fafc;
+        display: block;
+      }
+
+      .photo-counter {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
+      }
+
+      .gallery-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      /* ====== PAGE 3: VIDEO PAGE ====== */
+      #page3 .container {
+        max-width: 1000px;
+        margin: 50px auto;
+        text-align: center;
+      }
+
+      .video-container {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        box-shadow: var(--shadow-lg);
+        margin-top: 30px;
+      }
+
+      .video-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: var(--dark);
+      }
+
+      .video-placeholder {
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        border-radius: var(--radius-md);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .video-placeholder::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 0, 0, 0.1) 0%,
+          transparent 70%
+        );
+        z-index: 0;
+      }
+
+      .video-placeholder i {
+        font-size: 5rem;
+        color: #ff0000;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .video-placeholder h4 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .video-placeholder p {
+        opacity: 0.8;
+        position: relative;
+        z-index: 1;
+      }
+
+      .study-tips {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        padding: 25px;
+        border-radius: var(--radius-md);
+        margin-top: 30px;
+        border-left: 4px solid var(--primary);
+      }
+
+      .study-tips h4 {
+        color: var(--primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .study-tips ul {
+        text-align: left;
+        list-style: none;
+        color: var(--gray);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .study-tips li {
+        margin-bottom: 10px;
+        padding-left: 10px;
+      }
+
+      .study-tips i {
+        color: var(--success);
+        margin-right: 10px;
+      }
+
+      /* ====== BUTTONS ====== */
+      .btn {
+        padding: 12px 25px;
+        border-radius: var(--radius-md);
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--primary-light);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-accent {
+        background: var(--accent);
+        color: white;
+      }
+
+      .btn-accent:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--dark);
+        border: 2px solid var(--gray-light);
+      }
+
+      .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .btn-lg {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+      }
+
+      /* ====== FULLSCREEN VIEWER ====== */
+      .fullscreen-viewer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(5px);
+      }
+
+      .fullscreen-viewer.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .fullscreen-img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        border-radius: var(--radius-md);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease;
+      }
+
+      .fullscreen-controls {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .fullscreen-controls .btn {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+      }
+
+      /* ====== NOTIFICATION POPUP ====== */
+      .notification-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        background: white;
+        padding: 40px;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-xl);
+        z-index: 3000;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .notification-popup.active {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      .notification-icon {
+        font-size: 5rem;
+        color: var(--accent);
+        margin-bottom: 25px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .notification-title {
+        font-size: 2rem;
+        color: var(--dark);
+        margin-bottom: 15px;
+      }
+
+      .notification-message {
+        color: var(--gray);
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+
+      .notification-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      /* ====== RESPONSIVE DESIGN ====== */
+      @media (max-width: 768px) {
         .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: var(--shadow-md);
-        }
-
-        .logo-text h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .logo-text p {
-            font-size: 0.9rem;
-            opacity: 0.8;
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
         }
 
         .header-stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
-        }
-
-        .stat-box:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-light);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        /* ====== PAGE 1: LESSONS ====== */
-        #page1 .container {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .page-title h2 {
-            font-size: 2.2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .page-title p {
-            color: var(--gray);
-            font-size: 1.1rem;
+          width: 100%;
+          justify-content: center;
         }
 
         .lessons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .lesson-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 30px 25px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-            box-shadow: var(--shadow-md);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lesson-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .lesson-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-light);
-        }
-
-        .lesson-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .lesson-card.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .lesson-card.active .lesson-number,
-        .lesson-card.active .lesson-title,
-        .lesson-card.active .lesson-description {
-            color: white;
-        }
-
-        .lesson-card.active .lesson-code {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .lesson-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
-        }
-
-        .lesson-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--dark);
-            transition: color 0.3s ease;
-        }
-
-        .lesson-description {
-            font-size: 0.95rem;
-            color: var(--gray);
-            margin-bottom: 20px;
-            transition: color 0.3s ease;
-        }
-
-        .lesson-code {
-            display: inline-block;
-            padding: 8px 20px;
-            background: var(--light);
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        /* ====== PAGE 2: PAPER VIEWER ====== */
-        #page2 .container {
-            max-width: 1200px;
-            margin: 30px auto;
-        }
-
-        .viewer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--gray-light);
-        }
-
-        .viewer-title h3 {
-            font-size: 1.8rem;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-
-        .viewer-title p {
-            color: var(--gray);
-            font-size: 1rem;
-        }
-
-        /* ====== TIMER ====== */
-        .timer-container {
-            background: linear-gradient(135deg, var(--light) 0%, #f1f5f9 100%);
-            padding: 25px;
-            border-radius: var(--radius-lg);
-            margin-bottom: 30px;
-            border: 3px solid var(--success);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .timer-container.paused {
-            border-style: dashed;
-            opacity: 0.8;
-        }
-
-        .timer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .timer-label {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .timer-controls {
-            display: flex;
-            gap: 10px;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
 
         .timer-display {
-            font-size: 4rem;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            color: var(--success);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+          font-size: 3rem;
         }
 
-        .timer-display.paused {
-            opacity: 0.7;
-        }
-
-        .timer-warning {
-            color: var(--warning) !important;
-        }
-
-        .timer-danger {
-            color: var(--accent) !important;
-        }
-
-        .timer-progress {
-            height: 10px;
-            background: var(--gray-light);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .timer-progress-bar {
-            height: 100%;
-            background: var(--success);
-            width: 100%;
-            transition: width 1s ease, background-color 1s ease;
-        }
-
-        /* ====== PAPER GALLERY ====== */
-        .paper-gallery {
-            margin-bottom: 40px;
-        }
-
-        .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .gallery-title {
-            font-size: 1.4rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .photo-thumbnails {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 10px 0;
-            overflow-x: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-light) var(--light);
-        }
-
-        .photo-thumbnails::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .photo-thumbnails::-webkit-scrollbar-track {
-            background: var(--light);
-            border-radius: 3px;
-        }
-
-        .photo-thumbnails::-webkit-scrollbar-thumb {
-            background: var(--primary-light);
-            border-radius: 3px;
-        }
-
-        .photo-thumb {
-            width: 120px;
-            height: 120px;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-
-        .photo-thumb:hover {
-            transform: scale(1.05);
-            border-color: var(--primary);
-        }
-
-        .photo-thumb.active {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
-        }
-
-        .photo-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .main-photo-container {
-            position: relative;
-            width: 100%;
-            max-height: 600px;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 20px;
-        }
-
-        .main-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background: #f8fafc;
-            display: block;
-        }
-
-        .photo-counter {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            backdrop-filter: blur(4px);
-        }
-
-        .gallery-controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        /* ====== PAGE 3: VIDEO PAGE ====== */
-        #page3 .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            text-align: center;
-        }
-
-        .video-container {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            box-shadow: var(--shadow-lg);
-            margin-top: 30px;
-        }
-
-        .video-title {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--dark);
+        .viewer-header {
+          flex-direction: column;
+          gap: 20px;
+          align-items: flex-start;
         }
 
         .video-placeholder {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: var(--radius-md);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .video-placeholder::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.1) 0%, transparent 70%);
-            z-index: 0;
+          height: 300px;
         }
 
         .video-placeholder i {
-            font-size: 5rem;
-            color: #ff0000;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
+          font-size: 3rem;
         }
 
-        .video-placeholder h4 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+        .gallery-controls {
+          flex-wrap: wrap;
         }
 
-        .video-placeholder p {
-            opacity: 0.8;
-            position: relative;
-            z-index: 1;
+        .photo-thumb {
+          width: 100px;
+          height: 100px;
         }
 
-        .study-tips {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            padding: 25px;
-            border-radius: var(--radius-md);
-            margin-top: 30px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .study-tips h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .study-tips ul {
-            text-align: left;
-            list-style: none;
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .study-tips li {
-            margin-bottom: 10px;
-            padding-left: 10px;
-        }
-
-        .study-tips i {
-            color: var(--success);
-            margin-right: 10px;
-        }
-
-        /* ====== BUTTONS ====== */
-        .btn {
-            padding: 12px 25px;
-            border-radius: var(--radius-md);
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-light);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-accent {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-accent:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--dark);
-            border: 2px solid var(--gray-light);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-
-        .btn-lg {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-        }
-
-        /* ====== FULLSCREEN VIEWER ====== */
-        .fullscreen-viewer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-
-        .fullscreen-viewer.active {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .fullscreen-img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            border-radius: var(--radius-md);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
-        }
-
-        .fullscreen-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .fullscreen-controls .btn {
-            width: 44px;
-            height: 44px;
-            padding: 0;
-            border-radius: 50%;
-            justify-content: center;
-        }
-
-        /* ====== NOTIFICATION POPUP ====== */
         .notification-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.5);
-            background: white;
-            padding: 40px;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
-            z-index: 3000;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .notification-popup.active {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        .notification-icon {
-            font-size: 5rem;
-            color: var(--accent);
-            margin-bottom: 25px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .notification-title {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .notification-message {
-            color: var(--gray);
-            margin-bottom: 30px;
-            line-height: 1.6;
+          padding: 30px 20px;
         }
 
         .notification-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+          flex-direction: column;
         }
 
-        /* ====== RESPONSIVE DESIGN ====== */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
+        .notification-buttons .btn {
+          width: 100%;
+        }
+      }
 
-            .header-stats {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .lessons-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-
-            .timer-display {
-                font-size: 3rem;
-            }
-
-            .viewer-header {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-
-            .video-placeholder {
-                height: 300px;
-            }
-
-            .video-placeholder i {
-                font-size: 3rem;
-            }
-
-            .gallery-controls {
-                flex-wrap: wrap;
-            }
-
-            .photo-thumb {
-                width: 100px;
-                height: 100px;
-            }
-
-            .notification-popup {
-                padding: 30px 20px;
-            }
-
-            .notification-buttons {
-                flex-direction: column;
-            }
-
-            .notification-buttons .btn {
-                width: 100%;
-            }
+      @media (max-width: 480px) {
+        .lessons-grid {
+          grid-template-columns: 1fr;
         }
 
-        @media (max-width: 480px) {
-            .lessons-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-title h2 {
-                font-size: 1.8rem;
-            }
-
-            .timer-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: center;
-            }
-
-            .timer-controls {
-                width: 100%;
-                justify-content: center;
-            }
+        .page-title h2 {
+          font-size: 1.8rem;
         }
 
-        /* ====== UTILITY CLASSES ====== */
-        .hidden {
-            display: none !important;
+        .timer-header {
+          flex-direction: column;
+          gap: 15px;
+          align-items: center;
         }
 
-        .text-center {
-            text-align: center;
+        .timer-controls {
+          width: 100%;
+          justify-content: center;
         }
+      }
 
-        .mt-4 { margin-top: 1rem; }
-        .mt-6 { margin-top: 1.5rem; }
-        .mt-8 { margin-top: 2rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
+      /* ====== UTILITY CLASSES ====== */
+      .hidden {
+        display: none !important;
+      }
 
-        /* ====== FOOTER ====== */
-        .footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0 30px;
-            margin-top: 80px;
-        }
+      .text-center {
+        text-align: center;
+      }
 
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            text-align: center;
-        }
+      .mt-4 {
+        margin-top: 1rem;
+      }
+      .mt-6 {
+        margin-top: 1.5rem;
+      }
+      .mt-8 {
+        margin-top: 2rem;
+      }
+      .mb-4 {
+        margin-bottom: 1rem;
+      }
+      .mb-6 {
+        margin-bottom: 1.5rem;
+      }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0 30px;
-            flex-wrap: wrap;
-        }
+      /* ====== FOOTER ====== */
+      .footer {
+        background: var(--dark);
+        color: white;
+        padding: 40px 0 30px;
+        margin-top: 80px;
+      }
 
-        .footer-links a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: var(--transition);
-        }
+      .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        text-align: center;
+      }
 
-        .footer-links a:hover {
-            color: white;
-        }
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin: 20px 0 30px;
+        flex-wrap: wrap;
+      }
 
-        .copyright {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            border-top: 1px solid #334155;
-            padding-top: 20px;
-        }
+      .footer-links a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: var(--transition);
+      }
 
+      .footer-links a:hover {
+        color: white;
+      }
 
+      .copyright {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        border-top: 1px solid #334155;
+        padding-top: 20px;
+      }
 
+      /* Button Container */
+      .button-wrapper {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+      }
 
+      /* Main Button Styles */
+      .blue-btn {
+        /* Position & Layout */
+        position: relative;
+        left: 0;
+        top: 0;
 
-        
+        /* Colors & Background */
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border: none;
+        color: white;
 
-<!-- /* Button Container */
+        /* Shape & Size */
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+
+        /* Effects */
+        box-shadow:
+          0 4px 20px rgba(37, 99, 235, 0.3),
+          0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        /* Text */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: 0.5px;
+        text-transform: none;
+        outline: none;
+      }
+
+      /* Hover State - තද නිල් වෙනවා */
+      .blue-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        transform: translateY(-2px);
+        box-shadow:
+          0 6px 25px rgba(29, 78, 216, 0.4),
+          0 3px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Active State */
+      .blue-btn:active {
+        transform: translateY(0);
+        box-shadow:
+          0 2px 10px rgba(29, 78, 216, 0.3),
+          0 1px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Button with Icon */
+      .blue-btn.icon-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 28px;
+      }
+
+      .btn-icon {
+        font-size: 18px;
+        transition: transform 0.3s ease;
+      }
+
+      .blue-btn:hover .btn-icon {
+        transform: translateX(3px);
+      }
+
+      /* Simple Button (වඩාත් සරල) */
+      .simple-blue-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        position: fixed;
+        top: 20px;
+        left: 20px;
+      }
+
+      .simple-blue-btn:hover {
+        background: #2563eb;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      }
+
+      /* Modern Button with Border */
+      .modern-blue-btn {
+        background: white;
+        color: #2563eb;
+        border: 2px solid #2563eb;
+        padding: 14px 30px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+      }
+
+      .modern-blue-btn:hover {
+        background: #2563eb;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+      }
+
+      /* Glass Effect Button */
+      .glass-blue-btn {
+        background: rgba(37, 99, 235, 0.15);
+        backdrop-filter: blur(10px);
+        color: #1d4ed8;
+        border: 1px solid rgba(37, 99, 235, 0.3);
+        padding: 15px 32px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+      }
+
+      .glass-blue-btn:hover {
+        background: rgba(29, 78, 216, 0.25);
+        border-color: rgba(37, 99, 235, 0.5);
+        color: #1e40af;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(29, 78, 216, 0.2);
+      }
+
+      /* johncss **/
+      .large-title {
+        font-size: 40px;
+        font-weight: 800;
+        color: #fff;
+        text-transform: capitalize;
+      }
+
+      /* Responsive for mobile */
+      @media (max-width: 768px) {
         .button-wrapper {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
+          top: 15px;
+          left: 15px;
         }
 
-        /* Main Button Styles */
-        .blue-btn {
-            /* Position & Layout */
-            position: relative;
-            left: 0;
-            top: 0;
-
-            /* Colors & Background */
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border: none;
-            color: white;
-
-            /* Shape & Size */
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-
-            /* Effects */
-            box-shadow: 
-                0 4px 20px rgba(37, 99, 235, 0.3),
-                0 2px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-
-            /* Text */
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            letter-spacing: 0.5px;
-            text-transform: none;
-            outline: none;
-        }
-
-        /* Hover State - තද නිල් වෙනවා */
-        .blue-btn:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e40af);
-            transform: translateY(-2px);
-            box-shadow: 
-                0 6px 25px rgba(29, 78, 216, 0.4),
-                0 3px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Active State */
-        .blue-btn:active {
-            transform: translateY(0);
-            box-shadow: 
-                0 2px 10px rgba(29, 78, 216, 0.3),
-                0 1px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Button with Icon */
-        .blue-btn.icon-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-        }
-
-        .btn-icon {
-            font-size: 18px;
-            transition: transform 0.3s ease;
-        }
-
-        .blue-btn:hover .btn-icon {
-            transform: translateX(3px);
-        }
-
-        /* Simple Button (වඩාත් සරල) */
-        .simple-blue-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-            position: fixed;
-            top: 20px;
-            left: 20px;
-        }
-
-        .simple-blue-btn:hover {
-            background: #2563eb;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Modern Button with Border */
-        .modern-blue-btn {
-            background: white;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-            padding: 14px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-        }
-
-        .modern-blue-btn:hover {
-            background: #2563eb;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
-        }
-
-        /* Glass Effect Button */
+        .blue-btn,
+        .simple-blue-btn,
+        .modern-blue-btn,
         .glass-blue-btn {
-            background: rgba(37, 99, 235, 0.15);
-            backdrop-filter: blur(10px);
-            color: #1d4ed8;
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            padding: 15px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: fixed;
-            top: 20px;
-            left: 20px;
+          padding: 12px 24px;
+          font-size: 14px;
         }
-
-        .glass-blue-btn:hover {
-            background: rgba(29, 78, 216, 0.25);
-            border-color: rgba(37, 99, 235, 0.5);
-            color: #1e40af;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(29, 78, 216, 0.2);
-        }
-
-        /* Responsive for mobile */
-        @media (max-width: 768px) {
-            .button-wrapper {
-                top: 15px;
-                left: 15px;
-            }
-
-            .blue-btn,
-            .simple-blue-btn,
-            .modern-blue-btn,
-            .glass-blue-btn {
-                padding: 12px 24px;
-                font-size: 14px;
-            }
-        }
-
-
-
-
-        
-        
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
 
     <div class="bh">
-        <a href="Dash.html">
-            <button class="bhb">
-                Back to Dashboard
-            </button>
-        </a>
+      <a href="Dash.html">
+        <button class="bhb">Back to Dashboard</button>
+      </a>
     </div>
     <header class="header">
-        <div class="header-container">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-laptop-code"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>Akuratama ICT Academy</h1>
-                    <p>Advanced Level ICT Past Papers & Study Resources</p>
-                </div>
-            </div>
-            <div class="header-stats">
-                <div class="stat-box">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Lessons</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Past Papers</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">24</div>
-                    <div class="stat-label">Video Tutorials</div>
-                </div>
-            </div>
+      <div class="header-container">
+        <div class="logo">
+          <div class="logo-icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <div class="logo-text">
+            <h1>Akuratama ICT Academy</h1>
+            <p>Advanced Level ICT Past Papers & Study Resources</p>
+          </div>
         </div>
+        <div class="header-stats">
+          <div class="stat-box">
+            <div class="stat-number">13</div>
+            <div class="stat-label">Lessons</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Past Papers</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">24</div>
+            <div class="stat-label">Video Tutorials</div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Page 1: Lessons Selection -->
     <div id="page1" class="page active">
-        <div class="container">
-            <div class="page-title">
-                <h2>AL ICT Lesson Modules</h2>
-                <p>Select a lesson to access past papers and study materials</p>
-            </div>
-
-            <div class="lessons-grid" id="lessonsGrid">
-                <!-- Lesson cards will be populated by JavaScript -->
-            </div>
+      <div class="container">
+        <div class="page-title">
+          <h2>AL ICT Lesson Modules</h2>
+          <p>Select a lesson to access past papers and study materials</p>
         </div>
+
+        <div class="lessons-grid" id="lessonsGrid">
+          <!-- Lesson cards will be populated by JavaScript -->
+        </div>
+      </div>
     </div>
 
     <!-- Page 2: Paper Viewer -->
     <div id="page2" class="page">
-        <div class="container">
-            <div class="viewer-header">
-                <div class="viewer-title">
-                    <h3 id="currentLessonTitle">Lesson 1: Introduction to ICT</h3>
-                    <p id="currentLessonDescription">Basic concepts of Information and Communication Technology</p>
-                </div>
-                <button class="btn btn-secondary" id="backToLessons">
-                    <i class="fas fa-arrow-left"></i> Back to Lessons
-                </button>
-            </div>
-
-            <!-- Timer Section -->
-            <div class="timer-container" id="timerContainer">
-                <div class="timer-header">
-                    <div class="timer-label">
-                        <i class="fas fa-clock"></i>
-                        Study Timer (10 Minutes)
-                        <span style="font-size: 0.8rem; margin-left: 10px; color: var(--gray);">
-                            <i class="fas fa-info-circle"></i> Auto-redirects to video when complete
-                        </span>
-                    </div>
-                    <div class="timer-controls">
-                        <button class="btn btn-outline btn-sm" id="pauseTimer">
-                            <i class="fas fa-pause"></i> Pause
-                        </button>
-                        <button class="btn btn-outline btn-sm" id="resetTimer">
-                            <i class="fas fa-redo"></i> Reset
-                        </button>
-                    </div>
-                </div>
-                <div class="timer-display" id="timerDisplay">10:00</div>
-                <div class="timer-progress">
-                    <div class="timer-progress-bar" id="timerProgress"></div>
-                </div>
-            </div>
-
-            <!-- Paper Gallery -->
-            <div class="paper-gallery">
-                <div class="gallery-header">
-                    <div class="gallery-title">
-                        <i class="fas fa-file-alt"></i>
-                        Past Paper Images
-                    </div>
-                    <div style="background: var(--accent); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;" id="photoCountBadge">
-                        5 Images
-                    </div>
-                </div>
-
-                <div class="photo-thumbnails" id="photoThumbnails">
-                    <!-- Thumbnails will be populated by JavaScript -->
-                </div>
-
-                <div class="main-photo-container">
-                    <img class="main-photo" id="mainPhoto" src="" alt="Past Paper">
-                    <div class="photo-counter" id="photoCounter">1/5</div>
-                </div>
-
-                <div class="gallery-controls">
-                    <button class="btn btn-secondary" id="prevPhoto">
-                        <i class="fas fa-chevron-left"></i> Previous
-                    </button>
-                    <button class="btn btn-primary" id="viewFullscreen">
-                        <i class="fas fa-expand"></i> Fullscreen
-                    </button>
-                    <button class="btn btn-secondary" id="nextPhoto">
-                        Next <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="text-center mt-8">
-                <button class="btn btn-accent btn-lg" id="continueToVideo">
-                    <i class="fas fa-play-circle"></i> Watch Video Explanation
-                </button>
-                <p class="mt-4" style="color: var(--gray); font-size: 0.9rem;">
-                    <i class="fas fa-info-circle"></i> Timer will automatically redirect to video when it ends
-                </p>
-            </div>
+      <div class="container">
+        <div class="viewer-header">
+          <div class="viewer-title">
+            <h3 id="currentLessonTitle">Lesson 1: Introduction to ICT</h3>
+            <p id="currentLessonDescription">
+              Basic concepts of Information and Communication Technology
+            </p>
+          </div>
+          <button class="btn btn-secondary" id="backToLessons">
+            <i class="fas fa-arrow-left"></i> Back to Lessons
+          </button>
         </div>
+
+        <!-- Timer Section -->
+        <div class="timer-container" id="timerContainer">
+          <div class="timer-header">
+            <div class="timer-label">
+              <i class="fas fa-clock"></i>
+              Study Timer (10 Minutes)
+              <span
+                style="font-size: 0.8rem; margin-left: 10px; color: var(--gray)"
+              >
+                <i class="fas fa-info-circle"></i> Auto-redirects to video when
+                complete
+              </span>
+            </div>
+            <div class="timer-controls">
+              <button class="btn btn-outline btn-sm" id="pauseTimer">
+                <i class="fas fa-pause"></i> Pause
+              </button>
+              <button class="btn btn-outline btn-sm" id="resetTimer">
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+          </div>
+          <div class="timer-display" id="timerDisplay">10:00</div>
+          <div class="timer-progress">
+            <div class="timer-progress-bar" id="timerProgress"></div>
+          </div>
+        </div>
+
+        <!-- Paper Gallery -->
+        <div class="paper-gallery">
+          <div class="gallery-header">
+            <div class="gallery-title">
+              <i class="fas fa-file-alt"></i>
+              Past Paper Images
+            </div>
+            <div
+              style="
+                background: var(--accent);
+                color: white;
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+              "
+              id="photoCountBadge"
+            >
+              5 Images
+            </div>
+          </div>
+
+          <div class="photo-thumbnails" id="photoThumbnails">
+            <!-- Thumbnails will be populated by JavaScript -->
+          </div>
+
+          <div class="main-photo-container">
+            <img class="main-photo" id="mainPhoto" src="" alt="Past Paper" />
+            <div class="photo-counter" id="photoCounter">1/5</div>
+          </div>
+
+          <div class="gallery-controls">
+            <button class="btn btn-secondary" id="prevPhoto">
+              <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="btn btn-primary" id="viewFullscreen">
+              <i class="fas fa-expand"></i> Fullscreen
+            </button>
+            <button class="btn btn-secondary" id="nextPhoto">
+              Next <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center mt-8">
+          <button class="btn btn-accent btn-lg" id="continueToVideo">
+            <i class="fas fa-play-circle"></i> Watch Video Explanation
+          </button>
+          <p class="mt-4" style="color: var(--gray); font-size: 0.9rem">
+            <i class="fas fa-info-circle"></i> Timer will automatically redirect
+            to video when it ends
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Page 3: Video Page -->
     <div id="page3" class="page">
-        <div class="container">
-            <div class="page-title">
-                <h2>Video Explanation</h2>
-                <p>Complete lesson explanation and discussion</p>
-            </div>
-
-            <div class="video-container">
-                <h3 class="video-title" id="videoLessonTitle">Lesson 1: Introduction to ICT</h3>
-                <p style="color: var(--accent); font-weight: 600; margin-bottom: 20px;">
-                    <i class="fas fa-hourglass-end"></i> Time's up! Let's discuss the lesson.
-                </p>
-
-                <div class="video-placeholder">
-                    <i class="fab fa-youtube"></i>
-                    <h4>AL ICT Lesson Video Tutorial</h4>
-                    <p>Video loading for detailed explanation</p>
-                </div>
-
-                <div class="mb-6">
-                    <a href="https://www.youtube.com/results?search_query=AL+ICT+past+papers+explanation" target="_blank" class="btn btn-accent btn-lg">
-                        <i class="fab fa-youtube"></i> Watch on YouTube
-                    </a>
-                    <p class="mt-4" style="color: var(--gray);">
-                        This video covers complete paper solutions and exam techniques
-                    </p>
-                </div>
-
-                <div class="study-tips">
-                    <h4><i class="fas fa-lightbulb"></i> Study Tips for This Lesson</h4>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Review past papers systematically</li>
-                        <li><i class="fas fa-check"></i> Take notes on important concepts</li>
-                        <li><i class="fas fa-check"></i> Practice problem-solving techniques</li>
-                        <li><i class="fas fa-check"></i> Understand marking schemes</li>
-                        <li><i class="fas fa-check"></i> Join study discussions</li>
-                    </ul>
-                </div>
-
-                <div class="mt-8">
-                    <button class="btn btn-primary" id="backToPapers">
-                        <i class="fas fa-arrow-left"></i> Back to Papers
-                    </button>
-                    <button class="btn btn-secondary" id="backToHome">
-                        <i class="fas fa-home"></i> Back to Home
-                    </button>
-                </div>
-            </div>
+      <div class="container">
+        <div class="page-title">
+          <h2>Video Explanation</h2>
+          <p>Complete lesson explanation and discussion</p>
         </div>
+
+        <div class="video-container">
+          <h3 class="video-title" id="videoLessonTitle">
+            Lesson 1: Introduction to ICT
+          </h3>
+          <p
+            style="color: var(--accent); font-weight: 600; margin-bottom: 20px"
+          >
+            <i class="fas fa-hourglass-end"></i> Time's up! Let's discuss the
+            lesson.
+          </p>
+
+          <div class="video-placeholder">
+            <i class="fab fa-youtube"></i>
+            <h4>AL ICT Lesson Video Tutorial</h4>
+            <p>Video loading for detailed explanation</p>
+          </div>
+
+          <div class="mb-6">
+            <a
+              href="https://www.youtube.com/results?search_query=AL+ICT+past+papers+explanation"
+              target="_blank"
+              class="btn btn-accent btn-lg"
+            >
+              <i class="fab fa-youtube"></i> Watch on YouTube
+            </a>
+            <p class="mt-4" style="color: var(--gray)">
+              This video covers complete paper solutions and exam techniques
+            </p>
+          </div>
+
+          <div class="study-tips">
+            <h4><i class="fas fa-lightbulb"></i> Study Tips for This Lesson</h4>
+            <ul>
+              <li>
+                <i class="fas fa-check"></i> Review past papers systematically
+              </li>
+              <li>
+                <i class="fas fa-check"></i> Take notes on important concepts
+              </li>
+              <li>
+                <i class="fas fa-check"></i> Practice problem-solving techniques
+              </li>
+              <li><i class="fas fa-check"></i> Understand marking schemes</li>
+              <li><i class="fas fa-check"></i> Join study discussions</li>
+            </ul>
+          </div>
+
+          <div class="mt-8">
+            <button class="btn btn-primary" id="backToPapers">
+              <i class="fas fa-arrow-left"></i> Back to Papers
+            </button>
+            <button class="btn btn-secondary" id="backToHome">
+              <i class="fas fa-home"></i> Back to Home
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-container">
-            <div style="margin-bottom: 20px;">
-                <h3 style="color: var(--primary-light); margin-bottom: 10px;">Akuratama ICT Academy</h3>
-                <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto;">
-                    Providing quality ICT education resources for Sri Lankan Advanced Level students
-                </p>
-            </div>
-
-            <div class="footer-links">
-                <a href="#"><i class="fas fa-home"></i> Home</a>
-                <a href="#"><i class="fas fa-book"></i> Lessons</a>
-                <a href="#"><i class="fas fa-video"></i> Videos</a>
-                <a href="#"><i class="fas fa-download"></i> Downloads</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-            </div>
-
-            <div class="copyright">
-                <p>&copy; 2024 Akuratama ICT Academy. All rights reserved.</p>
-                <p style="margin-top: 5px; font-size: 0.8rem;">Designed for Advanced Level ICT Students</p>
-            </div>
+      <div class="footer-container">
+        <div style="margin-bottom: 20px">
+          <h3 style="color: var(--primary-light); margin-bottom: 10px">
+            Akuratama ICT Academy
+          </h3>
+          <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto">
+            Providing quality ICT education resources for Sri Lankan Advanced
+            Level students
+          </p>
         </div>
+
+        <div class="footer-links">
+          <a href="#"><i class="fas fa-home"></i> Home</a>
+          <a href="#"><i class="fas fa-book"></i> Lessons</a>
+          <a href="#"><i class="fas fa-video"></i> Videos</a>
+          <a href="#"><i class="fas fa-download"></i> Downloads</a>
+          <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+        </div>
+
+        <div class="copyright">
+          <p>&copy; 2024 Akuratama ICT Academy. All rights reserved.</p>
+          <p style="margin-top: 5px; font-size: 0.8rem">
+            Designed for Advanced Level ICT Students
+          </p>
+        </div>
+      </div>
     </footer>
 
     <!-- Notification Popup -->
     <div class="notification-popup" id="notificationPopup">
-        <div class="notification-icon">
-            <i class="fas fa-hourglass-end"></i>
-        </div>
-        <h3 class="notification-title">Time's Up!</h3>
-        <p class="notification-message">
-            "The time is enough! We can discuss now."<br>
-            You've studied for 10 minutes. Ready to review what we've learned?
-        </p>
-        <div class="notification-buttons">
-            <button class="btn btn-secondary" id="continueStudying">
-                <i class="fas fa-redo"></i> Continue Studying
-            </button>
-            <button class="btn btn-primary" id="goToVideo">
-                <i class="fas fa-play"></i> Watch Video
-            </button>
-        </div>
+      <div class="notification-icon">
+        <i class="fas fa-hourglass-end"></i>
+      </div>
+      <h3 class="notification-title">Time's Up!</h3>
+      <p class="notification-message">
+        "The time is enough! We can discuss now."<br />
+        You've studied for 10 minutes. Ready to review what we've learned?
+      </p>
+      <div class="notification-buttons">
+        <button class="btn btn-secondary" id="continueStudying">
+          <i class="fas fa-redo"></i> Continue Studying
+        </button>
+        <button class="btn btn-primary" id="goToVideo">
+          <i class="fas fa-play"></i> Watch Video
+        </button>
+      </div>
     </div>
 
     <!-- Fullscreen Viewer -->
     <div class="fullscreen-viewer" id="fullscreenViewer">
-        <div class="fullscreen-controls">
-            <button class="btn btn-secondary" id="zoomIn">
-                <i class="fas fa-search-plus"></i>
-            </button>
-            <button class="btn btn-secondary" id="zoomOut">
-                <i class="fas fa-search-minus"></i>
-            </button>
-            <button class="btn btn-accent" id="closeFullscreen">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <img class="fullscreen-img" id="fullscreenImage" src="" alt="Fullscreen Paper">
+      <div class="fullscreen-controls">
+        <button class="btn btn-secondary" id="zoomIn">
+          <i class="fas fa-search-plus"></i>
+        </button>
+        <button class="btn btn-secondary" id="zoomOut">
+          <i class="fas fa-search-minus"></i>
+        </button>
+        <button class="btn btn-accent" id="closeFullscreen">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <img
+        class="fullscreen-img"
+        id="fullscreenImage"
+        src=""
+        alt="Fullscreen Paper"
+      />
     </div>
 
     <script>
-let ictLessons = [];;
-        (async function(){
-            const res = await fetchAllCoursesForStudent()
-            ictLessons = res
-        })()
+      let ictLessons = [];
+      (async function () {
+        const res = await fetchAllCoursesForStudent();
+        ictLessons = res;
+        renderLessons(res);
+      })();
 
-    
+      // ====== APPLICATION STATE ======
+      let currentLesson = null;
+      let currentPhotos = [];
+      let currentPhotoIndex = 0;
+      let timerInterval = null;
+      let isTimerPaused = false;
+      let secondsRemaining = 600; // 10 minutes = 600 seconds
+      const totalSeconds = 600; // 10 minutes = 600 seconds
+      let zoomLevel = 1;
 
-        // ====== APPLICATION STATE ======
-        let currentLesson = null;
-        let currentPhotos = [];
-        let currentPhotoIndex = 0;
-        let timerInterval = null;
-        let isTimerPaused = false;
-        let secondsRemaining = 600; // 10 minutes = 600 seconds
-        const totalSeconds = 600; // 10 minutes = 600 seconds
-        let zoomLevel = 1;
+      // ====== DOM ELEMENTS ======
+      const page1 = document.getElementById("page1");
+      const page2 = document.getElementById("page2");
+      const page3 = document.getElementById("page3");
+      const lessonsGrid = document.getElementById("lessonsGrid");
+      const currentLessonTitle = document.getElementById("currentLessonTitle");
+      const currentLessonDescription = document.getElementById(
+        "currentLessonDescription",
+      );
+      const videoLessonTitle = document.getElementById("videoLessonTitle");
+      const photoCountBadge = document.getElementById("photoCountBadge");
+      const backToLessonsBtn = document.getElementById("backToLessons");
+      const timerDisplay = document.getElementById("timerDisplay");
+      const timerProgress = document.getElementById("timerProgress");
+      const timerContainer = document.getElementById("timerContainer");
+      const pauseTimerBtn = document.getElementById("pauseTimer");
+      const resetTimerBtn = document.getElementById("resetTimer");
+      const photoThumbnails = document.getElementById("photoThumbnails");
+      const mainPhoto = document.getElementById("mainPhoto");
+      const photoCounter = document.getElementById("photoCounter");
+      const prevPhotoBtn = document.getElementById("prevPhoto");
+      const nextPhotoBtn = document.getElementById("nextPhoto");
+      const viewFullscreenBtn = document.getElementById("viewFullscreen");
+      const continueToVideoBtn = document.getElementById("continueToVideo");
+      const backToPapersBtn = document.getElementById("backToPapers");
+      const backToHomeBtn = document.getElementById("backToHome");
+      const notificationPopup = document.getElementById("notificationPopup");
+      const continueStudyingBtn = document.getElementById("continueStudying");
+      const goToVideoBtn = document.getElementById("goToVideo");
+      const fullscreenViewer = document.getElementById("fullscreenViewer");
+      const fullscreenImage = document.getElementById("fullscreenImage");
+      const closeFullscreenBtn = document.getElementById("closeFullscreen");
+      const zoomInBtn = document.getElementById("zoomIn");
+      const zoomOutBtn = document.getElementById("zoomOut");
 
-        // ====== DOM ELEMENTS ======
-        const page1 = document.getElementById('page1');
-        const page2 = document.getElementById('page2');
-        const page3 = document.getElementById('page3');
-        const lessonsGrid = document.getElementById('lessonsGrid');
-        const currentLessonTitle = document.getElementById('currentLessonTitle');
-        const currentLessonDescription = document.getElementById('currentLessonDescription');
-        const videoLessonTitle = document.getElementById('videoLessonTitle');
-        const photoCountBadge = document.getElementById('photoCountBadge');
-        const backToLessonsBtn = document.getElementById('backToLessons');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timerProgress = document.getElementById('timerProgress');
-        const timerContainer = document.getElementById('timerContainer');
-        const pauseTimerBtn = document.getElementById('pauseTimer');
-        const resetTimerBtn = document.getElementById('resetTimer');
-        const photoThumbnails = document.getElementById('photoThumbnails');
-        const mainPhoto = document.getElementById('mainPhoto');
-        const photoCounter = document.getElementById('photoCounter');
-        const prevPhotoBtn = document.getElementById('prevPhoto');
-        const nextPhotoBtn = document.getElementById('nextPhoto');
-        const viewFullscreenBtn = document.getElementById('viewFullscreen');
-        const continueToVideoBtn = document.getElementById('continueToVideo');
-        const backToPapersBtn = document.getElementById('backToPapers');
-        const backToHomeBtn = document.getElementById('backToHome');
-        const notificationPopup = document.getElementById('notificationPopup');
-        const continueStudyingBtn = document.getElementById('continueStudying');
-        const goToVideoBtn = document.getElementById('goToVideo');
-        const fullscreenViewer = document.getElementById('fullscreenViewer');
-        const fullscreenImage = document.getElementById('fullscreenImage');
-        const closeFullscreenBtn = document.getElementById('closeFullscreen');
-        const zoomInBtn = document.getElementById('zoomIn');
-        const zoomOutBtn = document.getElementById('zoomOut');
+      // ====== PAGE NAVIGATION ======
+      function showPage(pageNumber) {
+        // Hide all pages
+        page1.classList.remove("active");
+        page2.classList.remove("active");
+        page3.classList.remove("active");
 
-        // ====== PAGE NAVIGATION ======
-        function showPage(pageNumber) {
-            // Hide all pages
-            page1.classList.remove('active');
-            page2.classList.remove('active');
-            page3.classList.remove('active');
-
-            // Show selected page
-            if (pageNumber === 1) {
-                page1.classList.add('active');
-                // Stop timer when leaving page 2
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-            }
-            if (pageNumber === 2) {
-                page2.classList.add('active');
-                // Start timer when entering page 2
-                if (!timerInterval) {
-                    startTimer();
-                }
-            }
-            if (pageNumber === 3) {
-                page3.classList.add('active');
-                // Update video page title
-                if (currentLesson) {
-                    videoLessonTitle.textContent = `Lesson ${currentLesson.id}: ${currentLesson.title}`;
-                }
-                // Stop timer when on video page
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
-            }
+        // Show selected page
+        if (pageNumber === 1) {
+          page1.classList.add("active");
+          // Stop timer when leaving page 2
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
         }
-
-        // ====== INITIALIZATION ======
-        function initializeApp() {
-            renderLessons();
-            setupEventListeners();
+        if (pageNumber === 2) {
+          page2.classList.add("active");
+          // Start timer when entering page 2
+          if (!timerInterval) {
+            startTimer();
+          }
         }
+        if (pageNumber === 3) {
+          page3.classList.add("active");
+          // Update video page title
+          if (currentLesson) {
+            videoLessonTitle.textContent = `Lesson ${currentLesson.id}: ${currentLesson.title}`;
+          }
+          // Stop timer when on video page
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+        }
+      }
 
-        // ====== RENDER LESSONS ======
-        function renderLessons() {
-            lessonsGrid.innerHTML = '';
+      // ====== INITIALIZATION ======
+      function initializeApp() {
+        setupEventListeners();
+      }
 
-            ictLessons.forEach(lesson => {
-                const card = document.createElement('div');
-                card.className = 'lesson-card';
-                card.dataset.lessonId = lesson.id;
+      // ====== RENDER LESSONS ======
+      function renderLessons() {
+        lessonsGrid.innerHTML = "";
 
-                card.innerHTML = `
-                    <div class="lesson-number">${lesson.id.toString().padStart(2, '0')}</div>
+        ictLessons.forEach((lesson) => {
+          const card = document.createElement("div");
+          card.className = "lesson-card";
+          card.dataset.lessonId = lesson.id;
+
+          card.innerHTML = `
+                    <div class="lesson-number" style="background:${lesson.image}">
+                        <div class="large-title">${lesson.grade}</div>
+                    </div>
                     <div class="lesson-title">${lesson.title}</div>
                     <p class="lesson-description">${lesson.description}</p>
-                    <div class="lesson-code">${lesson.code}</div>
+                    <div class="lesson-code">view course</div>
                     <div style="margin-top: 16px; display: flex; gap: 12px; font-size: 0.85rem; color: var(--gray);">
                         <span><i class="fas fa-file-pdf"></i> ${lesson.papers} papers</span>
                         <span><i class="fas fa-video"></i> ${lesson.videos} videos</span>
                     </div>
                 `;
 
-                card.addEventListener('click', () => selectLesson(lesson));
-                lessonsGrid.appendChild(card);
-            });
-        }
+          card.addEventListener("click", () => selectLesson(lesson));
+          lessonsGrid.appendChild(card);
+        });
+      }
 
-        // ====== SELECT LESSON ======
-        function selectLesson(lesson) {
-            currentLesson = lesson;
-            currentPhotos = lessonImages[lesson.id] || lessonImages[1];
-            currentPhotoIndex = 0;
+      // ====== SELECT LESSON ======
+      function selectLesson(lesson) {
+        currentLesson = lesson;
+        currentPhotos = lessonImages[lesson.id] || lessonImages[1];
+        currentPhotoIndex = 0;
 
-            // Update active state
-            document.querySelectorAll('.lesson-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            const selectedCard = document.querySelector(`[data-lesson-id="${lesson.id}"]`);
-            if (selectedCard) selectedCard.classList.add('active');
+        // Update active state
+        document.querySelectorAll(".lesson-card").forEach((card) => {
+          card.classList.remove("active");
+        });
+        const selectedCard = document.querySelector(
+          `[data-lesson-id="${lesson.id}"]`,
+        );
+        if (selectedCard) selectedCard.classList.add("active");
 
-            // Update page 2 content
-            currentLessonTitle.textContent = `Lesson ${lesson.id}: ${lesson.title}`;
-            currentLessonDescription.textContent = lesson.description;
-            photoCountBadge.textContent = `${currentPhotos.length} Images`;
+        // Update page 2 content
+        currentLessonTitle.textContent = `Lesson ${lesson.id}: ${lesson.title}`;
+        currentLessonDescription.textContent = lesson.description;
+        photoCountBadge.textContent = `${currentPhotos.length} Images`;
 
-            // Load photos
-            renderPhotoGallery();
+        // Load photos
+        renderPhotoGallery();
 
-            // Reset timer
-            resetTimer();
+        // Reset timer
+        resetTimer();
 
-            // Navigate to page 2
-            showPage(2);
-        }
+        // Navigate to page 2
+        showPage(2);
+      }
 
-        // ====== RENDER PHOTO GALLERY ======
-        function renderPhotoGallery() {
-            photoThumbnails.innerHTML = '';
+      // ====== RENDER PHOTO GALLERY ======
+      function renderPhotoGallery() {
+        photoThumbnails.innerHTML = "";
 
-            currentPhotos.forEach((photo, index) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'photo-thumb';
-                if (index === currentPhotoIndex) thumb.classList.add('active');
+        currentPhotos.forEach((photo, index) => {
+          const thumb = document.createElement("div");
+          thumb.className = "photo-thumb";
+          if (index === currentPhotoIndex) thumb.classList.add("active");
 
-                thumb.innerHTML = `<img src="${photo}" alt="Paper ${index + 1}" loading="lazy">`;
-                thumb.addEventListener('click', () => showPhoto(index));
-                photoThumbnails.appendChild(thumb);
-            });
+          thumb.innerHTML = `<img src="${photo}" alt="Paper ${index + 1}" loading="lazy">`;
+          thumb.addEventListener("click", () => showPhoto(index));
+          photoThumbnails.appendChild(thumb);
+        });
 
-            showPhoto(currentPhotoIndex);
-        }
+        showPhoto(currentPhotoIndex);
+      }
 
-        // ====== SHOW PHOTO ======
-        function showPhoto(index) {
-            currentPhotoIndex = index;
-            mainPhoto.src = currentPhotos[index];
-            fullscreenImage.src = currentPhotos[index];
-            photoCounter.textContent = `${index + 1}/${currentPhotos.length}`;
+      // ====== SHOW PHOTO ======
+      function showPhoto(index) {
+        currentPhotoIndex = index;
+        mainPhoto.src = currentPhotos[index];
+        fullscreenImage.src = currentPhotos[index];
+        photoCounter.textContent = `${index + 1}/${currentPhotos.length}`;
 
-            document.querySelectorAll('.photo-thumb').forEach((thumb, i) => {
-                thumb.classList.toggle('active', i === index);
-            });
+        document.querySelectorAll(".photo-thumb").forEach((thumb, i) => {
+          thumb.classList.toggle("active", i === index);
+        });
 
-            // Update button states
-            prevPhotoBtn.disabled = index === 0;
-            nextPhotoBtn.disabled = index === currentPhotos.length - 1;
-        }
+        // Update button states
+        prevPhotoBtn.disabled = index === 0;
+        nextPhotoBtn.disabled = index === currentPhotos.length - 1;
+      }
 
-        // ====== TIMER FUNCTIONS ======
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
+      // ====== TIMER FUNCTIONS ======
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
 
-            timerInterval = setInterval(() => {
-                if (!isTimerPaused && page2.classList.contains('active')) {
-                    secondsRemaining--;
-                    updateTimerDisplay();
-
-                    if (secondsRemaining <= 0) {
-                        clearInterval(timerInterval);
-                        timerInterval = null;
-                        // Show notification when timer ends
-                        showTimeUpNotification();
-                    }
-                }
-            }, 1000);
-        }
-
-        function showTimeUpNotification() {
-            notificationPopup.classList.add('active');
-
-            // Auto close notification after 30 seconds
-            setTimeout(() => {
-                if (notificationPopup.classList.contains('active')) {
-                    notificationPopup.classList.remove('active');
-                    showPage(3);
-                }
-            }, 30000);
-        }
-
-        function pauseTimer() {
-            isTimerPaused = !isTimerPaused;
-            pauseTimerBtn.innerHTML = isTimerPaused ? 
-                '<i class="fas fa-play"></i> Resume' : 
-                '<i class="fas fa-pause"></i> Pause';
-
-            // Show pause status visually
-            if (isTimerPaused) {
-                timerDisplay.classList.add('paused');
-                timerContainer.classList.add('paused');
-            } else {
-                timerDisplay.classList.remove('paused');
-                timerContainer.classList.remove('paused');
-            }
-        }
-
-        function resetTimer() {
-            secondsRemaining = totalSeconds;
-            isTimerPaused = false;
-            pauseTimerBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-            timerDisplay.classList.remove('paused');
-            timerContainer.classList.remove('paused');
+        timerInterval = setInterval(() => {
+          if (!isTimerPaused && page2.classList.contains("active")) {
+            secondsRemaining--;
             updateTimerDisplay();
 
-            if (timerInterval) {
-                clearInterval(timerInterval);
+            if (secondsRemaining <= 0) {
+              clearInterval(timerInterval);
+              timerInterval = null;
+              // Show notification when timer ends
+              showTimeUpNotification();
             }
-            startTimer();
+          }
+        }, 1000);
+      }
+
+      function showTimeUpNotification() {
+        notificationPopup.classList.add("active");
+
+        // Auto close notification after 30 seconds
+        setTimeout(() => {
+          if (notificationPopup.classList.contains("active")) {
+            notificationPopup.classList.remove("active");
+            showPage(3);
+          }
+        }, 30000);
+      }
+
+      function pauseTimer() {
+        isTimerPaused = !isTimerPaused;
+        pauseTimerBtn.innerHTML = isTimerPaused
+          ? '<i class="fas fa-play"></i> Resume'
+          : '<i class="fas fa-pause"></i> Pause';
+
+        // Show pause status visually
+        if (isTimerPaused) {
+          timerDisplay.classList.add("paused");
+          timerContainer.classList.add("paused");
+        } else {
+          timerDisplay.classList.remove("paused");
+          timerContainer.classList.remove("paused");
         }
+      }
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(secondsRemaining / 60);
-            const seconds = secondsRemaining % 60;
+      function resetTimer() {
+        secondsRemaining = totalSeconds;
+        isTimerPaused = false;
+        pauseTimerBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        timerDisplay.classList.remove("paused");
+        timerContainer.classList.remove("paused");
+        updateTimerDisplay();
 
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            // Update progress bar
-            const progress = (secondsRemaining / totalSeconds) * 100;
-            timerProgress.style.width = `${progress}%`;
-
-            // Change colors based on time remaining
-            if (secondsRemaining <= 60) { // Last minute (60 seconds)
-                timerDisplay.classList.add('timer-danger');
-                timerDisplay.classList.remove('timer-warning');
-                timerProgress.style.backgroundColor = 'var(--accent)';
-                timerContainer.style.borderColor = 'var(--accent)';
-            } else if (secondsRemaining <= 180) { // Last 3 minutes (180 seconds)
-                timerDisplay.classList.add('timer-warning');
-                timerDisplay.classList.remove('timer-danger');
-                timerProgress.style.backgroundColor = 'var(--warning)';
-                timerContainer.style.borderColor = 'var(--warning)';
-            } else {
-                timerDisplay.classList.remove('timer-warning', 'timer-danger');
-                timerProgress.style.backgroundColor = 'var(--success)';
-                timerContainer.style.borderColor = 'var(--success)';
-            }
+        if (timerInterval) {
+          clearInterval(timerInterval);
         }
+        startTimer();
+      }
 
-        // ====== FULLSCREEN VIEWER FUNCTIONS ======
-        function openFullscreen() {
-            fullscreenViewer.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            zoomLevel = 1;
-            updateFullscreenZoom();
+      function updateTimerDisplay() {
+        const minutes = Math.floor(secondsRemaining / 60);
+        const seconds = secondsRemaining % 60;
+
+        timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+        // Update progress bar
+        const progress = (secondsRemaining / totalSeconds) * 100;
+        timerProgress.style.width = `${progress}%`;
+
+        // Change colors based on time remaining
+        if (secondsRemaining <= 60) {
+          // Last minute (60 seconds)
+          timerDisplay.classList.add("timer-danger");
+          timerDisplay.classList.remove("timer-warning");
+          timerProgress.style.backgroundColor = "var(--accent)";
+          timerContainer.style.borderColor = "var(--accent)";
+        } else if (secondsRemaining <= 180) {
+          // Last 3 minutes (180 seconds)
+          timerDisplay.classList.add("timer-warning");
+          timerDisplay.classList.remove("timer-danger");
+          timerProgress.style.backgroundColor = "var(--warning)";
+          timerContainer.style.borderColor = "var(--warning)";
+        } else {
+          timerDisplay.classList.remove("timer-warning", "timer-danger");
+          timerProgress.style.backgroundColor = "var(--success)";
+          timerContainer.style.borderColor = "var(--success)";
         }
+      }
 
-        function closeFullscreen() {
-            fullscreenViewer.classList.remove('active');
-            document.body.style.overflow = 'auto';
+      // ====== FULLSCREEN VIEWER FUNCTIONS ======
+      function openFullscreen() {
+        fullscreenViewer.classList.add("active");
+        document.body.style.overflow = "hidden";
+        zoomLevel = 1;
+        updateFullscreenZoom();
+      }
+
+      function closeFullscreen() {
+        fullscreenViewer.classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function updateFullscreenZoom() {
+        fullscreenImage.style.transform = `scale(${zoomLevel})`;
+      }
+
+      function zoomIn() {
+        if (zoomLevel < 3) {
+          zoomLevel += 0.25;
+          updateFullscreenZoom();
         }
+      }
 
-        function updateFullscreenZoom() {
-            fullscreenImage.style.transform = `scale(${zoomLevel})`;
+      function zoomOut() {
+        if (zoomLevel > 0.5) {
+          zoomLevel -= 0.25;
+          updateFullscreenZoom();
         }
+      }
 
-        function zoomIn() {
-            if (zoomLevel < 3) {
-                zoomLevel += 0.25;
-                updateFullscreenZoom();
-            }
-        }
+      // ====== SETUP EVENT LISTENERS ======
+      function setupEventListeners() {
+        // Navigation buttons
+        backToLessonsBtn.addEventListener("click", () => showPage(1));
+        continueToVideoBtn.addEventListener("click", () => showPage(3));
+        backToPapersBtn.addEventListener("click", () => showPage(2));
+        backToHomeBtn.addEventListener("click", () => showPage(1));
 
-        function zoomOut() {
-            if (zoomLevel > 0.5) {
-                zoomLevel -= 0.25;
-                updateFullscreenZoom();
-            }
-        }
+        // Timer controls
+        pauseTimerBtn.addEventListener("click", pauseTimer);
+        resetTimerBtn.addEventListener("click", resetTimer);
 
-        // ====== SETUP EVENT LISTENERS ======
-        function setupEventListeners() {
-            // Navigation buttons
-            backToLessonsBtn.addEventListener('click', () => showPage(1));
-            continueToVideoBtn.addEventListener('click', () => showPage(3));
-            backToPapersBtn.addEventListener('click', () => showPage(2));
-            backToHomeBtn.addEventListener('click', () => showPage(1));
+        // Notification buttons
+        continueStudyingBtn.addEventListener("click", () => {
+          notificationPopup.classList.remove("active");
+          resetTimer();
+        });
 
-            // Timer controls
-            pauseTimerBtn.addEventListener('click', pauseTimer);
-            resetTimerBtn.addEventListener('click', resetTimer);
+        goToVideoBtn.addEventListener("click", () => {
+          notificationPopup.classList.remove("active");
+          showPage(3);
+        });
 
-            // Notification buttons
-            continueStudyingBtn.addEventListener('click', () => {
-                notificationPopup.classList.remove('active');
-                resetTimer();
-            });
+        // Photo gallery controls
+        prevPhotoBtn.addEventListener("click", () => {
+          if (currentPhotoIndex > 0) showPhoto(currentPhotoIndex - 1);
+        });
 
-            goToVideoBtn.addEventListener('click', () => {
-                notificationPopup.classList.remove('active');
-                showPage(3);
-            });
+        nextPhotoBtn.addEventListener("click", () => {
+          if (currentPhotoIndex < currentPhotos.length - 1)
+            showPhoto(currentPhotoIndex + 1);
+        });
 
-            // Photo gallery controls
-            prevPhotoBtn.addEventListener('click', () => {
+        // Fullscreen viewer
+        viewFullscreenBtn.addEventListener("click", openFullscreen);
+        closeFullscreenBtn.addEventListener("click", closeFullscreen);
+        zoomInBtn.addEventListener("click", zoomIn);
+        zoomOutBtn.addEventListener("click", zoomOut);
+
+        // Keyboard shortcuts
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            closeFullscreen();
+            notificationPopup.classList.remove("active");
+          }
+
+          if (page2.classList.contains("active")) {
+            switch (e.key) {
+              case "ArrowLeft":
                 if (currentPhotoIndex > 0) showPhoto(currentPhotoIndex - 1);
-            });
-
-            nextPhotoBtn.addEventListener('click', () => {
-                if (currentPhotoIndex < currentPhotos.length - 1) showPhoto(currentPhotoIndex + 1);
-            });
-
-            // Fullscreen viewer
-            viewFullscreenBtn.addEventListener('click', openFullscreen);
-            closeFullscreenBtn.addEventListener('click', closeFullscreen);
-            zoomInBtn.addEventListener('click', zoomIn);
-            zoomOutBtn.addEventListener('click', zoomOut);
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeFullscreen();
-                    notificationPopup.classList.remove('active');
+                break;
+              case "ArrowRight":
+                if (currentPhotoIndex < currentPhotos.length - 1)
+                  showPhoto(currentPhotoIndex + 1);
+                break;
+              case " ":
+                e.preventDefault();
+                pauseTimer();
+                break;
+              case "f":
+              case "F":
+                if (!fullscreenViewer.classList.contains("active")) {
+                  openFullscreen();
                 }
+                break;
+            }
+          }
+        });
 
-                if (page2.classList.contains('active')) {
-                    switch(e.key) {
-                        case 'ArrowLeft':
-                            if (currentPhotoIndex > 0) showPhoto(currentPhotoIndex - 1);
-                            break;
-                        case 'ArrowRight':
-                            if (currentPhotoIndex < currentPhotos.length - 1) showPhoto(currentPhotoIndex + 1);
-                            break;
-                        case ' ':
-                            e.preventDefault();
-                            pauseTimer();
-                            break;
-                        case 'f':
-                        case 'F':
-                            if (!fullscreenViewer.classList.contains('active')) {
-                                openFullscreen();
-                            }
-                            break;
-                    }
-                }
-            });
+        // Click outside fullscreen to close
+        fullscreenViewer.addEventListener("click", (e) => {
+          if (e.target === fullscreenViewer) {
+            closeFullscreen();
+          }
+        });
 
-            // Click outside fullscreen to close
-            fullscreenViewer.addEventListener('click', (e) => {
-                if (e.target === fullscreenViewer) {
-                    closeFullscreen();
-                }
-            });
+        // Click outside notification to close
+        notificationPopup.addEventListener("click", (e) => {
+          if (e.target === notificationPopup) {
+            notificationPopup.classList.remove("active");
+            showPage(3);
+          }
+        });
 
-            // Click outside notification to close
-            notificationPopup.addEventListener('click', (e) => {
-                if (e.target === notificationPopup) {
-                    notificationPopup.classList.remove('active');
-                    showPage(3);
-                }
-            });
+        // Preload first lesson images for better performance
+        window.addEventListener("load", () => {
+          const firstLessonImages = lessonImages[1] || [];
+          firstLessonImages.forEach((imgSrc) => {
+            const img = new Image();
+            img.src = imgSrc;
+          });
+        });
+      }
 
-            // Preload first lesson images for better performance
-            window.addEventListener('load', () => {
-                const firstLessonImages = lessonImages[1] || [];
-                firstLessonImages.forEach(imgSrc => {
-                    const img = new Image();
-                    img.src = imgSrc;
-                });
-            });
-        }
-
-        // ====== INITIALIZE APP ======
-        document.addEventListener('DOMContentLoaded', initializeApp);
+      // ====== INITIALIZE APP ======
+      document.addEventListener("DOMContentLoaded", initializeApp);
     </script>
-</body>
+  </body>
 </html>

@@ -33,8 +33,8 @@ const Item = ({
     const res = await aprureBill(_id, studentId, courseId);
 
     console.log(res);
-    if (res.message === "request apruved") {
-      alert("request apruved", _id);
+    if (res?.success) {
+      alert("request apruved" + _id);
     }
   };
 
