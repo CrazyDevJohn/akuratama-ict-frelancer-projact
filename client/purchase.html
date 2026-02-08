@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,10 +15,9 @@
       href="https://fonts.googleapis.com/css2?family=Baumans&family=Questrial&family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-    <script src="./database/api-calls.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
 
     <script>
       tailwind.config = {
@@ -230,15 +229,18 @@
             <!-- Course Image -->
             <div class="lg:w-2/5">
               <div class="rounded-xl overflow-hidden shadow-lg h-[200px]">
-                <div id="modalImage" class=" w-full h-full flex justify-center items-center">
-            <div class="flex justify-between items-start mb-2">
-            <h3
-              class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
-            >
-              Grade 7
-            </h3>
-          </div>
-          </div>
+                <div
+                  id="modalImage"
+                  class="w-full h-full flex justify-center items-center"
+                >
+                  <div class="flex justify-between items-start mb-2">
+                    <h3
+                      class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
+                    >
+                      Grade 7
+                    </h3>
+                  </div>
+                </div>
               </div>
               <div class="mt-6 bg-blue-50 p-4 rounded-lg">
                 <div class="flex justify-between items-center">
@@ -556,14 +558,16 @@
         class="course-card rounded-2xl overflow-hidden flex flex-col h-full bg-white shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group"
       >
         <div class="relative h-48 overflow-hidden">
-          <div class="course-img w-full h-full flex justify-center items-center">
+          <div
+            class="course-img w-full h-full flex justify-center items-center"
+          >
             <div class="flex justify-between items-start mb-2">
-            <h3
-              class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
-            >
-              Grade 7
-            </h3>
-          </div>
+              <h3
+                class="font-bold text-white text-2xl leading-tight line-clamp-2 course-main-grade group-hover:text-blue-600 transition-colors"
+              >
+                Grade 7
+              </h3>
+            </div>
           </div>
           <div
             class="course-tag absolute top-3 right-3 bg-white/90 backdrop-blur text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm hidden"
@@ -608,7 +612,6 @@
             <div class="w-full">
               <button
                 class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all flex items-center justify-center text-sm transform active:scale-95 buy-now-btn"
-                
               >
                 Buy Now
               </button>
@@ -651,11 +654,12 @@
       // checkAuth();
 
       // Enhanced Sample Data for Courses with more details
- 
 
-    let courses = [];
+      let courses = [];
 
-    (async function(){ courses =await  fetchAllCourses()})()
+      (async function () {
+        courses = await fetchAllCourses();
+      })();
 
       // Modal Functions
       function showQuickView(courseId) {
@@ -671,7 +675,7 @@
         document.getElementById("modalImage").style.background = course.image;
         document.getElementById("modalPrice").textContent = course.price;
         document.getElementById("modalBadge").textContent = formatGrade(
-          course.grade
+          course.grade,
         );
         document.getElementById("modalModules").textContent = course.modules;
         document.getElementById("modalLessons").textContent = course.lessons;
@@ -750,7 +754,7 @@
             clone.querySelector(".course-price").textContent = course.price;
             clone.querySelector(".course-img").style.background = course.image;
             clone.querySelector(".course-badge").textContent = formatGrade(
-              course.grade
+              course.grade,
             );
 
             // Show or hide tag based on course type
@@ -765,7 +769,7 @@
             const quickViewBtn = clone.querySelector(".quick-view-btn");
             quickViewBtn.onclick = (e) => {
               e.stopPropagation();
-           
+
               showQuickView(course?._id);
             };
 
@@ -773,9 +777,7 @@
             buyNowBtn.onclick = (e) => {
               e.stopPropagation();
 
-              window.location.href ="upload-slip.html?courseId="+course.id 
-
-
+              window.location.href = "upload-slip.html?courseId=" + course._id;
             };
 
             // Add fade-in animation
@@ -848,10 +850,10 @@
           }
         });
 
-        setTimeout(()=>{
-          
+        setTimeout(() => {
           // Initial Render
-        renderCourses("all")}, 1000)
+          renderCourses("all");
+        }, 1000);
       });
     </script>
   </body>
