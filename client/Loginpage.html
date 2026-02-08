@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -436,8 +436,8 @@
     <script type="module">
       // Constants
 
-     /*
-     
+      //  /*
+
       (async function () {
         const data = await checkIsAuthonticated();
         console.log(data);
@@ -449,8 +449,8 @@
           return;
         }
       })();
-     
-     */
+
+      //     */
 
       // DOM Elements
       const authContainer = document.getElementById("auth-container");
@@ -460,12 +460,12 @@
       const signupForm = document.getElementById("signup-form");
       const passwordInput = document.getElementById("signup-password");
       const passwordStrengthBar = document.getElementById(
-        "password-strength-bar"
+        "password-strength-bar",
       );
       const passwordError = document.getElementById("password-error");
       const confirmPasswordInput = document.getElementById("confirm-password");
       const confirmPasswordError = document.getElementById(
-        "confirm-password-error"
+        "confirm-password-error",
       );
 
       // --- Helper Functions ---
@@ -631,7 +631,7 @@
           const res = await createUserWithEmailAndPassword(
             name,
             email,
-            password
+            password,
           );
 
           console.log("✅ Signup response:", res);
