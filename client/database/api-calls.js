@@ -96,7 +96,7 @@ const fetchAllCoursesForStudent = async () => {
   return await res.data.course;
 };
 
-const uploadBill = async (file, data) => {
+const uploadBill = async (file, data, resetForm, uploadProgress) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
@@ -106,17 +106,22 @@ const uploadBill = async (file, data) => {
       "https://akuratama-ict-frelancer-projact.vercel.app/api/v2/billing/billing",
       formData,
       {
-        withCredentials: true,
-        onuploadprogress: (progressEvent) => {
-          const progress = Math.round(
-            (progressEvent.loaded / progressEvent.total) * 100,
+        onUploadProgress: function (progressEvent) {
+          let uploadPercentage = parseInt(
+            Math.round((progressEvent.loaded / progressEvent.total) * 100),
           );
-          console.log(`Upload Progress: ${progress}%`);
-        },
+
+          console.log("Upload Progress: " + uploadPercentage + "%");
+          uploadProgress(uploadPercentage);
+        }.bind(this),
+        withCredentials: true,
       },
     );
 
     console.log(res);
+    if (res.data.fileData) {
+      resetForm();
+    }
     return await res.data;
   } catch (error) {
     console.log("error in uploading billl");

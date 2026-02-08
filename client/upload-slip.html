@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="si">
   <head>
     <meta charset="UTF-8" />
@@ -380,7 +380,7 @@
           <i class="fas fa-arrow-left"></i>
           Back to Dashboard
         </a>
-        <button class="nav-btn" onclick="location.href='index.html'">
+        <button class="nav-btn" onclick="location.href = 'index.html'">
           <i class="fas fa-home"></i>
           Home
         </button>
@@ -492,8 +492,6 @@
 
      */
 
-      
-
       // DOM Elements
       const fileInput = document.getElementById("fileInput");
       const uploadArea = document.getElementById("uploadArea");
@@ -569,7 +567,7 @@
                 <p>File Size: <span>${formatFileSize(file.size)}</span></p>
                 <p>File Type: <span>${file.type}</span></p>
                 <p>Last Modified: <span>${new Date(
-                  file.lastModified
+                  file.lastModified,
                 ).toLocaleDateString()}</span></p>
             `;
 
@@ -598,6 +596,11 @@
         errorMessage.style.display = "none";
       }
 
+      const uploadProgress = (percentage) => {
+        progressFill.style.width = percentage + "%";
+        progressText.textContent = percentage + "% uploaded";
+      };
+
       // Upload to Firebase
       async function uploadToFirebase() {
         if (!selectedFile) return;
@@ -612,14 +615,32 @@
         const timestamp = Date.now();
         const fileName = `payment_slips/payment_${timestamp}_${selectedFile.name}`;
 
-const courseId = new URLSearchParams(window.location.search).get("courseId");
-const student =  await localStorage.getItem("STUDENT")
+        const courseId = new URLSearchParams(window.location.search).get(
+          "courseId",
+        );
+        const student = await localStorage.getItem("STUDENT");
 
-        await uploadBill(selectedFile, {
-          courseId,
-          studentId: student?.id
-        },);
-
+        await uploadBill(
+          selectedFile,
+          {
+            courseId,
+            studentId: student?.id,
+          },
+          resetForm,
+          uploadProgress,
+        )
+          .then(() => {
+            successMessage.style.display = "block";
+            resetForm();
+          })
+          .catch((error) => {
+            console.error("Upload error:", error);
+            errorMessage.style.display = "block";
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML =
+              '<i class="fas fa-upload"></i> Upload to Firebase';
+            progressContainer.style.display = "none";
+          });
       }
 
       // Helper Functions
