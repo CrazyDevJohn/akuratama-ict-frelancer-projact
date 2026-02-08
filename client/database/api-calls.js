@@ -107,6 +107,12 @@ const uploadBill = async (file, data) => {
       formData,
       {
         withCredentials: true,
+        onuploadprogress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded / progressEvent.total) * 100,
+          );
+          console.log(`Upload Progress: ${progress}%`);
+        },
       },
     );
 
