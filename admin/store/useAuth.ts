@@ -29,18 +29,22 @@ export const useAuthStore = create<AutStoreInterface>((set, get) => ({
     }
   },
   checkAuth: async () => {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/profile`,
-      {
-        withCredentials: true,
-      },
-    );
-    const user = await res.data;
-    if (user) {
-      set(() => ({ user: user }));
-      redirect("/");
-    } else {
-      set(() => ({ user: null }));
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/profile`,
+        {
+          withCredentials: true,
+        },
+      );
+      const user = await res.data;
+      if (user) {
+        set(() => ({ user: user }));
+        redirect("/");
+      } else {
+        set(() => ({ user: null }));
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
   logout: async () => {
@@ -49,21 +53,23 @@ export const useAuthStore = create<AutStoreInterface>((set, get) => ({
     redirect("/");
   },
 
-  getAllUsers: async () => { 
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/get-all`, {withCredentials:true})
+  getAllUsers: async () => {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/get-all`,
+      { withCredentials: true },
+    );
     const users = await res.data;
-    console.log(users)
+    console.log(users);
 
     set((state) => ({ allUsers: users }));
-    
   },
   getUserById: async (id) => {
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/${id}`, { withCredentials: true });
-    const user = await res.data.user
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/${id}`,
+      { withCredentials: true },
+    );
+    const user = await res.data.user;
     console.log(user);
     return user;
-
-  }
-
-
+  },
 }));

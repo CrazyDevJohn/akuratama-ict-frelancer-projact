@@ -27,13 +27,14 @@ const Item = ({
 }: {
   bill: BillInterface;
 }) => {
-  const { aprureBill } = useBillingStore();
+  const { aprureBill, getBills } = useBillingStore();
 
   const hanldeApruale = async () => {
     const res = await aprureBill(_id, studentId, courseId);
 
     console.log(res);
     if (res?.success) {
+      await getBills();
       alert("request apruved" + _id);
     }
   };
@@ -55,15 +56,28 @@ const Item = ({
       </div>
       <div className="w-full px-2 py-3 bg-light-300">
         <div className="flex justify-evenly items-center gap-3">
-          <button
-            onClick={() => hanldeApruale()}
-            className="px-4 py-2 bg-blue-500 cursor-pointer rounded-md my-2 mx-auto w-full hover:bg-red-400 text-light-400 font-semibold text-xl"
-          >
-            Apruve
-          </button>
-          <button className="px-4 py-2 bg-brand cursor-pointer rounded-md my-2 mx-auto w-full text-light-400 font-semibold text-xl">
-            Delete
-          </button>
+          {isApruved ? (
+            <>
+              <button
+                onClick={() => hanldeApruale()}
+                className="px-4 py-2 bg-green-500 cursor-pointer rounded-md my-2 mx-auto w-full hover:bg-red-400 text-light-400 font-semibold text-xl"
+              >
+                Apruved
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => hanldeApruale()}
+                className="px-4 py-2 bg-blue-500 cursor-pointer rounded-md my-2 mx-auto w-full hover:bg-red-400 text-light-400 font-semibold text-xl"
+              >
+                Apruve
+              </button>
+              <button className="px-4 py-2 bg-brand cursor-pointer rounded-md my-2 mx-auto w-full text-light-400 font-semibold text-xl">
+                Delete
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

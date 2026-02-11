@@ -11,7 +11,9 @@ import { redirect } from "next/navigation";
 export default function Page() {
   redirect("/course")
   return (
-    <div>dash</div>
+    <div>
+      <div className="flex-1"></div>
+    </div>
   );
 }
 

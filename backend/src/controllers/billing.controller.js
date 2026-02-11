@@ -60,11 +60,11 @@ export const aprualCourse = async (req, res) => {
       courseEnrolled: [...student.courseEnrolled, courseId],
     });
 
-    return res
-      .status(200)
-      .json({ message: 'request apruved' }, response, userData);
+    return res.status(200).json({ message: 'request apruved', success: true });
   } catch (error) {
-    return res.status(500).json({ message: 'error in aprual course', error });
+    return res
+      .status(500)
+      .json({ message: 'error in aprual course', error, success: false });
   }
 };
 
@@ -78,7 +78,7 @@ export const getAllPandingequests = async (req, res) => {
       return res.status(503).json({ message: 'You Not A Admin!' });
     }
 
-    const response = await Billing.find({ isApruved: false });
+    const response = await Billing.find({});
 
     return res
       .status(200)
