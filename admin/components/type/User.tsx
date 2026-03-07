@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import {
@@ -9,18 +11,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
-const usersArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+import useUserStore from "@/store/useUserStore";
+import useLoadingStore from "@/store/useLoadingStore";
 
 const User = () => {
+  const { users, getUsers } = useUserStore();
+  const { setIsLoading } = useLoadingStore();
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    getUsers().finally(() => {
+      setIsLoading(false);
+      console.log("loaded users");
+    });
+  }, []);
+
   return (
-    <div className="flex flex-col justify-center items-center gap-4 w-full h-full overflow-hidden relative">
-      <div className="w-full h-full absolute overflow-scroll p-4 remove-scrollbar">
-        {usersArray?.map((user, index) => {
+    <div className="flex flex-col justify-center items-center w-full h-full overflow-hidden relative">
+      <div className="w-full h-full absolute overflow-scroll pt-8 remove-scrollbar">
+        {users?.map((user, index) => {
           return (
             <div
               key={`selct-${index.toString()}`}
-              className="relative w-full h-24 flex justify-between items-center gap-4"
+              className="relative w-full mb-6 flex justify-between items-center gap-4"
             >
               <div className="flex justify-start items-center gap-4">
                 <Image
@@ -30,11 +43,15 @@ const User = () => {
                   alt="User Image"
                 />
                 <h1 className="text-xl font-semibold text-gray-800 ">
-                  John friday
+                  {user.name}
                 </h1>
+
                 <h3 className="text-ae font-semibold text-gray-700">
-                  Crazydevjohn@gmail.com
+                  {user.email}
                 </h3>
+                <h1 className="text-xl font-semibold text-gray-800 ">
+                  {user?.isAdmin ? "Admin" : "User"}
+                </h1>
               </div>
 
               <div>

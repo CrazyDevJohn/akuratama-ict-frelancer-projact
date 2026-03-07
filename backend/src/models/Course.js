@@ -10,16 +10,13 @@ const courseSchema = new Schema(
       type: String,
       required: true,
     },
-      price:Number,
-      grade:String,
+    price: Number,
+    grade: String,
     image: {
       type: String,
-      default:''
+      default: '',
     },
-    modules: Number,
-    lessons: Number,
-    duration:String,
-    certificate: String,
+
     features: {
       type: [String],
     },
@@ -28,11 +25,17 @@ const courseSchema = new Schema(
       ref: 'User',
       default: [],
     },
+    modules: String,
+    lessons: String,
+    duration: String,
+    certificate: String,
+    assets: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true },
 );
 
 const Course = model('Course', courseSchema);
 export default Course;
-
-

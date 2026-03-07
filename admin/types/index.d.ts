@@ -45,10 +45,67 @@ export interface BillInterface {
 
 export interface BillingStoreInterface {
   allBilling: BillInterface[] | [];
-  getBills: () => void;
+  getBills: () => Promise<void>;
   aprureBill: (
     billId: string,
     studentId: string,
     courseId: string,
   ) => Promise<{ success: boolean; message: string }>;
+}
+
+export interface LessonInterface {
+  title: string;
+  description: string;
+  pageNumber: number;
+  // lectures: string[];
+  videoUrl: string;
+  courseId: string;
+  _id: string;
+}
+
+interface LoadingState {
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+}
+
+interface useCourseProps {
+  allCourses: CourseInterface[];
+  // addedLectures: any[];
+  allLessons: any[];
+  getAllCourse: () => Promise<void>;
+  getCourseById: (id: string) => Promise<any>;
+
+  addCourse: (
+    title: string,
+    description: string,
+    grade: string,
+    price: number,
+    image?: string,
+  ) => void;
+  createLesson: (
+    title: string,
+    description: string,
+    pageNumber: number,
+    lectures: any,
+    courseId: string,
+  ) => any;
+  // createLecture: (
+  //   title: string,
+  //   description: string,
+  //   pageNumber: number,
+  //   resources: string,
+  // ) => any;
+  getAllLesson: () => Promise<void>;
+  getLessonById: (id: string) => Promise<void>;
+}
+
+export interface SummaryItemProps {
+  title: string;
+  value: number | string;
+}
+
+export interface UseSummeryStoreProps {
+  summary: SummaryItemProps[];
+
+  getSummarys: () => Promise<Void>;
 }

@@ -39,7 +39,7 @@ export const useAuthStore = create<AutStoreInterface>((set, get) => ({
       const user = await res.data;
       if (user) {
         set(() => ({ user: user }));
-        redirect("/");
+        // redirect("/");
       } else {
         set(() => ({ user: null }));
       }

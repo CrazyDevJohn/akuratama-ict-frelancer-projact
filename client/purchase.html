@@ -622,12 +622,14 @@
     </template>
 
     <script>
+      let user = null;
       async function checkAuth() {
         const loadingScreen = document.getElementById("loading-screen");
         try {
           const data = await checkIsAuthonticated();
 
           console.log(data);
+          user = data.user;
 
           if (data.user) {
             console.log("User is logged in:", data.user);
@@ -651,7 +653,7 @@
         }
       }
 
-      // checkAuth();
+      checkAuth();
 
       // Enhanced Sample Data for Courses with more details
 
@@ -659,6 +661,7 @@
 
       (async function () {
         courses = await fetchAllCourses();
+        renderCourses("all");
       })();
 
       // Modal Functions
@@ -774,18 +777,36 @@
             };
 
             const buyNowBtn = clone.querySelector(".buy-now-btn");
-            buyNowBtn.onclick = (e) => {
-              e.stopPropagation();
 
-              window.location.href = "upload-slip.html?courseId=" + course._id;
-            };
+            if (user.courseEnrolled.includes(course._id)) {
+              buyNowBtn.innerHTML = "Go to Course";
+              buyNowBtn.onclick = (e) => {
+                e.stopPropagation();
 
-            // Add fade-in animation
-            const card = clone.querySelector(".course-card");
-            card.classList.add("fade-in");
-            card.style.animationDelay = `${index * 0.1}s`;
+                window.location.href =
+                  "http://127.0.0.1:5500/client/view.html?lessonId=" +
+                  course._id;
+              };
+              const card = clone.querySelector(".course-card");
+              card.classList.add("fade-in");
+              card.style.animationDelay = `${index * 0.1}s`;
 
-            grid.appendChild(clone);
+              grid.appendChild(clone);
+            } else {
+              buyNowBtn.onclick = (e) => {
+                e.stopPropagation();
+
+                window.location.href =
+                  "upload-slip.html?courseId=" + course._id;
+              };
+
+              // Add fade-in animation
+              const card = clone.querySelector(".course-card");
+              card.classList.add("fade-in");
+              card.style.animationDelay = `${index * 0.1}s`;
+
+              grid.appendChild(clone);
+            }
           });
         }
       }
@@ -849,11 +870,6 @@
             closeQuickView();
           }
         });
-
-        setTimeout(() => {
-          // Initial Render
-          renderCourses("all");
-        }, 1000);
       });
     </script>
   </body>

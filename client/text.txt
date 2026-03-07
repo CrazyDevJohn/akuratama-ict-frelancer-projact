@@ -101,3 +101,96 @@
         }
         return isValid;
       }
+
+
+
+      const videoLessons = [
+         {
+           id: 1,
+           title: "2027 Season 1 Paper 4 - Recording",
+           duration: "45:22",
+           description:
+             "This recording covers the complete discussion of 2027 Season 1 Paper 4. The instructor goes through all questions, provides detailed explanations, and shares important tips for answering similar questions in future exams.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+           completed: true,
+         },
+         {
+           id: 2,
+           title: "2027 Season 1 Paper 5 part 1 - Recording",
+           duration: "38:15",
+           description:
+             "Part 1 of Paper 5 discussion covering the first section of questions. Focus on conceptual understanding and application of theories.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: true,
+         },
+         {
+           id: 3,
+           title: "2027 Season 1 Paper 5 part 2 - Recording",
+           duration: "42:30",
+           description:
+             "Part 2 of Paper 5 discussion completing the remaining questions. Emphasis on problem-solving techniques and exam strategies.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+         {
+           id: 4,
+           title: "2027 Season 1 Paper 6 - Recording",
+           duration: "51:10",
+           description:
+             "Complete discussion of Paper 6 with focus on practical applications and experimental questions. Includes step-by-step solutions.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+         {
+           id: 5,
+           title: "Topic 2027 session 01 Paper 06 Live Stream",
+           duration: "1:25:45",
+           description:
+             "Live stream recording of Paper 6 discussion with real-time Q&A session. Students' questions addressed during the session.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+         {
+           id: 6,
+           title: "2027 Season 01 Paper 07 Discussion-Recording",
+           duration: "47:20",
+           description:
+             "Detailed analysis of Paper 7 questions with emphasis on higher-order thinking questions and their solutions.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+         {
+           id: 7,
+           title: "Topic 2027 session 01 Paper 7 Live Stream",
+           duration: "1:32:15",
+           description:
+             "Live interactive session on Paper 7 with student participation. Covers advanced concepts and exam techniques.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+         {
+           id: 8,
+           title: "2027 Season 1 Paper 8 - Recording",
+           duration: "55:40",
+           description:
+             "Final paper discussion for Season 1. Comprehensive review of Paper 8 with focus on time management and answer presentation.",
+           videoUrl: "https://vjs.zencdn.net/v/oceans.mp4",
+           posterUrl:
+             "https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+           completed: false,
+         },
+       ];

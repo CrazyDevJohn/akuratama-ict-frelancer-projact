@@ -22,24 +22,18 @@ import { CARD_COLORS, cn } from "@/lib/utils";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, checkAuth } = useAuthStore();
-  const { getAllCourse}=useCourse()
+  const { getAllCourse } = useCourse();
   const [isOpened, setisOpened] = useState(false);
-  const pathname = usePathname();
 
-  
   useEffect(() => {
     checkAuth();
     if (!user) redirect("/login");
-    if (user)getAllCourse()
+    if (user) getAllCourse();
   }, []);
 
   if (!user) {
-    return 
+    return;
   }
-
-  // if (pathname === "/") {
-  //   return redirect('/users')
-  // }
 
   return (
     <section className="w-screen h-screen relative bg-light-400 flex justify-center items-center flex-col px-4 py-6 md:px-8 md:py-6">
@@ -90,7 +84,9 @@ export function InputGrid({
   const [description, setDescription] = useState("");
   const [grade, setGrade] = useState("");
   const [price, setPrice] = useState("");
-  const [activeColor, setActiveColor] = useState(`linear-gradient(135deg, ${CARD_COLORS[1][0]}, ${CARD_COLORS[1][1]})`);
+  const [activeColor, setActiveColor] = useState(
+    `linear-gradient(135deg, ${CARD_COLORS[1][0]}, ${CARD_COLORS[1][1]})`,
+  );
 
   const { addCourse } = useCourse();
 
@@ -121,20 +117,36 @@ export function InputGrid({
         change={setPrice}
       />
       <div className="w-full h-11 bg-light-200 rounded-md flex justify-between items-center gap-1 px-2">
-        {
-          CARD_COLORS.map((color, index) => (
-            <div key={`CARD-COLOR-${index.toString()}`}
-              style={{ background: `linear-gradient(135deg, ${color[0]}, ${color[1]})`, }}
-              className={cn("w-8 h-8 rounded-md", activeColor === `linear-gradient(135deg, ${color[0]}, ${color[1]})` && "border-2 border-white" )}
-              onClick={()=> setActiveColor(`linear-gradient(135deg, ${color[0]}, ${color[1]})`,)}
-            ></div>
-          ))
-        }
+        {CARD_COLORS.map((color, index) => (
+          <div
+            key={`CARD-COLOR-${index.toString()}`}
+            style={{
+              background: `linear-gradient(135deg, ${color[0]}, ${color[1]})`,
+            }}
+            className={cn(
+              "w-8 h-8 rounded-md",
+              activeColor ===
+                `linear-gradient(135deg, ${color[0]}, ${color[1]})` &&
+                "border-2 border-white",
+            )}
+            onClick={() =>
+              setActiveColor(
+                `linear-gradient(135deg, ${color[0]}, ${color[1]})`,
+              )
+            }
+          ></div>
+        ))}
       </div>
       <Field className="flex justify-end items-end">
         <button
           onClick={async () => {
-            await addCourse(title, description, grade, parseInt(price), activeColor);
+            await addCourse(
+              title,
+              description,
+              grade,
+              parseInt(price),
+              activeColor,
+            );
             setisOpened(false);
           }}
           className="w-full py-2 bg-brand text-2xl font-semibold text-light-400 rounded-md"

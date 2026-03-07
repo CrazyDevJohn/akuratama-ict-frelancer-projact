@@ -6,13 +6,27 @@ const lessonSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    course: {
+    courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Course',
       required: true,
     },
-    resources: {
-      type: string,
+    // lectures: {
+    //   type: [mongoose.Schema.Types.ObjectId],
+    //   ref: 'Lecture',
+    //   default: [],
+    // },
+
+    videoUrl: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    pageNumber: {
+      type: Number,
       required: true,
     },
   },

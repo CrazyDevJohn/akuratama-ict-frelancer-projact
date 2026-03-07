@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AkratamaICT - Class recordings</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Video.js for video player -->
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="./database/api-calls.js"></script>
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* Header Styles */
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: var(--primary-color) !important;
+      }
+
+      .navbar-brand span {
+        color: var(--accent-color);
+      }
+
+      .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background-color: white;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        margin: 0 5px;
+      }
+
+      .nav-link.active {
+        color: var(--secondary-color) !important;
+        font-weight: 600;
+      }
+
+      /* Page Header */
+      .page-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
+
+      /* Breadcrumb */
+      .breadcrumb {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 5px;
+        padding: 0.75rem 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Main Content */
+      .main-content {
+        min-height: 70vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+      }
+
+      .sidebar-title {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid var(--secondary-color);
+        font-size: 1.4rem;
+      }
+
+      .lesson-list {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .lesson-item {
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        background-color: var(--light-color);
+        border-radius: 5px;
+        border-left: 4px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .lesson-item:hover {
+        background-color: #e3f2fd;
+        transform: translateX(5px);
+      }
+
+      .lesson-item.active {
+        background-color: #e3f2fd;
+        border-left-color: var(--secondary-color);
+        font-weight: 600;
+      }
+
+      .lesson-title {
+        font-weight: 500;
+        margin-bottom: 3px;
+      }
+
+      .lesson-meta {
+        font-size: 0.85rem;
+        color: #666;
+        display: flex;
+        align-items: center;
+      }
+
+      .lesson-meta i {
+        margin-right: 5px;
+      }
+
+      /* Video Player Container */
+      .video-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .video-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .video-title {
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .video-meta {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .video-meta span {
+        margin-right: 15px;
+      }
+
+      .video-meta i {
+        margin-right: 5px;
+        color: var(--secondary-color);
+      }
+
+      /* Video Player */
+      .video-player-wrapper {
+        position: relative;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        background-color: #000;
+      }
+
+      #videoPlayer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Video Controls */
+      .video-controls {
+        padding: 1.5rem;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Lesson Content */
+      .lesson-content {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+      }
+
+      .lesson-content h3 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+
+      /* Resources */
+      .resources {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .resources h3 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+      }
+
+      .resource-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        background-color: var(--light-color);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .resource-item:hover {
+        background-color: #e3f2fd;
+        transform: translateX(5px);
+      }
+
+      .resource-icon {
+        font-size: 1.2rem;
+        color: var(--secondary-color);
+        margin-right: 15px;
+        width: 30px;
+      }
+
+      /* Instructor Info */
+      .instructor-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+      }
+
+      .instructor-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .instructor-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--secondary-color),
+          var(--primary-color)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-right: 15px;
+      }
+
+      .instructor-name {
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 3px;
+      }
+
+      .instructor-title {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      /* Footer */
+      footer {
+        background-color: var(--dark-color);
+        color: white;
+        padding: 2.5rem 0;
+        margin-top: 3rem;
+      }
+
+      .footer-links a {
+        color: #ddd;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 8px;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: white;
+        text-decoration: underline;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #aaa;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 992px) {
+        .sidebar {
+          position: static;
+          margin-bottom: 2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .page-header {
+          padding: 2rem 0;
+        }
+
+        .page-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .video-controls {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .video-controls .btn {
+          width: 100%;
+        }
+      }
+
+      /* Custom Video.js Styles */
+      .vjs-big-play-button {
+        background-color: rgba(52, 152, 219, 0.8) !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 80px !important;
+        height: 80px !important;
+        line-height: 80px !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+      }
+
+      .vjs-control-bar {
+        background-color: rgba(0, 0, 0, 0.7) !important;
+      }
+
+      .vjs-play-progress {
+        background-color: var(--secondary-color) !important;
+      }
+
+      /* Progress Indicator */
+      .progress-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #f0f8ff;
+        border-radius: 5px;
+      }
+
+      .progress-text {
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .progress-bar {
+        flex-grow: 1;
+        height: 8px;
+        background-color: #ddd;
+        border-radius: 4px;
+        margin: 0 15px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background-color: var(--secondary-color);
+        width: 75%; /* This would be dynamic in a real app */
+        border-radius: 4px;
+      }
+
+      /* Complete Lesson Button */
+      .complete-btn {
+        background-color: #27ae60;
+        border-color: #27ae60;
+        font-weight: 600;
+      }
+
+      .complete-btn:hover {
+        background-color: #219653;
+        border-color: #219653;
+      }
+
+      .complete-btn.completed {
+        background-color: #95a5a6;
+        border-color: #95a5a6;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="#"> <span>Akuratama</span> ICT </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Back To My Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Courses</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Resources</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Instructors</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link btn btn-primary text-white px-3 ms-2" href="#">
+                <i class="fas fa-user me-1"></i> Student Name
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h1>2027 Season 1 Paper Discussions</h1>
+            <p>
+              Complete video discussions for all papers from Season 1, 2027.
+              Watch recordings and improve your understanding.
+            </p>
+          </div>
+          <div class="col-md-4">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#" class="text-decoration-none">Courses</a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="#" class="text-decoration-none">Paper Discussions</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  2027 Season 1
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+      <div class="row">
+        <!-- Sidebar with Lessons -->
+        <div class="col-lg-4">
+          <div class="sidebar">
+            <h3 class="sidebar-title">Paper Discussion Videos</h3>
+            <ul class="lesson-list" id="lessonList">
+              <!-- Lessons will be populated by JavaScript -->
+            </ul>
+
+            <div class="progress-indicator">
+              <div class="progress-text">Course Progress</div>
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-text">75%</div>
+            </div>
+
+            <div class="mt-4">
+              <a href="#" class="btn btn-outline-primary w-100 mb-2">
+                <i class="fas fa-download me-2"></i> Download All Materials
+              </a>
+              <a href="#" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-question-circle me-2"></i> Get Help
+              </a>
+            </div>
+          </div>
+
+          <!-- Instructor Info -->
+          <div class="instructor-card">
+            <div class="instructor-header">
+              <div class="instructor-avatar">AD</div>
+              <div>
+                <div class="instructor-name">Amila Dasanayake</div>
+                <div class="instructor-title">Chemistry Instructor</div>
+              </div>
+            </div>
+            <p>
+              Expert chemistry instructor with 10+ years of experience preparing
+              students for national examinations. Specialized in paper analysis
+              and exam strategies.
+            </p>
+            <div class="mt-3">
+              <a href="#" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-envelope me-1"></i> Contact Instructor
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video and Content Area -->
+        <div class="col-lg-8">
+          <!-- Video Player -->
+          <div class="video-container">
+            <div class="video-header">
+              <h2 class="video-title" id="currentVideoTitle">
+                2027 Season 1 Paper 4 - Recording
+              </h2>
+              <div class="video-meta">
+                <span><i class="far fa-clock"></i> Duration: 45:22</span>
+                <span
+                  ><i class="far fa-calendar"></i> Published: March 15,
+                  2027</span
+                >
+                <span><i class="far fa-eye"></i> Views: 1,245</span>
+              </div>
+            </div>
+
+            <div class="video-player-wrapper">
+              <video
+                id="videoPlayer"
+                class="video-js vjs-big-play-centered vjs-fluid"
+                controls
+                preload="auto"
+                poster="https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80"
+                data-setup="{}"
+              >
+                <source
+                  src="https://vjs.zencdn.net/v/oceans.mp4"
+                  type="video/mp4"
+                />
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider
+                  upgrading to a web browser that
+                  <a
+                    href="https://videojs.com/html5-video-support/"
+                    target="_blank"
+                    >supports HTML5 video</a
+                  >
+                </p>
+              </video>
+            </div>
+
+            <div class="video-controls">
+              <div>
+                <button class="btn btn-outline-primary" id="prevBtn">
+                  <i class="fas fa-arrow-left me-2"></i> Previous Lesson
+                </button>
+                <button class="btn btn-outline-primary ms-2" id="nextBtn">
+                  Next Lesson <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+              </div>
+
+              <button class="btn complete-btn" id="completeBtn">
+                <i class="fas fa-check-circle me-2"></i> Mark as Complete
+              </button>
+            </div>
+          </div>
+
+          <!-- Lesson Content -->
+          <div class="lesson-content">
+            <h3>About This Discussion</h3>
+            <p id="currentVideoDescription">
+              This recording covers the complete discussion of 2027 Season 1
+              Paper 4. The instructor goes through all questions, provides
+              detailed explanations, and shares important tips for answering
+              similar questions in future exams.
+            </p>
+
+            <h4 class="mt-4">Key Topics Covered:</h4>
+            <ul>
+              <li>Question analysis and interpretation techniques</li>
+              <li>Common mistakes students make in Paper 4</li>
+              <li>Time management strategies for the exam</li>
+              <li>Important formulas and concepts highlighted</li>
+              <li>Practice questions with step-by-step solutions</li>
+            </ul>
+          </div>
+
+          <!-- Resources -->
+          <div class="resources">
+            <h3>Downloadable Resources</h3>
+            <div class="resource-item">
+              <div class="resource-icon">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+              <div>
+                <div class="lesson-title">Paper 4 Question Paper</div>
+                <div class="lesson-meta">PDF • 2.4 MB</div>
+              </div>
+              <a href="#" class="btn btn-sm btn-outline-primary ms-auto"
+                >Download</a
+              >
+            </div>
+
+            <div class="resource-item">
+              <div class="resource-icon">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div>
+                <div class="lesson-title">Answer Sheet with Marking Scheme</div>
+                <div class="lesson-meta">PDF • 1.8 MB</div>
+              </div>
+              <a href="#" class="btn btn-sm btn-outline-primary ms-auto"
+                >Download</a
+              >
+            </div>
+
+            <div class="resource-item">
+              <div class="resource-icon">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div>
+                <div class="lesson-title">Performance Analysis Report</div>
+                <div class="lesson-meta">PDF • 850 KB</div>
+              </div>
+              <a href="#" class="btn btn-sm btn-outline-primary ms-auto"
+                >Download</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <h4 class="mb-3"><span>Echem</span>.lk</h4>
+            <p>
+              Providing quality chemistry education resources and paper
+              discussions for Sri Lankan students since 2020.
+            </p>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4">
+            <h5 class="mb-3">Quick Links</h5>
+            <div class="footer-links">
+              <a href="#">Home</a>
+              <a href="#">Courses</a>
+              <a href="#">Paper Discussions</a>
+              <a href="#">Instructors</a>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h5 class="mb-3">Resources</h5>
+            <div class="footer-links">
+              <a href="#">Past Papers</a>
+              <a href="#">Model Papers</a>
+              <a href="#">Lesson Notes</a>
+              <a href="#">Video Library</a>
+            </div>
+          </div>
+          <div class="col-lg-3 mb-4">
+            <h5 class="mb-3">Contact Us</h5>
+            <div class="footer-links">
+              <a href="#"><i class="fas fa-envelope me-2"></i> info@echem.lk</a>
+              <a href="#"><i class="fas fa-phone me-2"></i> +94 77 123 4567</a>
+              <div class="mt-3">
+                <a href="#" class="me-3"
+                  ><i class="fab fa-facebook fa-lg"></i
+                ></a>
+                <a href="#" class="me-3"
+                  ><i class="fab fa-youtube fa-lg"></i
+                ></a>
+                <a href="#" class="me-3"
+                  ><i class="fab fa-whatsapp fa-lg"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="copyright">
+          &copy; 2027 Echem.lk. All Rights Reserved. Designed for Sri Lankan
+          Chemistry Students.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Video.js -->
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+
+    <script>
+      // Video Lessons Data
+
+      const courseId = new URLSearchParams(window.location.search).get(
+        "courseId",
+      );
+
+      let videoLessons = [];
+
+      (async function () {
+        const res = await getCourseById(courseId);
+        console.log(res);
+        videoLessons = res;
+      })();
+
+      // Current video index
+      let currentVideoIndex = 0;
+      let player;
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize video player
+        player = videojs("videoPlayer");
+
+        // Populate lesson list
+        populateLessonList();
+
+        // Load first video
+        loadVideo(currentVideoIndex);
+
+        // Set up event listeners
+        document
+          .getElementById("prevBtn")
+          .addEventListener("click", loadPreviousVideo);
+        document
+          .getElementById("nextBtn")
+          .addEventListener("click", loadNextVideo);
+        document
+          .getElementById("completeBtn")
+          .addEventListener("click", toggleComplete);
+
+        // Update progress indicator
+        updateProgress();
+      });
+
+      // Populate the lesson list
+      function populateLessonList() {
+        const lessonList = document.getElementById("lessonList");
+        lessonList.innerHTML = "";
+
+        videoLessons.forEach((lesson, index) => {
+          const lessonItem = document.createElement("li");
+          lessonItem.className = `lesson-item ${index === currentVideoIndex ? "active" : ""} ${lesson.completed ? "completed" : ""}`;
+          lessonItem.innerHTML = `
+                    <div class="lesson-title">${lesson.title}</div>
+                    <div class="lesson-meta">
+                        <i class="far fa-clock"></i> ${lesson.duration}
+                        ${lesson.completed ? '<span class="ms-2"><i class="fas fa-check-circle text-success"></i> Completed</span>' : ""}
+                    </div>
+                `;
+
+          lessonItem.addEventListener("click", () => {
+            // Remove active class from all items
+            document.querySelectorAll(".lesson-item").forEach((item) => {
+              item.classList.remove("active");
+            });
+
+            // Add active class to clicked item
+            lessonItem.classList.add("active");
+
+            // Load the selected video
+            loadVideo(index);
+          });
+
+          lessonList.appendChild(lessonItem);
+        });
+      }
+
+      // Load a video by index
+      function loadVideo(index) {
+        if (index < 0 || index >= videoLessons.length) return;
+
+        currentVideoIndex = index;
+        const lesson = videoLessons[index];
+
+        // Update video player
+        player.src({ type: "video/mp4", src: lesson.videoUrl });
+        player.poster(lesson.posterUrl);
+
+        // Update page title and description
+        document.getElementById("currentVideoTitle").textContent = lesson.title;
+        document.getElementById("currentVideoDescription").textContent =
+          lesson.description;
+
+        // Update active lesson in sidebar
+        document.querySelectorAll(".lesson-item").forEach((item, i) => {
+          if (i === index) {
+            item.classList.add("active");
+          } else {
+            item.classList.remove("active");
+          }
+        });
+
+        // Update complete button
+        const completeBtn = document.getElementById("completeBtn");
+        if (lesson.completed) {
+          completeBtn.innerHTML =
+            '<i class="fas fa-check-circle me-2"></i> Completed';
+          completeBtn.classList.add("completed");
+        } else {
+          completeBtn.innerHTML =
+            '<i class="fas fa-check-circle me-2"></i> Mark as Complete';
+          completeBtn.classList.remove("completed");
+        }
+
+        // Update video metadata
+        document.querySelector(".video-meta span:nth-child(1)").innerHTML =
+          `<i class="far fa-clock"></i> Duration: ${lesson.duration}`;
+
+        // Update progress indicator
+        updateProgress();
+      }
+
+      // Load previous video
+      function loadPreviousVideo() {
+        if (currentVideoIndex > 0) {
+          loadVideo(currentVideoIndex - 1);
+        }
+      }
+
+      // Load next video
+      function loadNextVideo() {
+        if (currentVideoIndex < videoLessons.length - 1) {
+          loadVideo(currentVideoIndex + 1);
+        }
+      }
+
+      // Toggle complete status
+      function toggleComplete() {
+        const lesson = videoLessons[currentVideoIndex];
+        lesson.completed = !lesson.completed;
+
+        // Update button
+        const completeBtn = document.getElementById("completeBtn");
+        if (lesson.completed) {
+          completeBtn.innerHTML =
+            '<i class="fas fa-check-circle me-2"></i> Completed';
+          completeBtn.classList.add("completed");
+        } else {
+          completeBtn.innerHTML =
+            '<i class="fas fa-check-circle me-2"></i> Mark as Complete';
+          completeBtn.classList.remove("completed");
+        }
+
+        // Update lesson item in sidebar
+        const lessonItems = document.querySelectorAll(".lesson-item");
+        if (lesson.completed) {
+          lessonItems[currentVideoIndex].classList.add("completed");
+        } else {
+          lessonItems[currentVideoIndex].classList.remove("completed");
+        }
+
+        // Update progress
+        updateProgress();
+      }
+
+      // Update progress indicator
+      function updateProgress() {
+        const completedCount = videoLessons.filter(
+          (lesson) => lesson.completed,
+        ).length;
+        const totalCount = videoLessons.length;
+        const percentage = Math.round((completedCount / totalCount) * 100);
+
+        // Update progress bar
+        document.querySelector(".progress-fill").style.width = `${percentage}%`;
+        document.querySelector(".progress-text:last-child").textContent =
+          `${percentage}%`;
+
+        // Update progress text
+        document.querySelector(".progress-text:first-child").textContent =
+          `Completed ${completedCount} of ${totalCount} lessons`;
+      }
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", function (e) {
+        // Space bar to play/pause
+        if (
+          e.code === "Space" &&
+          e.target.tagName !== "BUTTON" &&
+          e.target.tagName !== "INPUT" &&
+          e.target.tagName !== "TEXTAREA"
+        ) {
+          e.preventDefault();
+          if (player.paused()) {
+            player.play();
+          } else {
+            player.pause();
+          }
+        }
+
+        // Left arrow for previous video
+        if (e.code === "ArrowLeft" && e.ctrlKey) {
+          loadPreviousVideo();
+        }
+
+        // Right arrow for next video
+        if (e.code === "ArrowRight" && e.ctrlKey) {
+          loadNextVideo();
+        }
+      });
+    </script>
+  </body>
+</html>

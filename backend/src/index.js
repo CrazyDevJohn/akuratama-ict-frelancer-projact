@@ -1,18 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
 import 'dotenv/config';
-import axios from 'axios';
 
 import authroutes from './routes/auth.routes.js';
 import courseRoutes from './routes/course.routes.js';
-import categoriesRoutes from './routes/categories.route.js';
 import lessonRoutes from './routes/lesson.route.js';
-import connectDb from './lib/db.js';
-import { sendMail } from './lib/mail.js';
-import billingRoutes from "./routes/billing.routes.js"
+import usersRoutes from './routes/users.route.js';
+import summerRoutes from './routes/summer.routes.js';
+import billingRoutes from './routes/billing.routes.js';
 import { checkAuth } from './middilewares/auth.middleware.js';
+import connectDb from './lib/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,7 +25,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 
 app.get('/api/v2/health', (req, res) => {
@@ -35,10 +33,11 @@ app.get('/api/v2/health', (req, res) => {
 });
 
 app.use('/api/v2/auth', authroutes);
-app.use('/api/v2/categories', categoriesRoutes);
-app.use('/api/v2/course',checkAuth, courseRoutes);
+app.use('/api/v2/course', checkAuth, courseRoutes);
 app.use('/api/v2/lessons', lessonRoutes);
-app.use("/api/v2/billing", checkAuth, billingRoutes)
+app.use('/api/v2/billing', checkAuth, billingRoutes);
+app.use('/api/v2/users', checkAuth, usersRoutes);
+app.use('/api/v2/summery', checkAuth, summerRoutes);
 
 const connect = async () => {
   await connectDb()

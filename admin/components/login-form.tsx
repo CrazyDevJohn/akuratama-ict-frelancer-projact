@@ -20,9 +20,9 @@ import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/store/useAuth";
 import { useEffect, useState } from "react";
 
-
 import axios from "axios";
 import { redirect } from "next/navigation";
+import useLoadingStore from "@/store/useLoadingStore";
 
 export function LoginForm({
   className,
@@ -31,18 +31,17 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login,checkAuth,user } = useAuthStore();
+  const { login, checkAuth, user } = useAuthStore();
+  const { isLoading, setIsLoading } = useLoadingStore();
 
-useEffect(() => {
-  checkAuth();
-        if (user)redirect("/");
-}, [])
-
+  useEffect(() => {
+    checkAuth();
+    if (user) redirect("/");
+  }, [checkAuth, user]);
 
   const handleSubmit = async (ev: any) => {
     ev.preventDefault();
-    
-
+    // ?setIsLoading(true);
     await login(email, password);
   };
 

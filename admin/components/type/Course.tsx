@@ -1,18 +1,20 @@
 "use client";
 import { CARD_COLORS } from "@/lib/utils";
 import { useCourse } from "@/store/useCourse";
+import useLoadingStore from "@/store/useLoadingStore";
 import { CourseInterface } from "@/types";
 import Image from "next/image";
 import React, { useEffect } from "react";
 
-
-
-
 const Course = () => {
   const { allCourses, getAllCourse } = useCourse();
+  const { setIsLoading } = useLoadingStore();
 
   useEffect(() => {
-    getAllCourse();
+    setIsLoading(true);
+    getAllCourse().finally(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return (
@@ -27,7 +29,6 @@ const Course = () => {
     </section>
   );
 };
-
 
 const Item = ({
   course: { title, description, id, price, image, grade },
@@ -47,17 +48,18 @@ const Item = ({
           />
         )} */}
 
-        <div style={{
-          background:image,
-        }}
-        className="w-full h-full absolute flex justify-center items-center flex-col"
+        <div
+          style={{
+            background: image,
+          }}
+          className="w-full h-full absolute flex justify-center items-center flex-col"
         >
-          <h1 className="text-3xl text-white capitalize pb-2 font-semibold text-center">{ title}</h1>
+          <h1 className="text-3xl text-white capitalize pb-2 font-semibold text-center">
+            {title}
+          </h1>
           <h2 className="text-2xl text-white capitalize pb-2 font-semibold">
             {grade}
           </h2>
-          
-
         </div>
       </div>
       <div className="w-full px-2 py-3 bg-light-300">

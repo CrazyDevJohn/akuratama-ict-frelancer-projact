@@ -1,14 +1,19 @@
 "use client";
 
 import useBillingStore from "@/store/useBillingStore";
+import useLoadingStore from "@/store/useLoadingStore";
 import { BillInterface } from "@/types";
 import React, { useEffect } from "react";
 
 const Request = () => {
   const { allBilling, getBills } = useBillingStore();
+  const { setIsLoading } = useLoadingStore();
 
   useEffect(() => {
-    getBills();
+    setIsLoading(true);
+    getBills().finally(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return (
