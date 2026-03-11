@@ -1,6 +1,6 @@
 const createUserWithEmailAndPassword = async (name, email, password) => {
   const res = await axios.post(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/register`,
+    `http://localhost:5000/api/v2/auth/register`,
     {
       name,
       email,
@@ -16,7 +16,7 @@ const createUserWithEmailAndPassword = async (name, email, password) => {
 
 const logiWithEmailAndPasword = async (email, password) => {
   const res = await axios.post(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/login`,
+    `http://localhost:5000/api/v2/auth/login`,
     {
       email,
       password,
@@ -32,7 +32,7 @@ const logiWithEmailAndPasword = async (email, password) => {
 
 const sendOtp = async (otp) => {
   const res = await axios.post(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/verify`,
+    `http://localhost:5000/api/v2/auth/verify`,
     {
       otp: otp,
     },
@@ -45,19 +45,16 @@ const sendOtp = async (otp) => {
 };
 
 const checkIsAuthonticated = async () => {
-  const res = await axios.get(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/profile`,
-    {
-      withCredentials: true,
-    },
-  );
+  const res = await axios.get(`http://localhost:5000/api/v2/auth/profile`, {
+    withCredentials: true,
+  });
 
   return await res.data;
 };
 
 const logOut = async () => {
   const res = await axios.post(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/auth/logout`,
+    `http://localhost:5000/api/v2/auth/logout`,
     {},
     { withCredentials: true },
   );
@@ -68,34 +65,30 @@ const logOut = async () => {
 };
 
 const getCourseById = async (id) => {
-  const res = await axios.get(
-    `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/course/${id}`,
-    {
-      withCredentials: true,
-    },
-  );
+  const res = await axios.get(`http://localhost:5000/api/v2/course/${id}`, {
+    withCredentials: true,
+  });
 
   return await res.data.course;
 };
 
 const fetchAllCourses = async () => {
-  const res = await axios.get(
-    "https://akuratama-ict-frelancer-projact.vercel.app/api/v2/course",
-    {
-      withCredentials: true,
-    },
-  );
+  const res = await axios.get("http://localhost:5000/api/v2/course", {
+    withCredentials: true,
+  });
   console.log("All courses ", await res.data.courses);
   return await res.data.courses;
 };
 
 const fetchAllCoursesForStudent = async () => {
   const res = await axios.get(
-    "https://akuratama-ict-frelancer-projact.vercel.app/api/v2/course/all-enrolled",
+    "http://localhost:5000/api/v2/course/all-enrolled",
     { withCredentials: true },
   );
   console.log("All courses ", await res.data.course);
   return await res.data.course;
+
+  console.log("fetchAllCoursesForStudent is called");
 };
 
 const uploadBill = async (file, data, resetForm, uploadProgress) => {
@@ -105,7 +98,7 @@ const uploadBill = async (file, data, resetForm, uploadProgress) => {
     formData.append("bill", JSON.stringify(data));
 
     const res = await axios.post(
-      "https://akuratama-ict-frelancer-projact.vercel.app/api/v2/billing/billing",
+      "http://localhost:5000/api/v2/billing/billing",
       formData,
       {
         onUploadProgress: function (progressEvent) {
@@ -134,7 +127,7 @@ const uploadBill = async (file, data, resetForm, uploadProgress) => {
 const fetchLessonsByCourseId = async (courseId) => {
   try {
     const res = await axios.get(
-      `https://akuratama-ict-frelancer-projact.vercel.app/api/v2/lessons/${courseId}`,
+      `http://localhost:5000/api/v2/lessons/${courseId}`,
       { withCredentials: true },
     );
     console.log("Lessons for course ", await res.data);
@@ -144,4 +137,4 @@ const fetchLessonsByCourseId = async (courseId) => {
   }
 };
 
-// https://akuratama-ict-frelancer-projact.vercel.app/api/v2
+// https://akuratama-ict-frelancer-projact.vercel.app/api

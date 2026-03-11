@@ -11,8 +11,8 @@ const router = Router();
 
 router.get('/health', health);
 router.get('/', getAllCourses); // Placeholder for getting all courses
-router.get('/:id', getCourseById); // Placeholder for getting a course by ID
 router.post('/add', createCourse);
 router.get('/all-enrolled', allEnrolled);
+router.get('/:id', getCourseById); // Placeholder for getting a course by ID
 
 export default router;

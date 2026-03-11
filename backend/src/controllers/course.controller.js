@@ -12,16 +12,22 @@ export const getAllCourses = async (req, res) => {
       courses: allCourses,
     });
   } catch (error) {
-    console.log('error in create course', error);
+    console.log('error in getting all courses', error);
     return res
       .status(500)
-      .json({ message: 'error in create course', error: error.message });
+      .json({ message: 'error in getting all courses', error: error.message });
   }
 };
 
 export const getCourseById = async (req, res) => {
   const { id } = req.params;
   try {
+    if (!id) {
+      return res.status(400).json({ message: 'Course id is required' });
+    }
+
+    console.log(`find by course id: ${id}`);
+
     const response = await Course.findById(id).populate('lessons');
 
     if (response) {
@@ -32,16 +38,24 @@ export const getCourseById = async (req, res) => {
 
     return res.status(404).json({ mesage: 'Course Not founded!' });
   } catch (error) {
-    console.log('error in create course', error);
+    console.log('error in getting course by id', error);
     return res
       .status(500)
-      .json({ message: 'error in create course', error: error.message });
+      .json({ message: 'error in getting course by id', error: error.message });
   }
 };
 
 export const createCourse = async (req, res) => {
   try {
-    const { title, description, grade, price, image } = req.body;
+    const {
+      title,
+      description,
+      grade,
+      price,
+      image,
+      referencesUrls: [],
+      assets: [],
+    } = req.body;
 
     const response = await Course.create({
       title,
@@ -49,6 +63,8 @@ export const createCourse = async (req, res) => {
       price,
       grade,
       image: image || '',
+      referencesUrls,
+      assets,
     });
     console.log('course created', response);
 
@@ -66,6 +82,7 @@ export const createCourse = async (req, res) => {
 export const allEnrolled = async (req, res) => {
   try {
     const { _id, courseEnrolled } = req.user;
+
     const allCourses = await Course.find().where('_id').in(courseEnrolled);
 
     return res

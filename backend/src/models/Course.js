@@ -16,7 +16,6 @@ const courseSchema = new Schema(
       type: String,
       default: '',
     },
-
     features: {
       type: [String],
     },
@@ -29,6 +28,10 @@ const courseSchema = new Schema(
     lessons: String,
     duration: String,
     certificate: String,
+    referencesUrls: {
+      type: [String],
+      default: [],
+    },
     assets: {
       type: [String],
       default: [],
