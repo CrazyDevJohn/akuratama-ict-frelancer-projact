@@ -8,10 +8,11 @@ import React, { useEffect } from "react";
 
 const Course = () => {
   const { allCourses, getAllCourse } = useCourse();
-  const { setIsLoading } = useLoadingStore();
+  const { setIsLoading, setLoadingText } = useLoadingStore();
 
   useEffect(() => {
     setIsLoading(true);
+    setLoadingText("Loading all Courses!");
     getAllCourse().finally(() => {
       setIsLoading(false);
     });

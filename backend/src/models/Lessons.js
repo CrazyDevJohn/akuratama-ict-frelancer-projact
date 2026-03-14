@@ -25,10 +25,6 @@ const lessonSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    pageNumber: {
-      type: Number,
-      required: true,
-    },
   },
   { timestamps: true },
 );

@@ -1,4 +1,5 @@
 import Course from '../models/Course.js';
+import Lesson from '../models/Lessons.js';
 
 export const health = (req, res) => {
   res.status(200).json({ status: 'Course service is healthy' });
@@ -30,6 +31,8 @@ export const getCourseById = async (req, res) => {
 
     const response = await Course.findById(id).populate('lessons');
 
+    // const response = await Lesson.find({ courseId: id });
+
     if (response) {
       return res
         .status(200)
@@ -50,11 +53,14 @@ export const createCourse = async (req, res) => {
     const {
       title,
       description,
-      grade,
       price,
+      grade,
       image,
-      referencesUrls: [],
-      assets: [],
+      lessons,
+      modules,
+      duration,
+      features = [],
+      assets = [],
     } = req.body;
 
     const response = await Course.create({
@@ -63,8 +69,11 @@ export const createCourse = async (req, res) => {
       price,
       grade,
       image: image || '',
-      referencesUrls,
       assets,
+      lessons,
+      modules,
+      duration,
+      features,
     });
     console.log('course created', response);
 

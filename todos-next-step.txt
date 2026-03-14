@@ -1,0 +1,7 @@
+implement add course with this
+
+lessons:string,
+    modules:string,
+    duration:string,
+    features:string[],
+    assets?:string[],

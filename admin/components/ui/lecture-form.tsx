@@ -26,6 +26,7 @@ import {
 import { useCourse } from "@/store/useCourse";
 import { Select, SelectValue } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger } from "./select";
+import useLoadingStore from "@/store/useLoadingStore";
 
 export function LectureForm({
   className,
@@ -40,10 +41,6 @@ export function LectureForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>
-      <div>
-        <Button onClick={() => setIsOpened(true)}>Create New Lesson</Button>
-      </div>
-
       <Popup
         isOpened={isOpened}
         setisOpened={setIsOpened}
@@ -119,7 +116,8 @@ export function InputGrid({
   //    }[]
   //  >([]);
 
-  const { createLesson, allCourses } = useCourse();
+  const { createLesson, allCourses, getAllLesson } = useCourse();
+  const { setIsLoading } = useLoadingStore();
 
   return (
     <FieldGroup className="grid max-w-sm grid-cols-2">
@@ -134,13 +132,6 @@ export function InputGrid({
         title="Description"
         placeholder={"The Course Is ..."}
         change={setDescription}
-      />
-
-      <InputField
-        id="pageNumber"
-        title="Page Number"
-        placeholder={"1"}
-        change={setPageNumber}
       />
 
       <InputField
@@ -227,27 +218,25 @@ export function InputGrid({
             //   alert("Please select at least one lecture");
             //   return;
             // }
+
+            setIsLoading(true);
+
             await createLesson(
               title,
               description,
-              pageNumber,
+              // pageNumber,
               // lectures,
               videoUrl,
               courseId,
-            );
-            setisOpened(false);
+            ).finally(() => {
+              setisOpened(false);
+              setIsLoading(false);
+              getAllLesson();
+            });
           }}
           className="w-full py-2 bg-brand text-2xl font-semibold text-light-400 rounded-md"
         >
           ADD
-        </button>
-      </Field>
-      <Field className="flex justify-end items-end">
-        <button
-          onClick={() => setIsLectureGridOpened(true)}
-          className="w-full py-2 bg-brand text-2xl font-semibold text-light-400 rounded-md"
-        >
-          Add New Lesson
         </button>
       </Field>
     </FieldGroup>

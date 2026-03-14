@@ -6,7 +6,7 @@ import { create } from "zustand";
 export const useAuthStore = create<AutStoreInterface>((set, get) => ({
   user: null,
   allUsers: [],
-  login: async (email: string, pass: string) => {
+  login: async (email, pass) => {
     console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
 
     const res = await axios.post(
@@ -14,6 +14,42 @@ export const useAuthStore = create<AutStoreInterface>((set, get) => ({
       {
         email,
         password: pass,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+
+    const user = await res.data;
+    if (user) {
+      set(() => ({ user: user }));
+      redirect("/");
+    } else {
+      set(() => ({ user: null }));
+    }
+  },
+  register: async (email, pass, name) => {
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+      {
+        name,
+        email,
+        password: pass,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+  },
+  sendOtp: async (otp) => {
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify`,
+      {
+        otp,
       },
       {
         withCredentials: true,

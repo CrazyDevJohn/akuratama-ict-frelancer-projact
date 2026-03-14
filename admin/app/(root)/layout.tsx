@@ -19,6 +19,7 @@ import { useCourse } from "@/store/useCourse";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuth";
 import { CARD_COLORS, cn } from "@/lib/utils";
+import { Cross, X } from "lucide-react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, checkAuth } = useAuthStore();
@@ -84,6 +85,13 @@ export function InputGrid({
   const [description, setDescription] = useState("");
   const [grade, setGrade] = useState("");
   const [price, setPrice] = useState("");
+  const [features, setFeatures] = useState([]);
+  const [assets, setAssets] = useState([]);
+
+  const [modules, setModules] = useState("");
+  const [lessons, setLessons] = useState("");
+  const [duration, setDuration] = useState("");
+
   const [activeColor, setActiveColor] = useState(
     `linear-gradient(135deg, ${CARD_COLORS[1][0]}, ${CARD_COLORS[1][1]})`,
   );
@@ -116,6 +124,44 @@ export function InputGrid({
         placeholder={"999.00"}
         change={setPrice}
       />
+
+      <InputField
+        id="Modules"
+        title="Modules"
+        placeholder={"40 Modules"}
+        change={setModules}
+      />
+      <InputField
+        id="Lessons"
+        title="Lessons"
+        placeholder={"45 Lessons"}
+        change={setLessons}
+      />
+      <InputField
+        id="Duration"
+        title="Duration"
+        placeholder={"6 Mothns"}
+        change={setDuration}
+      />
+
+      <TikWords
+        id="assets"
+        title="Add Metireales."
+        placeholder={
+          "https://github.com/CrazyDevJohn/akuratama-ict-frelancer-projact"
+        }
+        change={() => {}}
+        setState={setFeatures}
+        data={features}
+      />
+      <TikWords
+        id="features"
+        title="Add Features."
+        placeholder={"Internet Fundamentals"}
+        change={() => {}}
+        setState={setAssets}
+        data={assets}
+      />
       <div className="w-full h-11 bg-light-200 rounded-md flex justify-between items-center gap-1 px-2">
         {CARD_COLORS.map((color, index) => (
           <div
@@ -146,6 +192,11 @@ export function InputGrid({
               grade,
               parseInt(price),
               activeColor,
+              lessons,
+              modules,
+              duration,
+              features,
+              assets,
             );
             setisOpened(false);
           }}
@@ -158,24 +209,108 @@ export function InputGrid({
   );
 }
 
+const TikWords = ({
+  id,
+  title,
+  placeholder,
+  change,
+  setState,
+  data,
+}: {
+  id: string;
+  title: string;
+  placeholder: string;
+  change?: any;
+  setState?: any;
+  data: string[] | any;
+}) => {
+  const [word, setWord] = useState("");
+
+  const keyDownEv = (key: String) => {
+    if (key === "Enter") {
+      const isIncludedLink = data?.includes(word);
+
+      if (word === "") {
+        return;
+      }
+
+      if (isIncludedLink) {
+        alert("this link allready added!" + word);
+        return;
+      }
+
+      setState((prev: string[]) => [...prev, word]);
+      setWord("");
+    }
+  };
+
+  const handleClearItem = (i: number, d: string) => {
+    const sortedList = data.filter(
+      (item: string, index: number) => item !== d && index !== i,
+    );
+
+    setState(sortedList);
+  };
+
+  return (
+    <div className="flex flex-col">
+      <FieldLabel htmlFor={id}>{title}</FieldLabel>
+      {data && (
+        <div className="flex justify-start items-center pb-2 gap-2 max-w-full flex-wrap">
+          {data?.map((d: string, index: number) => {
+            return (
+              <div
+                key={index.toString()}
+                className="p-1 px-2 gap-1 bg-gray-300 rounded-xl flex justify-between items-center text-xs"
+              >
+                {d.substring(0, 4)}
+                <button onClick={() => handleClearItem(index, d)}>
+                  <X size={14} color="black" />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <InputField
+        id={id}
+        title={""}
+        placeholder={placeholder}
+        change={setWord}
+        onKeyDown={(ev: any) => keyDownEv(ev.key)}
+        noLable
+        value={word}
+      />
+    </div>
+  );
+};
+
 const InputField = ({
   id,
   title,
   placeholder,
   change,
+  onKeyDown,
+  noLable = false,
+  value,
 }: {
   id: string;
   title: string;
   placeholder: string;
-  change: any;
+  change?: any;
+  onKeyDown?: any;
+  noLable?: boolean;
+  value?: any;
 }) => {
   return (
     <Field>
-      <FieldLabel htmlFor={id}>{title}</FieldLabel>
+      {!noLable && <FieldLabel htmlFor={id}>{title}</FieldLabel>}
       <Input
         onChange={(ev) => change(ev.target.value)}
         id={id}
         placeholder={placeholder}
+        onKeyDown={onKeyDown}
+        value={value}
       />
     </Field>
   );

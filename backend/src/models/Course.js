@@ -28,10 +28,7 @@ const courseSchema = new Schema(
     lessons: String,
     duration: String,
     certificate: String,
-    referencesUrls: {
-      type: [String],
-      default: [],
-    },
+
     assets: {
       type: [String],
       default: [],

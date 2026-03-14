@@ -15,7 +15,18 @@ export const useCourse = create<useCourseProps>((set, get) => ({
     set((state) => ({ allCourses: res.data.courses || [] }));
   },
 
-  addCourse: async (title, description, grade, price, image) => {
+  addCourse: async (
+    title,
+    description,
+    grade,
+    price,
+    image,
+    lessons,
+    modules,
+    duration,
+    features,
+    assets,
+  ) => {
     await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/course/add`,
       {
@@ -24,6 +35,11 @@ export const useCourse = create<useCourseProps>((set, get) => ({
         price,
         grade,
         image,
+        lessons,
+        modules,
+        duration,
+        features,
+        assets,
       },
       { withCredentials: true },
     );
@@ -42,7 +58,7 @@ export const useCourse = create<useCourseProps>((set, get) => ({
   createLesson: async (
     title,
     description,
-    pageNumber,
+    // pageNumber,
     /**  lecture, */ videoUrl,
     courseId,
   ) => {
@@ -51,7 +67,7 @@ export const useCourse = create<useCourseProps>((set, get) => ({
       {
         title,
         description,
-        pageNumber,
+        // pageNumber,
         // lectures,
         videoUrl,
         courseId,

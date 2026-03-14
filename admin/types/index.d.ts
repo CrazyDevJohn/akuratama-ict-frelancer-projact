@@ -27,10 +27,12 @@ export interface AutStoreInterface {
   user: UserProps | null;
   allUsers: UserProps[] | [];
 
-  login: (email: string, pass: string) => void;
-  checkAuth: () => void;
-  logout: () => void;
-  getAllUsers: () => void;
+  login: (email: string, pass: string) => Promise<void>;
+  register: (email: string, pass: string, name: string) => Promise<void>;
+  sendOtp: (otp: string) => Promise<void>;
+  checkAuth: () => Promise<void>;
+  logout: () => Promise<void>;
+  getAllUsers: () => Promise<void>;
   getUserById: (id: string) => any;
 }
 
@@ -65,6 +67,8 @@ export interface LessonInterface {
 
 interface LoadingState {
   isLoading: boolean;
+  loadingText: string;
+  setLoadingText: (tetx: string) => void;
   setIsLoading: (value: boolean) => void;
 }
 
@@ -81,11 +85,16 @@ interface useCourseProps {
     grade: string,
     price: number,
     image?: string,
+
+    lessons: string,
+    modules: string,
+    duration: string,
+    features: string[],
+    assets?: string[],
   ) => void;
   createLesson: (
     title: string,
     description: string,
-    pageNumber: number,
     lectures: any,
     courseId: string,
   ) => any;

@@ -486,7 +486,7 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-8">
-            <h1>2027 Season 1 Paper Discussions</h1>
+            <h1 class="title">2027 Season 1 Paper Discussions</h1>
             <p>
               Complete video discussions for all papers from Season 1, 2027.
               Watch recordings and improve your understanding.
@@ -501,9 +501,10 @@
                 <li class="breadcrumb-item">
                   <a href="#" class="text-decoration-none">Paper Discussions</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  2027 Season 1
-                </li>
+                <li
+                  class="breadcrumb-item active title"
+                  aria-current="page"
+                ></li>
               </ol>
             </nav>
           </div>
@@ -567,15 +568,17 @@
           <!-- Video Player -->
           <div class="video-container">
             <div class="video-header">
-              <h2 class="video-title" id="currentVideoTitle">
+              <h2 class="video-title title" id="currentVideoTitle">
                 2027 Season 1 Paper 4 - Recording
               </h2>
               <div class="video-meta">
-                <span><i class="far fa-clock"></i> Duration: 45:22</span>
+                <span class="time-duration"
+                  ><i class="far fa-clock"></i> Duration: 00:00
+                </span>
                 <span
-                  ><i class="far fa-calendar"></i> Published: March 15,
-                  2027</span
-                >
+                  ><i class="far fa-calendar"></i>
+                  <span class="published-date">Published: 00:00:00</span>
+                </span>
                 <span><i class="far fa-eye"></i> Views: 1,245</span>
               </div>
             </div>
@@ -632,32 +635,33 @@
             </p>
 
             <h4 class="mt-4">Key Topics Covered:</h4>
-            <ul>
-              <li>Question analysis and interpretation techniques</li>
+            <ul class="key-topics">
+              <!-- <li>Question analysis and interpretation techniques</li>
               <li>Common mistakes students make in Paper 4</li>
               <li>Time management strategies for the exam</li>
               <li>Important formulas and concepts highlighted</li>
-              <li>Practice questions with step-by-step solutions</li>
+              <li>Practice questions with step-by-step solutions</li> -->
             </ul>
           </div>
 
           <!-- Resources -->
           <div class="resources">
             <h3>Downloadable Resources</h3>
-            <div class="resource-item">
+
+            <!-- <div class="resource-item">
               <div class="resource-icon">
-                <i class="fas fa-file-pdf"></i>
+                <i class="fas fa-link"></i>
               </div>
               <div>
                 <div class="lesson-title">Paper 4 Question Paper</div>
-                <div class="lesson-meta">PDF • 2.4 MB</div>
+                <div class="lesson-meta">No Malware or Trojans included!</div>
               </div>
               <a href="#" class="btn btn-sm btn-outline-primary ms-auto"
-                >Download</a
+                >Visite</a
               >
-            </div>
+            </div> -->
 
-            <div class="resource-item">
+            <!-- <div class="resource-item">
               <div class="resource-icon">
                 <i class="fas fa-file-alt"></i>
               </div>
@@ -681,7 +685,7 @@
               <a href="#" class="btn btn-sm btn-outline-primary ms-auto"
                 >Download</a
               >
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -757,10 +761,18 @@
 
       let videoLessons = [];
 
+      let course = null;
+
       (async function () {
-        const res = await getCourseById(courseId);
-        console.log(res);
-        videoLessons = res;
+        const res = await fetchLessonsByCourseId(courseId);
+        console.log({ message: "Course fetched", res });
+        videoLessons = res.response;
+        course = res.course;
+
+        // Populate lesson list
+        populateLessonList();
+        renderKeyTopics();
+        renderResourses();
       })();
 
       // Current video index
@@ -771,9 +783,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         // Initialize video player
         player = videojs("videoPlayer");
-
-        // Populate lesson list
-        populateLessonList();
 
         // Load first video
         loadVideo(currentVideoIndex);
@@ -793,6 +802,47 @@
         updateProgress();
       });
 
+      // render ker features
+      const renderKeyTopics = () => {
+        const el = document.querySelector(".key-topics");
+
+        course?.features?.forEach((topic, index) => {
+          const li = document.createElement("li");
+          li.textContent = topic;
+
+          el.appendChild(li);
+        });
+      };
+
+      // render resources
+      const renderResourses = () => {
+        const el = document.querySelector(".resources");
+        const title = document.querySelector(".title");
+        const publishedDate = document.querySelector(".published-date");
+
+        title.textContent = course?.title;
+        publishedDate.textContent = `Published : ${course.createdAt.split("T")[0]}`;
+
+        course?.assets?.forEach((resourse) => {
+          const item = document.createElement("div");
+          item.classList.add("resource-item");
+
+          item.innerHTML = `
+              <div class="resource-icon">
+                <i class="fas fa-link"></i>
+              </div>
+              <div>
+                <div class="lesson-title">${resourse.trim()}</div>
+                <div class="lesson-meta">No Malware or Trojans included!</div>
+              </div>
+              <a href="${resourse}" target="_blank" class="btn btn-sm btn-outline-primary ms-auto"
+                >Visite</a>
+              `;
+
+          el.appendChild(item);
+        });
+      };
+
       // Populate the lesson list
       function populateLessonList() {
         const lessonList = document.getElementById("lessonList");
@@ -804,7 +854,7 @@
           lessonItem.innerHTML = `
                     <div class="lesson-title">${lesson.title}</div>
                     <div class="lesson-meta">
-                        <i class="far fa-clock"></i> ${lesson.duration}
+                        <i class="far fa-book"></i> ${lesson.description}
                         ${lesson.completed ? '<span class="ms-2"><i class="fas fa-check-circle text-success"></i> Completed</span>' : ""}
                     </div>
                 `;
@@ -825,6 +875,8 @@
           lessonList.appendChild(lessonItem);
         });
       }
+
+      const durationEl = document.querySelector(".time-duration");
 
       // Load a video by index
       function loadVideo(index) {
@@ -863,9 +915,11 @@
           completeBtn.classList.remove("completed");
         }
 
+        const duration = player.duration();
+
         // Update video metadata
         document.querySelector(".video-meta span:nth-child(1)").innerHTML =
-          `<i class="far fa-clock"></i> Duration: ${lesson.duration}`;
+          `<i class="far fa-clock"></i> Duration: ${duration.toFixed(2)}`;
 
         // Update progress indicator
         updateProgress();

@@ -298,6 +298,37 @@
     </div>
 
     <script>
+
+          async function checkAuth() {
+            const loadingScreen = document.getElementById('loading-screen');
+            try {
+                const data = await checkIsAuthonticated();
+                if (data.user) {
+                    console.log('User is logged in:', data.user);
+                    localStorage.setItem("STUDENT", data.user)
+                    // Hide loading screen after a short delay
+                    setTimeout(() => {
+                        if (loadingScreen) {
+                            loadingScreen.style.opacity = '0';
+                            setTimeout(() => {
+                                loadingScreen.style.display = 'none';
+                            }, 500);
+                        }
+                    }, 1000);
+
+                } else {
+                    // User is not signed in, redirect to login
+                    console.log('User not authenticated, redirecting to login...');
+                    window.location.href = 'index.html';
+                }
+            } catch (e) {
+                console.log(e)
+                window.location.href = 'index.html';
+            }
+        }
+        checkAuth();
+
+
       let enrolledCourses = [];
       (async function () {
         const res = await fetchAllCoursesForStudent();

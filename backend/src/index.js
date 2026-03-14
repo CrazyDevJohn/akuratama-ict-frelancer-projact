@@ -11,6 +11,7 @@ import summerRoutes from './routes/summer.routes.js';
 import billingRoutes from './routes/billing.routes.js';
 import { checkAuth } from './middilewares/auth.middleware.js';
 import connectDb from './lib/db.js';
+import User from './models/User.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,7 +43,7 @@ app.use('/api/v2/summery', checkAuth, summerRoutes);
 const connect = async () => {
   await connectDb()
     .then(() => {
-      app.listen(PORT, () => {
+      app.listen(PORT, async () => {
         console.log(`Server is running on http://localhost:${PORT}/api/v2/`);
       });
     })

@@ -32,11 +32,12 @@ const cardData = [
 
 export default function Page() {
   const { summary, getSummarys } = useSummeryStore();
-  const { setIsLoading } = useLoadingStore();
+  const { setIsLoading, setLoadingText } = useLoadingStore();
   console.log(summary);
 
   useEffect(() => {
     setIsLoading(true);
+    setLoadingText("Loading Dashboard!");
     getSummarys().finally(() => {
       setIsLoading(false);
     });
@@ -69,7 +70,7 @@ export default function Page() {
                   {item.title}
                 </h3>
                 <p className="text-2xl font-bold letter-spacing">
-                  $ {item.value} +
+                  {item.value} +
                 </p>
               </div>
             ))}

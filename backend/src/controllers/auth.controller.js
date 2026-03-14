@@ -67,8 +67,6 @@ export const VerifyRegister = async (req, res) => {
       });
     }
 
-    console.log(token);
-
     const { otp: oldOtp, ...user } = jwt.verify(
       token,
       process.env.JWT_SECRET_REGISTER,
@@ -78,11 +76,16 @@ export const VerifyRegister = async (req, res) => {
       return res.status(400).json({ status: false, message: 'Invalid OTP' });
     }
 
-    const newUser = await User.create({
+    const isTheFirstUserOrNot = !!(await User.find({})).length;
+
+    const newUser = {
       name: user.name,
       email: user.email,
       password: user.password,
-    });
+      isAdmin: !isTheFirstUserOrNot,
+    };
+
+    await User.create(newUser);
 
     return res
       .status(201)

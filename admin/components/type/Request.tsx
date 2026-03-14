@@ -7,10 +7,11 @@ import React, { useEffect } from "react";
 
 const Request = () => {
   const { allBilling, getBills } = useBillingStore();
-  const { setIsLoading } = useLoadingStore();
+  const { setIsLoading, setLoadingText } = useLoadingStore();
 
   useEffect(() => {
     setIsLoading(true);
+    setLoadingText("Loading all Biiligs!");
     getBills().finally(() => {
       setIsLoading(false);
     });

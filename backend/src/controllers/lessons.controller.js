@@ -1,3 +1,4 @@
+import Course from '../models/Course.js';
 import Lecture from '../models/Lectures.js';
 import Lesson from '../models/Lessons.js';
 
@@ -5,11 +6,14 @@ export const getAllLessonsByCourseId = async (req, res) => {
   const { courseId } = req.params;
 
   try {
-    const response = await Lesson.find({ courseId })
-      .sort({ pageNumber: 1 })
-      .populate('lectures')
-      .sort({ pageNumber: 1 });
-    return res.status(200).json(response);
+    const response = await Lesson.find({ courseId });
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    return res.status(200).json({ response, course });
   } catch (error) {
     console.log('Error fetching lessons', error);
     return res
@@ -37,7 +41,7 @@ export const createLesson = async (req, res) => {
     const {
       title,
       description,
-      pageNumber,
+      // pageNumber,
       /**lectures, */ videoUrl,
       courseId,
     } = req.body;
@@ -45,7 +49,7 @@ export const createLesson = async (req, res) => {
     console.log('Received data for creating lesson:', {
       title,
       description,
-      pageNumber,
+      // pageNumber,
       // lectures,
       videoUrl,
       courseId,
@@ -65,7 +69,7 @@ export const createLesson = async (req, res) => {
     const response = await Lesson.create({
       title,
       description,
-      pageNumber,
+      // pageNumber,
       // lectures: lecturesRes.map((lecture) => lecture._id),
       videoUrl,
       courseId,
@@ -91,7 +95,7 @@ export const createLecture = async (req, res) => {
     const response = await Lecture.create({
       title,
       description,
-      pageNumber,
+      // pageNumber,
       resources,
     });
     console.log('Lecture created', response);

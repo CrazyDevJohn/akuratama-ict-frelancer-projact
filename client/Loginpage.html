@@ -366,7 +366,7 @@
                 required
                 maxlength="100"
               />
-              <div class="error-message" id="signup-name-error"></div>
+              <div class="error-message" id="signup-name-error">hello</div>
             </div>
 
             <div class="input-group">
@@ -648,14 +648,13 @@
           }, 2000);
         } catch (e) {
           const error = e.response ? e.response.data : e;
+          signupError.textContent = error.message;
+          signupError.style.display = "block";
           console.error("💥 Signup error details:", error);
 
           let errorMessage =
             error.response.message ||
             "An unknown error occurred. Please try again.";
-
-          signupError.textContent = errorMessage;
-          signupError.style.display = "block";
         } finally {
           setLoading(signupBtn, false);
         }

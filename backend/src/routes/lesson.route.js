@@ -8,10 +8,10 @@ import {
 
 const router = Router();
 
-router.get('/:courseId', getAllLessonsByCourseId);
 router.get('/', getAllLessons);
 router.post('/create-lesson', createLesson);
 router.post('/create-lecture', createLecture);
+router.get('/:courseId', getAllLessonsByCourseId);
 
 export default router;
 

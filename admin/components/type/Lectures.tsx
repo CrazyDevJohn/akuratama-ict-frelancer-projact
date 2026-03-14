@@ -5,34 +5,37 @@ import { LectureForm } from "../ui/lecture-form";
 import { useCourse } from "@/store/useCourse";
 import { LessonInterface } from "@/types";
 import useLoadingStore from "@/store/useLoadingStore";
+import { Button } from "../ui/button";
 
 const Lectures = () => {
   const [isOpened, setIsOpened] = useState(false);
   const { getAllLesson, allLessons } = useCourse();
-  const { setIsLoading } = useLoadingStore();
+  const { setIsLoading, setLoadingText } = useLoadingStore();
 
   useEffect(() => {
     setIsLoading(true);
+    setLoadingText("Loading all Lessons!");
     getAllLesson().finally(() => {
       setIsLoading(false);
     });
   }, []);
 
   return (
-    <section>
-      {/* show all lectures */}
-
-      <div className="pt-4">
+    <section className="flex flex-col justify-center items-center gap-4 w-full h-full overflow-hidden relative ">
+      <div className="w-full h-full overflow-scroll p-4 flex justify-start items-start flex-wrap remove-scrollbar gap-4">
         {allLessons.map((lecture) => (
           <Item lesson={lecture} key={lecture._id} />
         ))}
       </div>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm ">
         <LectureForm
           isOpened={isOpened}
           setIsOpened={setIsOpened}
           className="w-full h-full overflow-hidden"
         />
+      </div>
+      <div className="fixed z-10 top-28 right-12">
+        <Button onClick={() => setIsOpened(true)}>Create New Lesson</Button>
       </div>
     </section>
   );

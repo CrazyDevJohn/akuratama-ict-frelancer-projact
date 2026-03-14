@@ -16,10 +16,11 @@ import useLoadingStore from "@/store/useLoadingStore";
 
 const User = () => {
   const { users, getUsers } = useUserStore();
-  const { setIsLoading } = useLoadingStore();
+  const { setIsLoading, setLoadingText } = useLoadingStore();
 
   React.useEffect(() => {
     setIsLoading(true);
+    setLoadingText("Loading all Users!");
     getUsers().finally(() => {
       setIsLoading(false);
       console.log("loaded users");
